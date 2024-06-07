@@ -3,6 +3,13 @@
 class CCollider;
 class CAnimator;
 
+// 오브젝트는 카메라를 참조해서,
+// 랜더링 시 중심좌표-카메라좌표 차이값 반영
+#include "CCamera.h"
+// 헤더에서 헤더참조는 어지간해선 안 하려 하지만
+// 카메라는 어차피 모든 옵젝이 항상 쓸거라,
+// 매 cpp마다 참조할 필요 없도록 한다
+
 class CObject
 {
 private:

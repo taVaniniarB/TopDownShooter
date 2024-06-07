@@ -9,6 +9,7 @@
 #include "CPathMgr.h"
 #include "CCollisionMgr.h"
 #include "CEventMgr.h"
+#include "CCamera.h"
 
 
 CCore::CCore()
@@ -79,6 +80,7 @@ void CCore::progress()
 	// ==============
 	CTimeMgr::GetInst()->update(); // dt 값 계산
 	CKeyMgr::GetInst()->update(); // 키 상태 체크
+	CCamera::GetInst()->update();
 
 	// ============
 	// Scene Update

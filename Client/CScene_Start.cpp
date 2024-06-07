@@ -14,6 +14,7 @@
 
 #include "CKeyMgr.h"
 #include "CSceneMgr.h"
+#include "CCamera.h"
 
 CScene_Start::CScene_Start()
 {
@@ -31,6 +32,13 @@ void CScene_Start::update()
 	{
 		ChangeScene(SCENE_TYPE::TOOL); // 이벤트 만들음
 	}
+	if (KEY_TAP(KEY::LBTN))
+	{
+		// 마우스 좌표를 알아와서 거기를 Lookat으로 잡자
+		// 마우스 좌표는 렌더링 기준이라, 그걸 진짜좌표로 변환
+		Vec2 vMousePos = CCamera::GetInst()->GetRealPos(MOUSE_POS);
+		CCamera::GetInst()->SetLookAt(vMousePos);
+	}
 }
 
 void CScene_Start::Enter()
@@ -44,13 +52,14 @@ void CScene_Start::Enter()
 
 	AddObject(pObj, GROUP_TYPE::PLAYER);
 
-
 	//CObject* pOtherPlayer = new CPlayer(*(CPlayer*)pObj);
 	
 	/*CObject* pOtherPlayer = pObj->Clone();
 	pOtherPlayer->SetPos(Vec2(740.f, 360.f));
 	AddObject(pOtherPlayer, GROUP_TYPE::PLAYER);*/
 
+	// Follow Player
+	//CCamera::GetInst()->SetTarget(pObj);
 
 
 	// 몬스터 추가
@@ -81,6 +90,11 @@ void CScene_Start::Enter()
 	// 충돌 가능한 조합...을 만들어주는 개념 (마치 체크박스처럼)
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::PLAYER, GROUP_TYPE::MONSTER);
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::MONSTER, GROUP_TYPE::PROJ_PLAYER);
+
+	// Camera Start 지정
+	// 	   위에 해상도 받아다 몬스터 위치지정 하는 코드 있어서 일단 주석처리
+	//Vec2 vResolution = CCore::GetInst()->GetResolution();
+	CCamera::GetInst()->SetLookAt(vResolution / 2.f);
 }
 
 // 충돌조합 체크박스를 해제하듯이 충돌 그룹 해제해주어야 함

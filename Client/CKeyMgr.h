@@ -35,6 +35,9 @@ enum class KEY
 	ENTER,
 	ESC,
 
+	LBTN,
+	RBTN,
+
 	LAST,
 };
 
@@ -60,6 +63,7 @@ private:
 	vector<tKeyInfo> m_vecKey;
 	// 벡터 안에 모든 키 값들 enum 순서대로 저장
 	// 키값은 인덱스로 접근
+	Vec2			m_vCurMousePos;
 
 public:
 	void init();
@@ -67,5 +71,6 @@ public:
 
 public:
 	KEY_STATE GetKeyState(KEY _eKey) { return m_vecKey[(int)_eKey].eState; }
+	Vec2 GetMouseCursor() { return m_vCurMousePos; }
 };
 

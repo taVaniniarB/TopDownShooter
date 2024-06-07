@@ -6,6 +6,7 @@
 #include "CAnimator.h"
 #include "CTexture.h"
 #include "CObject.h"
+#include "CCamera.h"
 
 CAnimation::CAnimation()
 	: m_pAnimator(nullptr)
@@ -61,6 +62,8 @@ void CAnimation::render(HDC _dc)
 
 	vPos += m_vecFrm[m_iCurFrm].vOffset;
 
+	// 랜더링용 좌표로 변환
+	vPos = CCamera::GetInst()->GetRenderPos(vPos);
 
 	// dc, 출력될 위치(오브젝트가 출력될 좌상단 위치), 가로세로길이, 텍스처의 DC, 텍스처 내에서 자를 위치, 가로세로길이
 	TransparentBlt(_dc
@@ -84,7 +87,7 @@ void CAnimation::Create(CTexture* _pTex, Vec2 _vLT, Vec2 _vSliceSize, Vec2 _vSte
 	{
 		frm.fDuration = _fDuration;
 		frm.vSlice = _vSliceSize;
-		frm.vLT = _vLT + _vStep * i; // 벡터와 int의 덧셈 오버로딩 (벡터-int 순서 맞춰주기)
+		frm.vLT = _vLT + _vStep * (float)i; // 벡터와 int의 덧셈 오버로딩 (벡터-int 순서 맞춰주기)
 
 		m_vecFrm.push_back(frm);
 	}

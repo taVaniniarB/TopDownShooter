@@ -31,12 +31,17 @@ int g_arrVK[(int)KEY::LAST] =
 	'V',
 	'B',
 
+
+
 	VK_MENU, // ALT
 	VK_CONTROL, // CTRL
 	VK_LSHIFT,
 	VK_SPACE,
 	VK_RETURN, // ENTER
 	VK_ESCAPE, // ESC
+
+	VK_LBUTTON,
+	VK_RBUTTON,
 };
 
 
@@ -95,6 +100,17 @@ void CKeyMgr::update()
 				m_vecKey[i].bPrevPush = false;
 			}
 		}
+
+		// mouse 위치 계산
+		POINT ptPos = {};
+		
+		// GetCursorPos는 전체화면 기준의 커서 좌표 반환(클라이언트 창 기준이 아님)
+		GetCursorPos(&ptPos);
+
+		// 클라이언트 윈도우 기준 좌표로 자동으로 계산해주는 함수
+		ScreenToClient(CCore::GetInst()->GetMainHwnd(), &ptPos);
+
+		m_vCurMousePos = Vec2((float)ptPos.x, (float)ptPos.y);
 	}
 
 	//윈도우 포커싱 해제 상태!

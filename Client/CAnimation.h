@@ -35,7 +35,7 @@ public:
 
 	// 받아간 쪽에서 수정 가능하게 레퍼런스
 	tAnimFrm& GetFrame(int iIdx) { return m_vecFrm[iIdx]; }
-	int GetMaxFrame() { return m_vecFrm.size(); }
+	UINT GetMaxFrame() { return (UINT)m_vecFrm.size(); }
 
 private:
 	// 한 번 정해진 이름이 나중에라도 바뀌면 안 되니까 private
