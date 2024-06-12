@@ -1,4 +1,4 @@
-#include "pch.h"
+#include "global.h"
 #include "CResMgr.h"
 
 #include "CPathMgr.h"

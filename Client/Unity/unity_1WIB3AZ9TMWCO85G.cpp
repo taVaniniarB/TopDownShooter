@@ -1,7 +1,4 @@
 
-#include "C:\Users\hayoa\source\repos\WinApiLecture\Client\CRes.cpp"
-
-
 #include "C:\Users\hayoa\source\repos\WinApiLecture\Client\CResMgr.cpp"
 
 
@@ -23,7 +20,13 @@
 #include "C:\Users\hayoa\source\repos\WinApiLecture\Client\CTexture.cpp"
 
 
+#include "C:\Users\hayoa\source\repos\WinApiLecture\Client\CTile.cpp"
+
+
 #include "C:\Users\hayoa\source\repos\WinApiLecture\Client\CTimeMgr.cpp"
+
+
+#include "C:\Users\hayoa\source\repos\WinApiLecture\Client\CUI.cpp"
 
 
 #include "C:\Users\hayoa\source\repos\WinApiLecture\Client\func.cpp"

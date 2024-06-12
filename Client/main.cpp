@@ -1,6 +1,7 @@
-﻿#include "pch.h"
+﻿#include "global.h"
 #include "framework.h"
 #include "Client.h"
+
 #include "CCore.h"
 
 
@@ -157,6 +158,10 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 //
 
 
+// 이런 함수가 있다~는 전방선언
+// 구현은 Tool Scene에 있지만
+INT_PTR CALLBACK TileCountProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
+
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch (message)
@@ -170,9 +175,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             case IDM_ABOUT:
                 DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
                 break;
+            case ID_MENU_TILE:
+                DialogBox(hInst, MAKEINTRESOURCE(IDD_TILECOUNT), hWnd, TileCountProc);
+                
+                break;
             case IDM_EXIT:
                 DestroyWindow(hWnd);
                 break;
+            
             default:
                 return DefWindowProc(hWnd, message, wParam, lParam);
             }

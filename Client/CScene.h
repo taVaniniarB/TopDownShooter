@@ -1,5 +1,5 @@
 #pragma once
-
+#include "global.h"
 // 컴파일 속도 올리기 위해 헤더 참조 대신 전방선언
 // 헤더참조 했다면, object 변경할 때마다 scene쪽도 매번 확인돼서 느려짐
 // 구체적으로는 모르고, 이런 애가 있다~ 정도만 알게되는거임
@@ -15,9 +15,17 @@ private:
 	vector<CObject*>	m_arrObj[(UINT)GROUP_TYPE::END];
 	wstring				m_strName; // Scene 이름
 
+	UINT				m_iTileX; // 타일 가로 개수
+	UINT				m_iTileY; // 타일 세로 개수
+
 public:
 	void SetName(const wstring& _strName) { m_strName = _strName; }
 	const wstring& GetName() { return m_strName; }
+
+
+	UINT GetTileX() { return m_iTileX; }
+	UINT GetTileY() { return m_iTileY; }
+
 
 	virtual void update();
 	virtual void finalUpdate();
@@ -37,6 +45,7 @@ public:
 	virtual void Exit() = 0;
 
 public:
+
 	void AddObject(CObject* _pObj, GROUP_TYPE _eType)
 	{
 		m_arrObj[(UINT)_eType].push_back(_pObj);
@@ -46,8 +55,10 @@ public:
 	const vector<CObject*>& GetGroupObject(GROUP_TYPE _eType) { return m_arrObj[(UINT)_eType]; }
 	void DeleteGroup(GROUP_TYPE _eTarget); // 그룹 지정 시 해당 그룹의 모든 옵젝 삭제
 	void DeleteAll();
-	void DeleteAllException(GROUP_TYPE _eLType, GROUP_TYPE _eRType);
 	const vector<CObject*>* GetObjectArr() { return m_arrObj; }
+	
+	// 가로세로 값 받아서 타일 만들어주는 함수
+	void CreateTile(UINT _iXCount, UINT _iYCount);
 
 public:
 	CScene();

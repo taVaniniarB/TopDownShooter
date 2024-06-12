@@ -102,11 +102,7 @@ void CScene_Start::Enter()
 void CScene_Start::Exit()
 {
 	// 씬의 객체 삭제
-	//DeleteAll();
-
-	// 그룹 지정해서, 일부만 지우도록 하는 게 어떨까?
-
-	DeleteAllException(GROUP_TYPE::PLAYER, GROUP_TYPE::PROJ_PLAYER);
+	DeleteAll();
 
 	// 그룹 충돌 지정 해제
 	CCollisionMgr::GetInst()->Reset();
