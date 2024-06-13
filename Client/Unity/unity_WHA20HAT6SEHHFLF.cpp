@@ -28,15 +28,3 @@
 
 #include "C:\Users\hayoa\source\repos\WinApiLecture\Client\CMonster.cpp"
 
-
-#include "C:\Users\hayoa\source\repos\WinApiLecture\Client\CObject.cpp"
-
-
-#include "C:\Users\hayoa\source\repos\WinApiLecture\Client\CPathMgr.cpp"
-
-
-#include "C:\Users\hayoa\source\repos\WinApiLecture\Client\CPlayer.cpp"
-
-
-#include "C:\Users\hayoa\source\repos\WinApiLecture\Client\CRes.cpp"
-

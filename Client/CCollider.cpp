@@ -25,6 +25,7 @@ CCollider::CCollider(const CCollider& _origin)
 	//, m_vFinalPos(_origin.m_vFinalPos) 알아서 계산될거라 명시할 필요 없음
 	, m_vScale(_origin.m_vScale)
 	, m_iID(g_iNextID++)
+	, m_iCol(0)
 {
 }
 

@@ -23,6 +23,7 @@ public:
 	void Play(const wstring& _strName, bool _bRepeat);	 // 특정 애니메이션 재생
 
 	void update();
+	void finalUpdate();
 	void render(HDC _dc);
 
 public:

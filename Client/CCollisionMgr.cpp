@@ -25,7 +25,6 @@ void CCollisionMgr::update()
 		{
 			if (m_arrCheck[iRow] & (1 << iCol))
 			{
-				int a = 0;
 				// 현제 씬의 멤버로 오브젝트목록들이 있지
 				// 그룹 단위로 요청
 				// 작은 값인 row를 앞에, 큰 값인 col을 뒤애 두어 순서 보장
@@ -135,7 +134,7 @@ void CCollisionMgr::CollisionUpdateGroup(GROUP_TYPE _eLeft, GROUP_TYPE _eRight)
 	}
 }
 
-// 진짜 충돌 한다 안 한다를 알려주는 함수
+// 좌표를 조회하여 진짜 충돌 한다 안 한다를 알려주는 함수
 bool CCollisionMgr::IsCollision(CCollider* _pLeftCol, CCollider* _pRightCol)
 {
 	Vec2 vLeftPos = _pLeftCol->GetFinalPos();

@@ -50,7 +50,7 @@ public:
 	// 자식객체 포인터로 가리키면 오버라이딩 함수 실행 가능해져버림
 	// 애초에 자식에서 구현 자체를 막아버리자
 	// virtual, final을 붙여준다.
-	virtual void finalUpdate() final;
+	virtual void finalUpdate();
 	virtual void render(HDC _dc);
 
 private: // 오로지 이벤트 처리를 통해서만 오브젝트를 죽일 수 있도록 함

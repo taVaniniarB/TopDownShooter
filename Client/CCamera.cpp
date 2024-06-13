@@ -75,8 +75,6 @@ void CCamera::CalDiff()
 
 		// 이전 LookAt + (정규화한 방향벡터*속도)
 		//m_vCurLookAt = m_vPrevLookAt + vLookDir.Nomalize() * m_fSpeed * fDT;
-	
-		
 	}
 	
 	Vec2 vResolution = CCore::GetInst()->GetResolution();

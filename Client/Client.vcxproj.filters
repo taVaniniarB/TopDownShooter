@@ -71,9 +71,6 @@
     <Filter Include="Engine\08. Module">
       <UniqueIdentifier>{3b38f328-c799-4dc4-be64-2010e5c8c372}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\03. Manager\CollisionMgr">
-      <UniqueIdentifier>{61b5ee21-9556-4e4a-ade6-3d68d3d54783}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\03. Manager\EvenMgr">
       <UniqueIdentifier>{b4ec83d6-77f6-4932-bfab-94be397c9163}</UniqueIdentifier>
     </Filter>
@@ -94,6 +91,15 @@
     </Filter>
     <Filter Include="Engine\04. Object\UI">
       <UniqueIdentifier>{fff18304-a638-4a40-a5c5-493101d52529}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\03. Manager\UIMgr">
+      <UniqueIdentifier>{4ef02afa-f93d-41f0-9145-1ced45c2b18b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Object\UI\Panel">
+      <UniqueIdentifier>{1f559895-d060-4c6f-a6ad-188b4695fc44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\03. Manager\EvenMgr\CollisionMgr">
+      <UniqueIdentifier>{61b5ee21-9556-4e4a-ade6-3d68d3d54783}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -165,7 +171,7 @@
       <Filter>Engine\08. Module</Filter>
     </ClInclude>
     <ClInclude Include="CCollisionMgr.h">
-      <Filter>Engine\03. Manager\CollisionMgr</Filter>
+      <Filter>Engine\03. Manager\EvenMgr\CollisionMgr</Filter>
     </ClInclude>
     <ClInclude Include="CEventMgr.h">
       <Filter>Engine\03. Manager\EvenMgr</Filter>
@@ -196,6 +202,12 @@
     </ClInclude>
     <ClInclude Include="CUI.h">
       <Filter>Engine\04. Object\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="CUIMgr.h">
+      <Filter>Engine\03. Manager\UIMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="CPanelUI.h">
+      <Filter>Engine\04. Object\UI\Panel</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -262,7 +274,7 @@
       <Filter>Engine\08. Module</Filter>
     </ClCompile>
     <ClCompile Include="CCollisionMgr.cpp">
-      <Filter>Engine\03. Manager\CollisionMgr</Filter>
+      <Filter>Engine\03. Manager\EvenMgr\CollisionMgr</Filter>
     </ClCompile>
     <ClCompile Include="CEventMgr.cpp">
       <Filter>Engine\03. Manager\EvenMgr</Filter>
@@ -290,6 +302,12 @@
     </ClCompile>
     <ClCompile Include="CUI.cpp">
       <Filter>Engine\04. Object\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="CUIMgr.cpp">
+      <Filter>Engine\03. Manager\UIMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="CPanelUI.cpp">
+      <Filter>Engine\04. Object\UI\Panel</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

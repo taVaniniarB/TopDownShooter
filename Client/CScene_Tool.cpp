@@ -31,11 +31,23 @@ void CScene_Tool::Enter()
 	// UI 생성
 	Vec2 vResolution = CCore::GetInst()->GetResolution();
 
-	CUI* pUI = new CUI;
-	pUI->SetScale(Vec2(100.f, 30.f));
+	CUI* pUI = new CUI(false);
+
+	pUI->SetName(L"ParentUI");
+	pUI->SetScale(Vec2(500.f, 300.f));
 	pUI->SetPos(Vec2(vResolution.x - pUI->GetScale().x, 0.f));
-	
+
+	CUI* pChildUI = new CUI(false);
+	pChildUI->SetName(L"ChildUI");
+	pChildUI->SetScale(Vec2(100.f, 40.f));
+	// 부모로부터 상대적 위치
+	pChildUI->SetPos(Vec2(0.f, 0.f));
+
+	pUI->AddChild(pChildUI);
+
+	// pUI 하나만 씬에 넣어두면, 계층적으로 자식을 호출
 	AddObject(pUI, GROUP_TYPE::UI);
+
 
 	// 카메라 LookAt 지정
 	// 	   //위의 UI 생성에서 해상도 받아오는 부분 있어서, 일단 주석 처리
@@ -55,6 +67,7 @@ void CScene_Tool::update()
 {
 	CScene::update();
 
+	// 마우스 좌표 받아서 타일 인덱스를 변환
 	SetTileIdx();
 }
 
