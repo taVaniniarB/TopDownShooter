@@ -5,6 +5,9 @@
 #include "C:\Users\hayoa\source\repos\WinApiLecture\Client\CAnimator.cpp"
 
 
+#include "C:\Users\hayoa\source\repos\WinApiLecture\Client\CBtnUI.cpp"
+
+
 #include "C:\Users\hayoa\source\repos\WinApiLecture\Client\CCamera.cpp"
 
 
@@ -24,7 +27,4 @@
 
 
 #include "C:\Users\hayoa\source\repos\WinApiLecture\Client\CMissile.cpp"
-
-
-#include "C:\Users\hayoa\source\repos\WinApiLecture\Client\CMonster.cpp"
 

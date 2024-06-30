@@ -36,3 +36,20 @@ void CPathMgr::init()
 
 	//SetWindowText(CCore::GetInst()->GetMainHwnd(), m_szContentPath);
 }
+
+wstring CPathMgr::GetRelativePath(const wchar_t* _filepath)
+{
+	_filepath;
+
+	// string 함수를 이용하자
+	wstring strFilePath = _filepath;
+
+	// 특정 지점으로부터 문자열 잘라내기 (잘라낸거 반환)
+	size_t iAbsLen = wcslen(m_szContentPath);
+	size_t iFullLen = strFilePath.length();
+
+	// 시작 인덱스, 잘라낼 문자 개수
+	wstring strRelativePath = strFilePath.substr(iAbsLen, iFullLen - iAbsLen);
+
+	return strRelativePath;
+}

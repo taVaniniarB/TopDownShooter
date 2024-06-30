@@ -101,6 +101,9 @@
     <Filter Include="Engine\03. Manager\EvenMgr\CollisionMgr">
       <UniqueIdentifier>{61b5ee21-9556-4e4a-ade6-3d68d3d54783}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\04. Object\UI\BtnUI">
+      <UniqueIdentifier>{440f4a19-90ba-452e-bbd0-d85b7f84f477}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CCore.h">
@@ -209,6 +212,9 @@
     <ClInclude Include="CPanelUI.h">
       <Filter>Engine\04. Object\UI\Panel</Filter>
     </ClInclude>
+    <ClInclude Include="CBtnUI.h">
+      <Filter>Engine\04. Object\UI\BtnUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
@@ -308,6 +314,9 @@
     </ClCompile>
     <ClCompile Include="CPanelUI.cpp">
       <Filter>Engine\04. Object\UI\Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="CBtnUI.cpp">
+      <Filter>Engine\04. Object\UI\BtnUI</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -5,16 +5,25 @@
 #include "CSceneMgr.h"
 #include "CCore.h"
 #include "CCamera.h"
+#include "CPathMgr.h"
 
 #include "CTile.h"
 #include "CResMgr.h"
 #include "CSceneMgr.h"
 #include "CUI.h"
+#include "CUIMgr.h"
 
 #include "resource.h"
+#include "CPanelUI.h"
+#include "CBtnUI.h"
+
+
+// 함수포인터 인자 전달해야 하는데 전역함수가 아래에 있어서 전방선언
+void ChangeScene(DWORD_PTR, DWORD_PTR);
 
 
 CScene_Tool::CScene_Tool()
+	: m_pUI(nullptr)
 {
 }
 
@@ -31,23 +40,42 @@ void CScene_Tool::Enter()
 	// UI 생성
 	Vec2 vResolution = CCore::GetInst()->GetResolution();
 
-	CUI* pUI = new CUI(false);
+	CUI* pPanelUI = new CPanelUI;
 
-	pUI->SetName(L"ParentUI");
-	pUI->SetScale(Vec2(500.f, 300.f));
-	pUI->SetPos(Vec2(vResolution.x - pUI->GetScale().x, 0.f));
+	pPanelUI->SetName(L"ParentUI");
+	pPanelUI->SetScale(Vec2(300.f, 200.f));
+	pPanelUI->SetPos(Vec2(vResolution.x - pPanelUI->GetScale().x, 0.f));
 
-	CUI* pChildUI = new CUI(false);
-	pChildUI->SetName(L"ChildUI");
-	pChildUI->SetScale(Vec2(100.f, 40.f));
+	CBtnUI* pBtnUI = new CBtnUI;
+	pBtnUI->SetName(L"ChildUI");
+	pBtnUI->SetScale(Vec2(100.f, 40.f));
 	// 부모로부터 상대적 위치
-	pChildUI->SetPos(Vec2(0.f, 0.f));
+	pBtnUI->SetPos(Vec2(0.f, 0.f));
 
-	pUI->AddChild(pChildUI);
+	// 버튼 클릭시 세이브하도록 구현
+	// 멤버함수 포인터의 경우 함수명 앞에 & 붙여줘야만 주소로 인식
+	// BtnUI에서 부모 클래스의 함수를 받도록 해줬으므로 부모 오브젝트로 캐스팅 필요
+	((CBtnUI*)pBtnUI)->SetClickedCallBack(this, (SCENE_MEMFUNC)&CScene_Tool::SaveTileData);
+	
+	pPanelUI->AddChild(pBtnUI);
 
 	// pUI 하나만 씬에 넣어두면, 계층적으로 자식을 호출
-	AddObject(pUI, GROUP_TYPE::UI);
+	AddObject(pPanelUI, GROUP_TYPE::UI);
 
+
+	// 복사본 UI
+	/* 복사본 UI
+	CUI* pClonePanel = pPanelUI->Clone();
+	pClonePanel->SetPos(pClonePanel->GetPos() + Vec2(-100.f, 100.f));
+	
+	// 복제한 UI의 버튼에 콜백함수 등록
+	((CBtnUI*)pClonePanel->GetChildUI()[0])->SetClickedCallBack(&ChangeScene, 0, 0);
+	
+	AddObject(pClonePanel, GROUP_TYPE::UI);
+
+	m_pUI = pClonePanel;
+
+	*/
 
 	// 카메라 LookAt 지정
 	// 	   //위의 UI 생성에서 해상도 받아오는 부분 있어서, 일단 주석 처리
@@ -58,6 +86,7 @@ void CScene_Tool::Enter()
 
 void CScene_Tool::Exit()
 {
+	DeleteAll();
 }
 
 
@@ -69,6 +98,24 @@ void CScene_Tool::update()
 
 	// 마우스 좌표 받아서 타일 인덱스를 변환
 	SetTileIdx();
+
+	// G키를 누르면 툴씬이 기억하고 있는 UI로 강제 포커싱
+	if (KEY_TAP(KEY::G))
+	{
+		CUIMgr::GetInst()->SetFocusedUI(m_pUI);
+	}
+
+	// 컨트롤 + S 누르면 타일을 저장
+	if (KEY_TAP(KEY::S) && KEY_HOLD(KEY::CTRL))
+	{
+		SaveTileData();
+	}
+
+	// F 누르면 파일 로드
+	if (KEY_TAP(KEY::F))
+	{
+		LoadTileData();
+	}
 }
 
 
@@ -109,6 +156,144 @@ void CScene_Tool::SetTileIdx()
 	
 }
 
+void CScene_Tool::SaveTileData()
+{
+	// 창을 띄워서 어디에 뭐라 저장할지 정하고
+	// 그 경로 받아와서 SaveTile 함수를 호출하자.
+
+	OPENFILENAME ofn = {};
+
+	// 저장될 파일의 절대경로를 넣을 변수
+	wchar_t szName[256] = {};
+
+	ofn.lStructSize = sizeof(OPENFILENAME);
+	ofn.hwndOwner = CCore::GetInst()->GetMainHwnd();
+
+	// 완성된 경로가 채워질 주소(배열의 시작주소)를 가리킨다
+	ofn.lpstrFile = szName;
+
+	ofn.nMaxFile = sizeof(szName); // 버퍼 크기 (바이트)
+	// lpstrFilter: 확장자 필터 규칙
+	ofn.lpstrFilter = L"ALL\0*.*\0Tile\0*.tile\0";
+	// 필터 인덱스: 골라놓은 것 중 초기 필터를 무엇으로 세팅하는가?
+	// 0선택: ALL이라는 뜻...
+	ofn.nFilterIndex = 0;
+	//창 오픈 시 캡션인데, 수정 가능한 값 줘야해서 일단 패스
+	ofn.lpstrFileTitle = nullptr;
+	ofn.nMaxFileTitle = 0;
+
+	wstring strTileFolder = CPathMgr::GetInst()->GetContentPath();
+	strTileFolder += L"tile";
+	// 저장창의 초기 경로
+	ofn.lpstrInitialDir = strTileFolder.c_str();
+	// 패스가 존재하고 파일이 존재해야 한다 (비트연산 조합)
+	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+
+
+	// 세팅한 정보 바탕으로 창 열기
+	if (GetSaveFileName(&ofn)) 
+	{
+		SaveTile(szName);
+	}
+}
+
+void CScene_Tool::SaveTile(const wstring& _strFilePath)
+{
+	// 커널 오브젝트
+	FILE* pFile = nullptr;
+
+	// C++에서 기본으로 제공하는 입출력 함수
+	// 이중 포인터를 인자로 넘김으로써, 실행 후에 pFile은 무언가 가리키게 됨
+	// 파일포인터의 주소 / 절대경로(wchar*) / 모드(w: 쓰기)
+	_wfopen_s(&pFile, _strFilePath.c_str(), L"wb");
+
+	// 파일 열기(fopen) 실패. 성공했다면 어떤 주소가 채워져 있을테니...
+	assert(pFile);
+
+	// 데이터 저장
+	// 저장할 것: 타일 가로세로 개수
+	UINT xCount = GetTileX();
+	UINT yCount = GetTileY();
+
+	// 입력할 데이터의 시작주소 / 입력할 데이터의 크기 / 개수(배열일 경우 배열의크기) / 
+	// 시작주소가 void포인터인데, 어떤 데이터든 받을 수 있게 하기 위함임.
+	// 일단 받은 다음, 두 번째 인자 크기 단위로 읽는다.
+	// 저장할 데이터가 무엇이든 간에 범용적 적용을 위함.
+	fwrite(&xCount, sizeof(UINT), 1, pFile);
+	fwrite(&yCount, sizeof(UINT), 1, pFile);
+
+
+	// 타일 각각의 정보는 각자 자기(타일) 쪽에 구현 (세이브가 아닌 타일의 역할)
+	const vector<CObject*>& vecTile = GetGroupObject(GROUP_TYPE::TILE);
+
+
+	// 모든 타일을 개별적으로, 저장할 데이터 저장하게 함
+	// 타일 전체를 순회하며 각자 타일에게 저장할거있음 저장해라, save 함수 호출
+	// 타일들은 각각 자신을 save 한다
+	for (size_t i = 0; i < vecTile.size(); ++i)
+	{
+		((CTile*)vecTile[i])->Save(pFile);
+	}
+
+
+	// 이 파일에 대한 파일 입출력 닫기
+	fclose(pFile);
+
+}
+
+//어떤 파일을 열지 UI 통해 지정하고, 그것을 Load하기
+void CScene_Tool::LoadTileData()
+{
+	// 창 열어서 경로를 알아내고 load tile 해야한다.
+
+	OPENFILENAME ofn = {};
+
+	// 오픈할 파일의 절대경로를 넣을 변수
+	wchar_t szName[256] = {};
+
+	ofn.lStructSize = sizeof(OPENFILENAME);
+	ofn.hwndOwner = CCore::GetInst()->GetMainHwnd();
+
+	// 선택한 파일의 경로가 채워질 주소(배열의 시작주소)를 가리킨다
+	ofn.lpstrFile = szName;
+
+	ofn.nMaxFile = sizeof(szName); // 버퍼 크기 (바이트)
+	// lpstrFilter: 확장자 필터 규칙....?
+	// 모든 파일: L"ALL\0*.*"
+	// 저장 창 열렸을 때 필더된 확장자 파일들만 목록에 뜨는거!!!!
+	ofn.lpstrFilter = L"ALL\0*.*\0Tile\0*.tile\0";
+	// 필터 인덱스: 골라놓은 것 중 초기 필터를 무엇으로 세팅하는가?
+	// 0선택: ALL이라는 뜻...
+	ofn.nFilterIndex = 0;
+	//창 오픈 시 캡션인데, 수정 가능한 값 줘야해서 일단 패스
+	ofn.lpstrFileTitle = nullptr;
+	ofn.nMaxFileTitle = 0;
+
+	wstring strTileFolder = CPathMgr::GetInst()->GetContentPath();
+	strTileFolder += L"tile";
+	// 저장창의 초기 경로
+	ofn.lpstrInitialDir = strTileFolder.c_str();
+	// 패스가 존재하고 파일이 존재해야 한다 (비트연산 조합)
+	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+
+
+	// 세팅한 정보 바탕으로 오픈 창 열기
+	if (GetOpenFileName(&ofn))
+	{
+		// 상대경로 변환
+		wstring strRelativePath = CPathMgr::GetInst()->GetRelativePath(szName);
+		
+		LoadTile(strRelativePath);
+	}
+}
+
+
+
+// 전역 함수
+void ChangeScene(DWORD_PTR, DWORD_PTR)
+{
+	ChangeScene(SCENE_TYPE::START);
+}
 
 
 
@@ -133,8 +318,6 @@ INT_PTR CALLBACK TileCountProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
 			UINT iXCount = GetDlgItemInt(hDlg, IDC_EDIT1, nullptr, false);
 			UINT iYCount = GetDlgItemInt(hDlg, IDC_EDIT2, nullptr, false);
 
-			// 타일 생성 전에 해야할 것: 이전 타일 지우기
-			// 타일 그룹 오브젝트들을 모두 날리자
 			// 여기는 멤버함수가 아니므로 SceneMgr에서부터 scene 받아와야 함
 			CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
 			// 무조건 Tool Scene에서만 쓸 UI 기능이므로, 메뉴바는 ToolScene에서만 활성화한다
@@ -144,7 +327,7 @@ INT_PTR CALLBACK TileCountProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
 			CScene_Tool* pToolScene = dynamic_cast<CScene_Tool*>(pCurScene);
 			assert(pToolScene);
 
-			pToolScene->DeleteGroup(GROUP_TYPE::TILE);
+
 			pToolScene->CreateTile(iXCount, iYCount);
 
 			EndDialog(hDlg, LOWORD(wParam));

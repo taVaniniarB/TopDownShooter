@@ -84,6 +84,9 @@ void CScene_Start::Enter()
 		AddObject(pMonsterObj, GROUP_TYPE::MONSTER);
 	}
 
+	//타일 로딩
+	//LoadTile(L"Tile\\start.tile");
+
 	// 충돌 지정
 	// Player 그룹과 Monster 그룹 간의 충돌체크
 	// scene은 마지막에 두 그룹 간의 충돌 여부를 검사

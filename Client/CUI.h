@@ -19,6 +19,7 @@ public:
     Vec2 GetFinalPos() { return m_vFinalPos; }
     CUI* GetParent() { return m_pParentUI; }
     bool IsMouseOn() { return m_bMouseOn; }
+    bool IsLbtnDown() { return m_bLbtnDown; }
 
     // 자식 UI 들어오면 벡터에 넣고, 부모 연결
     void AddChild(CUI* _pUI)
@@ -35,8 +36,6 @@ public:
     virtual void render(HDC _dc);
     virtual void finalUpdate();
 
-    CLONE(CUI);
-
 private:
     void update_child();
     void finalUpdate_Child();
@@ -51,10 +50,14 @@ public:
     virtual void MousebtnUp(); // 마우스 떼졌을 때
     virtual void MouseLbtnClicked(); // 클릭
 
+    virtual CUI* Clone() = 0;
+
 public:
     // 카메라 영향 유무 까먹고 세팅 안 할 수 있으므로
     // UI 생성 시, 무조건 카메라 영향 여부를 받기로 하자 (기본생성자 없애기)
     CUI(bool _bCamAff);
+    // 깊복 구현 위한 복.생
+    CUI(const CUI& _origin);
     // 그냥 명시적으로 virtual 붙여줌
     virtual ~CUI();
 

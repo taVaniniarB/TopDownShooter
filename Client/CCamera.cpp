@@ -64,14 +64,21 @@ void CCamera::CalDiff()
 		// 쫓아갈 방향 벡터 계산
 		Vec2 vLookDir = m_vLookAt - m_vPrevLookAt;
 
+		// 영벡터 발생 방어
+		if (!vLookDir.isZero())
+		{
 		// 등가속도 운동
 		// 속도-시간 그래프의 기울기(가속도의 크기)를 4로 고정해서
 		// 시간은 AccTime으로 하여, 속도 v를 구한다.
 		// 또한, 거속시 공식에 따라 시간 값이 커야 속도가 느려지므로, 빠름>느림 으로 하기 위해 시간값을 m_fTime - m_fAccTime 이렇게 계산해줌
-		float vel = 4.f * (m_fTime - m_fAccTime);
+			float vel = 4.f * (m_fTime - m_fAccTime);
 
-		// 이전 위치 + ( 방향 * (속력 * 가속도) * DT )
-		m_vCurLookAt = m_vPrevLookAt + vLookDir.Nomalize() * m_fSpeed * vel * fDT;
+			// 이전 위치 + ( 방향 * (속력 * 가속도) * DT )
+			m_vCurLookAt = m_vPrevLookAt + vLookDir.Nomalize() * m_fSpeed * vel * fDT;
+		}
+
+
+		
 
 		// 이전 LookAt + (정규화한 방향벡터*속도)
 		//m_vCurLookAt = m_vPrevLookAt + vLookDir.Nomalize() * m_fSpeed * fDT;

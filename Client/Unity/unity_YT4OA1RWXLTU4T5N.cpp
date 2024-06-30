@@ -1,4 +1,7 @@
 
+#include "C:\Users\hayoa\source\repos\WinApiLecture\Client\CMonster.cpp"
+
+
 #include "C:\Users\hayoa\source\repos\WinApiLecture\Client\CObject.cpp"
 
 
@@ -24,7 +27,4 @@
 
 
 #include "C:\Users\hayoa\source\repos\WinApiLecture\Client\CScene_Start.cpp"
-
-
-#include "C:\Users\hayoa\source\repos\WinApiLecture\Client\CScene_Tool.cpp"
 

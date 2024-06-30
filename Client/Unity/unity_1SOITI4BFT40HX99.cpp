@@ -1,4 +1,7 @@
 
+#include "C:\Users\hayoa\source\repos\WinApiLecture\Client\CScene_Tool.cpp"
+
+
 #include "C:\Users\hayoa\source\repos\WinApiLecture\Client\CSound.cpp"
 
 

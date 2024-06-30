@@ -7,6 +7,13 @@ struct Vec2
 	float x;
 	float y;
 public:
+	bool isZero()
+	{
+		if (x == 0.f && y == 0.f)
+			return true;
+		return false;
+	}
+
 	float Length() // ∫§≈Õ¿« ±Ê¿Ã
 	{
 		return sqrt(x * x + y * y);
