@@ -2,6 +2,7 @@
 #include "CScene.h"
 
 class CUI;
+class CTile;
 
 class CScene_Tool:
 	public CScene
@@ -9,6 +10,8 @@ class CScene_Tool:
 private:
 	// 碍力 器目教且 UI 历厘
 	CUI* m_pUI;
+	CTile* m_pSelectedTile;
+
 public:
 	virtual void Enter();
 	virtual void Exit();

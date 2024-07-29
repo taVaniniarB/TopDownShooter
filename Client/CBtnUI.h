@@ -7,9 +7,9 @@
 typedef void (*BTN_FUNC) (DWORD_PTR, DWORD_PTR);
 
 // CScene에서 파생되는 모든 클래스의 멤버함수들 받을 수 있다
-// Scene에 구현된 인자가 void고 반환형이 void인 멤버함수 타입
+// Scene에 구현된 인자가 void고 반환형이 void인 멤버함수 타입을 '*SCENE_MEMFUNC'라 정의한다.
 typedef void (CScene:: *SCENE_MEMFUNC) (void);
-typedef void (CObject::* PLAYER_MEMFUNC) (void);
+// typedef void (CObject:: *PLAYER_MEMFUNC) (void);
 
 class CBtnUI :
     public CUI

@@ -24,6 +24,7 @@ void ChangeScene(DWORD_PTR, DWORD_PTR);
 
 CScene_Tool::CScene_Tool()
 	: m_pUI(nullptr)
+	, m_pSelectedTile(nullptr)
 {
 }
 
@@ -61,6 +62,27 @@ void CScene_Tool::Enter()
 
 	// pUI 하나만 씬에 넣어두면, 계층적으로 자식을 호출
 	AddObject(pPanelUI, GROUP_TYPE::UI);
+
+
+    // 과제 - 타일 UI
+	CUI* pTilePanelUI = new CPanelUI;
+	pTilePanelUI->SetName(L"TileParentUI");
+	pTilePanelUI->SetScale(Vec2(300.f, 400.f));
+	pTilePanelUI->SetPos(Vec2(vResolution.x - pTilePanelUI->GetScale().x, 100.f));
+	AddObject(pTilePanelUI, GROUP_TYPE::UI);
+
+	for (UINT i = 0; i < 12; ++i)
+	{
+		CBtnUI* pTileSelectUI = new CBtnUI;
+		pTileSelectUI->SetName(L"ChildUI"); //문자열 합치기 함수로 타일에 이름을 부여하자
+		pTileSelectUI->SetScale(Vec2(pTilePanelUI->GetScale().x/3, pTilePanelUI->GetScale().x / 3));
+
+		// 부모로부터 상대적 위치
+		pTileSelectUI->SetPos(Vec2(0.f, 0.f));
+		((CBtnUI*)pTileSelectUI)->SetClickedCallBack(this, (SCENE_MEMFUNC)&CScene_Tool::SaveTileData);
+		pTilePanelUI->AddChild(pTileSelectUI);
+		AddObject(pTilePanelUI, GROUP_TYPE::UI);
+	}
 
 
 	// 복사본 UI
