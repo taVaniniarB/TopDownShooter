@@ -24,7 +24,7 @@ void ChangeScene(DWORD_PTR, DWORD_PTR);
 
 CScene_Tool::CScene_Tool()
 	: m_pUI(nullptr)
-	, m_pSelectedTile(nullptr)
+	, m_pSelectedTileIdx(0)
 {
 }
 
@@ -73,15 +73,27 @@ void CScene_Tool::Enter()
 
 	for (UINT i = 0; i < 12; ++i)
 	{
-		CBtnUI* pTileSelectUI = new CBtnUI;
-		pTileSelectUI->SetName(L"ChildUI"); //문자열 합치기 함수로 타일에 이름을 부여하자
-		pTileSelectUI->SetScale(Vec2(pTilePanelUI->GetScale().x/3, pTilePanelUI->GetScale().x / 3));
+		const int iMaxRow = 3;
+		int iRow = 0; int iCol = 0;
 
-		// 부모로부터 상대적 위치
-		pTileSelectUI->SetPos(Vec2(0.f, 0.f));
-		((CBtnUI*)pTileSelectUI)->SetClickedCallBack(this, (SCENE_MEMFUNC)&CScene_Tool::SaveTileData);
+		wchar_t name[20] = L"ChildUI";
+		wchar_t idx[10];
+		_itow_s(i, idx, 10);
+		wcscat_s(name, idx);
+
+		CBtnUI* pTileSelectUI = new CBtnUI;
+		pTileSelectUI->SetName(name); //두 wchar 버퍼 합치기 함수로 타일에 이름을 부여
+
+		int iXScale = (int)(pTilePanelUI->GetScale().x / iMaxRow);
+		int iTileUIScale = 80;
+		
+		pTileSelectUI->SetScale(Vec2((float)iTileUIScale, (float)iTileUIScale));
+		iRow = i / iMaxRow;
+		iCol = (int)(i % iMaxRow);
+		pTileSelectUI->SetPos(Vec2((float)iCol * iXScale, (float)iRow * iXScale));
+
+		((CBtnUI*)pTileSelectUI)->SetClickedCallBack(this, (SCENE_MEMFUNC_INT)&CScene_Tool::SetSelectedTile, i);
 		pTilePanelUI->AddChild(pTileSelectUI);
-		AddObject(pTilePanelUI, GROUP_TYPE::UI);
 	}
 
 
@@ -138,6 +150,19 @@ void CScene_Tool::update()
 	{
 		LoadTileData();
 	}
+
+	if (KEY_HOLD(KEY::LBTN) || KEY_TAP(KEY::LBTN))
+	{
+		Vec2 vMousePos = MOUSE_POS;
+		vMousePos = CCamera::GetInst()->GetRealPos(vMousePos);
+		
+		int iTileX = GetTileX();
+		int iTileY = GetTileY();
+		if (iTileX)
+
+		// 클릭된 타일의 인덱스를 변경
+		ChangeTile(vMousePos, m_pSelectedTileIdx);
+	}
 }
 
 
@@ -146,7 +171,7 @@ void CScene_Tool::SetTileIdx()
 	if (KEY_TAP(KEY::LBTN))
 	{
 		// 마우스 위치를 실제좌표로 변환
-		Vec2 vMousePos = MOUSE_POS;;
+		Vec2 vMousePos = MOUSE_POS;
 		vMousePos = CCamera::GetInst()->GetRealPos(vMousePos);
 
 		int iTileX = (int)GetTileX();
@@ -309,6 +334,10 @@ void CScene_Tool::LoadTileData()
 	}
 }
 
+void CScene_Tool::SetSelectedTile(int _idx)
+{
+	m_pSelectedTileIdx = _idx;
+}
 
 
 // 전역 함수

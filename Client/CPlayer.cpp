@@ -26,7 +26,7 @@ CPlayer::CPlayer()
 
 
 	// Texture 로딩하기
-	CTexture* pTex = CResMgr::GetInst()->LoadTexture(L"PlayerTex", L"texture\\Fif.bmp");
+	CTexture* pTex = CResMgr::GetInst()->LoadTexture(L"PlayerTex", L"texture\\ray_t.bmp");
 	
 	CreateAnimator();
 	GetAnimator()->CreateAnimation(L"IDLE", pTex, Vec2(0.f, 0.f), Vec2(36.f, 40.f), Vec2(36.f, 0.f), 0.1f, 12);
@@ -44,6 +44,7 @@ CPlayer::CPlayer()
 
 CPlayer::~CPlayer()
 {
+	
 }
 
 
@@ -79,7 +80,30 @@ void CPlayer::update()
 }
 void CPlayer::render(HDC _dc)
 {
-	component_render(_dc);
+	// 컴포넌트(충돌체, etc,,) 있는 경우 렌더
+	//component_render(_dc);
+
+	CTexture* pTex = CResMgr::GetInst()->LoadTexture(L"PlayerTex", L"texture\\rat_t.bmp");
+
+	Vec2 vPos = GetPos();
+	vPos = CCamera::GetInst()->GetRenderPos(vPos);
+
+	float width = (float)pTex->Width();
+	float height = (float)pTex->Height();
+
+	BLENDFUNCTION bf = {};
+	bf.BlendOp = AC_SRC_OVER;
+	bf.AlphaFormat = AC_SRC_ALPHA;
+	bf.BlendFlags = 0;
+	bf.SourceConstantAlpha = 127; //전역적으로 적용되는 알파!
+
+	// 목적지 dc, 출력위치(좌상단의 x, y), 가로세로, 원본 dc, 원본 이미지의 좌상단 xy, 너비높이, BLANDFUNCTION 구조체
+	AlphaBlend(_dc
+		, int(vPos.x - width / 2.f)
+		, int(vPos.y - height / 2.f)
+		, int(width), int(height)
+		, pTex->GetDC()
+		, 0, 0, (int)width, (int)height, bf);
 }
 void CPlayer::CreateMissile()
 {

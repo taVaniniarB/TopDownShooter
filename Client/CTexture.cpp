@@ -23,6 +23,7 @@ void CTexture::Load(const wstring& _strFilePath)
 	assert(m_hBit);
 
 	// 비트맵과 연결할 텍스처 자체 dc
+	// 메인 DC와 호환되는 텍스처 DC를 생성
 	m_dc = CreateCompatibleDC(CCore::GetInst()->GetMainDC());
 	
 	// 비트맵과 DC 연결
@@ -34,5 +35,19 @@ void CTexture::Load(const wstring& _strFilePath)
 
 	// 특정 오브젝트에 대한 정보를 주는 함수
 	// 비트맵 정보 멤버에 정보를 저장
+	GetObject(m_hBit, sizeof(BITMAP), &m_bitInfo);
+}
+
+void CTexture::Create(UINT _iwidth, UINT _iHeight)
+{
+	// 메인DC 가져와서, 그것을 기반으로 비트맵과 DC를 만들고, 둘을 연결해준다.
+
+	HDC mainDC = CCore::GetInst()->GetMainDC();
+	m_hBit = CreateCompatibleBitmap(mainDC, _iwidth, _iHeight);
+	m_dc = CreateCompatibleDC(mainDC);
+
+	HBITMAP hOldBit = (HBITMAP)SelectObject(m_dc, m_hBit);
+	DeleteObject(hOldBit);
+
 	GetObject(m_hBit, sizeof(BITMAP), &m_bitInfo);
 }

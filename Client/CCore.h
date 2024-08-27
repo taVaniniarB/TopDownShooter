@@ -1,5 +1,7 @@
 #pragma once
 
+class CTexture;
+
 class CCore
 {
 	SINGLE(CCore);
@@ -8,8 +10,12 @@ private:
 	POINT	m_ptResolution; // 메인 윈도우 해상도
 	HDC		m_hDC;			// 메인 윈도우에 Draw 할 DC
 
-	HBITMAP m_hBit;			// 버퍼 비트맵
-	HDC		m_memDC;		// 버퍼에 Draw 할 DC
+
+	// 더블 버퍼링 용도의 백버퍼를 텍스처로 대체함 (멤버가 겹쳐서)
+	//HBITMAP m_hBit;			// 버퍼 비트맵
+	//HDC		m_memDC;		// 버퍼에 Draw 할 DC (메모리 DC)
+
+	CTexture* m_pMemTex;		// 백버퍼 텍스처
 
 	// 자주 사용하는 GDI Object
 	// 필요할 때마다 생성은 비효율적이니까

@@ -43,6 +43,24 @@ CTexture* CResMgr::LoadTexture(const wstring& _strKey, const wstring& _strRelati
 	return pTex;
 }
 
+CTexture* CResMgr::CreateTexture(const wstring& _strKey, UINT _iwidth, UINT _iheight)
+{
+	// 동일 키 값 체크
+	CTexture* pTex = FindTexture(_strKey);
+	if (nullptr != pTex)
+	{
+		return pTex;
+	}
+
+	pTex = new CTexture; 
+	pTex->Create(_iwidth, _iheight);
+	// 텍스처가 스스로의 경로와 스스로 어떤 키(이름)으로 저장됐는지 알게 한다
+	pTex->SetKey(_strKey);
+	m_mapTex.insert(make_pair(_strKey, pTex));
+
+	return pTex;
+}
+
 // 텍스처 맵 순회 후, 키 맞는거 있으면 그 텍스처 객체 반환
 CTexture* CResMgr::FindTexture(const wstring& _strKey)
 {

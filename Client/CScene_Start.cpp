@@ -98,6 +98,10 @@ void CScene_Start::Enter()
 	// 	   위에 해상도 받아다 몬스터 위치지정 하는 코드 있어서 일단 주석처리
 	//Vec2 vResolution = CCore::GetInst()->GetResolution();
 	CCamera::GetInst()->SetLookAt(vResolution / 2.f);
+	
+	// Camera 효과 지정
+	CCamera::GetInst()->FadeOut(1.f);
+	CCamera::GetInst()->FadeIn(1.f);
 }
 
 // 충돌조합 체크박스를 해제하듯이 충돌 그룹 해제해주어야 함

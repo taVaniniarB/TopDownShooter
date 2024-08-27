@@ -31,6 +31,8 @@ public:
 	virtual void finalUpdate();
 	virtual void render(HDC _dc);
 
+	void render_tile(HDC _dc);
+
 	// 씬 진입 시 초기 작업을 하는 함수. 부모에선 구현 안함.
 	// 자식들이 자기만의 기능을 구현하면 되니까 부모 쪽에서 가상함수화 시켜서
 	// 실제 객체쪽(본인쪽)의 start가 호출되도록 한거니까
@@ -61,6 +63,7 @@ public:
 
 	// 가로세로 값 받아서 타일 만들어주는 함수
 	void CreateTile(UINT _iXCount, UINT _iYCount);
+	void ChangeTile(Vec2 _vMousePos, int _idx);
 
 	// Tool Scene에서 파일을 세이브하고, 씬(을 상속받은 다른 씬들)은 그것을 load한다
 	void LoadTile(const wstring& _sttRelativePath);

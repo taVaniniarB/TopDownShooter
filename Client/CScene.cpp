@@ -4,6 +4,9 @@
 #include "CTile.h"
 #include "CResMgr.h"
 #include "CPathMgr.h"
+#include "CKeyMgr.h"
+#include "CCamera.h"
+#include "CCore.h"
 
 
 
@@ -54,6 +57,28 @@ void CScene::CreateTile(UINT _iXCount, UINT _iYCount)
 	}
 }
 
+void CScene::ChangeTile(Vec2 _vMousePos, int _idx)
+{
+	int iTileX = (int)GetTileX();
+	int iTileY = (int)GetTileY();
+
+	// 음수좌표 고려하여 int
+	int iCol = (int)_vMousePos.x / TILE_SIZE;
+	int iRow = (int)_vMousePos.y / TILE_SIZE;
+
+	// 타일 없는 곳 클릭 예외처리
+	if (_vMousePos.x < 0.f || iCol >= iTileX
+		|| _vMousePos.y < 0.f || iRow >= iTileY)
+	{
+		return;
+	}
+
+	int iIdx = iCol + (iRow * m_iTileX);
+
+	const vector<CObject*>& vecTile = GetGroupObject(GROUP_TYPE::TILE);
+	CTile* changeTile = dynamic_cast<CTile*>(vecTile[iIdx]);
+	changeTile->SetImgIdx(_idx);
+}
 
 
 void CScene::update()
@@ -88,6 +113,17 @@ void CScene::render(HDC _dc)
 {
 	for (UINT i = 0; i < (UINT)GROUP_TYPE::END; ++i)
 	{
+		// 현재 렌더링 그룹이 타일일 시
+		if ((UINT)GROUP_TYPE::TILE == i)
+		{
+			// 따로 렌더링 함수를 구현한다.
+			render_tile(_dc);
+			continue;
+		}
+
+		// 렌더 전, 객체가 죽은 상태가 아닌지 검사하여 null 참조를 방지한다
+		// 렌더에서 이 검사를 하는 이유: finalupdate 등 이미 죽은애와의 충돌하는 건 말이 안 되니까
+		// 가장 나중의 작업인 render에서 구현한 것이다.
 		// earse 함수 쓰기 위해 operator(i, j...) 변수 쓰지 않고
 		// iterator 쓴다
 
@@ -105,6 +141,46 @@ void CScene::render(HDC _dc)
 			{
 				iter = m_arrObj[i].erase(iter); //벡터에서 데이터 삭제 후엔 그 다음 이터 받는 것 기억
 			}
+		}
+	}
+}
+
+void CScene::render_tile(HDC _dc)
+{
+	const vector<CObject*>& vecTile = GetGroupObject(GROUP_TYPE::TILE);
+
+	Vec2 CameraLookat = CCamera::GetInst()->GetLookAt();
+	Vec2 Res = CCore::GetInst()->GetResolution();
+	Vec2 vLT = { (CameraLookat.x - Res.x / 2.f), (CameraLookat.y - Res.y / 2.f) };
+	
+	// 스크린 좌상단 인덱스
+	int iLTCol = (int)vLT.x / TILE_SIZE;
+	
+	int iLTRow = (int)vLT.y / TILE_SIZE;
+
+	int iClientWidth = ((int)Res.x / TILE_SIZE) + 1; // 화면 내에 들어오는 타일 개수(가로) / 잘림 방지 위해 + 1
+	int iClientHeight = ((int)Res.y / TILE_SIZE) + 1; // 세로 타일 개수
+
+	for (int iCurRow = iLTRow; iCurRow < (iLTRow + iClientHeight); ++iCurRow)
+	{
+		for (int iCurCol = iLTCol; iCurCol < (iLTCol + iClientWidth); ++iCurCol)
+		{
+			// 타일이 존재하지 않는 영역을 Lookat 시
+			// 그 부분의 인덱스 계산 및 렌더는 패스
+			// 예외처리
+			// 1. 현재 열은 음수가 될 수 없다
+			// 2. 현재 열은 총 타일 가로 개수보다 클 수 없다
+			// 3. 현재 행은 음수가 될 수 없다
+			// 4. 현재 행은 총 타일 세로 개수보다 클 수 없다
+			if (iCurCol < 0 || m_iTileX <= iCurCol
+				|| iCurRow < 0 || m_iTileY <= iCurRow)
+			{
+				continue;
+			}
+
+			int iIdx = (m_iTileX * iCurRow) + iCurCol;
+
+			vecTile[iIdx]->render(_dc);
 		}
 	}
 }

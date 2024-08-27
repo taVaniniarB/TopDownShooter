@@ -45,4 +45,13 @@ void CBtnUI::MouseLbtnClicked()
 		// 포인터 그대로 안 쓰고, (원형.원형)(인자) 혹은 객체 포인터접근
 		(m_pSceneInst->*m_pSceneFunc)();
 	}
+
+	if (m_pSceneInst && m_pSceneFuncInt)
+	{
+		if (m_param1)
+		{
+			(m_pSceneInst->*m_pSceneFuncInt)(m_param1);
+		}
+	}
 }
+

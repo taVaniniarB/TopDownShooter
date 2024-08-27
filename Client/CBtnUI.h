@@ -10,6 +10,7 @@ typedef void (*BTN_FUNC) (DWORD_PTR, DWORD_PTR);
 // Scene에 구현된 인자가 void고 반환형이 void인 멤버함수 타입을 '*SCENE_MEMFUNC'라 정의한다.
 typedef void (CScene:: *SCENE_MEMFUNC) (void);
 // typedef void (CObject:: *PLAYER_MEMFUNC) (void);
+typedef void (CScene::* SCENE_MEMFUNC_INT) (int);
 
 class CBtnUI :
     public CUI
@@ -20,6 +21,7 @@ private:
     DWORD_PTR       m_param2; 
 
     SCENE_MEMFUNC   m_pSceneFunc; // 함수 포인터
+    SCENE_MEMFUNC_INT m_pSceneFuncInt;
     CScene*         m_pSceneInst; // 함수를 호출할 객체
 
 public:
@@ -40,6 +42,13 @@ public:
     {
         m_pSceneInst = _pScene;
         m_pSceneFunc = _pSceneFunc;
+    }
+
+    void SetClickedCallBack(CScene* _pScene, SCENE_MEMFUNC_INT _pSceneFunc, DWORD_PTR _param1)
+    {
+        m_pSceneInst = _pScene;
+        m_pSceneFuncInt = _pSceneFunc;
+        m_param1 = _param1;
     }
 
     CLONE(CBtnUI);

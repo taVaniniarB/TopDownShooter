@@ -62,9 +62,6 @@
     <Filter Include="Engine\03. Manager\PathMgr">
       <UniqueIdentifier>{3aa5e1f3-62d2-404a-8c7a-de2cff789758}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\03. Manager\ResMgr">
-      <UniqueIdentifier>{8ff6d2bc-7f59-4e45-9e1f-107e8b8c4b2e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\07. Component">
       <UniqueIdentifier>{90beb4b6-5355-4087-9829-a3a619da0716}</UniqueIdentifier>
     </Filter>
@@ -103,6 +100,9 @@
     </Filter>
     <Filter Include="Engine\04. Object\UI\BtnUI">
       <UniqueIdentifier>{440f4a19-90ba-452e-bbd0-d85b7f84f477}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\03. Manager\ResMgr">
+      <UniqueIdentifier>{8ff6d2bc-7f59-4e45-9e1f-107e8b8c4b2e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -215,6 +215,9 @@
     <ClInclude Include="CBtnUI.h">
       <Filter>Engine\04. Object\UI\BtnUI</Filter>
     </ClInclude>
+    <ClInclude Include="AI.h">
+      <Filter>Engine\08. Module</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
@@ -317,6 +320,9 @@
     </ClCompile>
     <ClCompile Include="CBtnUI.cpp">
       <Filter>Engine\04. Object\UI\BtnUI</Filter>
+    </ClCompile>
+    <ClCompile Include="AI.cpp">
+      <Filter>Engine\08. Module</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

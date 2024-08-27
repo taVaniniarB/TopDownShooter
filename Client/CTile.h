@@ -21,6 +21,10 @@ public:
     {
         ++m_iImgIdx;
     }
+    void SetImgIdx(int _idx)
+    {
+        m_iImgIdx = _idx;
+    }
 
 private:
     virtual void update();

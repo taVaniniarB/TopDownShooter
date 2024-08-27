@@ -10,7 +10,8 @@ class CScene_Tool:
 private:
 	// 강제 포커싱할 UI 저장
 	CUI* m_pUI;
-	CTile* m_pSelectedTile;
+	// 현재 선택된 타일 인덱스
+	int m_pSelectedTileIdx;
 
 public:
 	virtual void Enter();
@@ -26,6 +27,7 @@ public:
 	void SaveTileData();
 	// 타일을 파일로 저장 (절대경로 사용)
 	void SaveTile(const wstring& _strFilePath);
+	void SetSelectedTile(int _idx);
 	
 	
 	void LoadTileData();
