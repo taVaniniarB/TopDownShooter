@@ -46,16 +46,18 @@ void CCamera::update()
 			m_vLookAt = m_pTargetObj->GetPos();
 		}
 	}
-
-	if (KEY_HOLD(KEY::UP))
-		m_vLookAt.y -= 500.f * fDT;
-	if (KEY_HOLD(KEY::DOWN))
-		m_vLookAt.y += 500.f * fDT;
-	if (KEY_HOLD(KEY::RIGHT))
-		m_vLookAt.x += 500.f * fDT;
-	if (KEY_HOLD(KEY::LEFT))
-		m_vLookAt.x -= 500.f * fDT;
-
+	else
+	{
+		if (KEY_HOLD(KEY::UP))
+			m_vLookAt.y -= 500.f * fDT;
+		if (KEY_HOLD(KEY::DOWN))
+			m_vLookAt.y += 500.f * fDT;
+		if (KEY_HOLD(KEY::RIGHT))
+			m_vLookAt.x += 500.f * fDT;
+		if (KEY_HOLD(KEY::LEFT))
+			m_vLookAt.x -= 500.f * fDT;
+	}
+	
 
 	// 화면 중앙좌표와 카메라 LookAt 차이 계산
 	CalDiff();

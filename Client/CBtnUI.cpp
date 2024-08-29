@@ -10,6 +10,7 @@ CBtnUI::CBtnUI()
 	, m_param2(0)
 	, m_pSceneInst(nullptr)
 	, m_pSceneFunc(nullptr)
+	, m_pSceneFuncInt(0)
 {
 }
 
@@ -50,7 +51,7 @@ void CBtnUI::MouseLbtnClicked()
 	{
 		if (m_param1)
 		{
-			(m_pSceneInst->*m_pSceneFuncInt)(m_param1);
+			(m_pSceneInst->*m_pSceneFuncInt)((int)m_param1);
 		}
 	}
 }

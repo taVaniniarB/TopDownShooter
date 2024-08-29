@@ -14,6 +14,9 @@
 
 #include "CResMgr.h"
 #include "CTexture.h"
+#include "SelectGDI.h"
+
+#include "resource.h"
 
 
 CCore::CCore()
@@ -25,6 +28,7 @@ CCore::CCore()
 	, m_arrBrush{}
 	, m_arrPen{}
 	, m_pMemTex(nullptr)
+	, m_hMenu(0)
 {
 }
 
@@ -40,6 +44,8 @@ CCore::~CCore()
 		DeleteObject(m_arrPen[i]);
 	}
 	
+	// 참고: DeleteMenu: 메뉴의 항목 지우기
+	DestroyMenu(m_hMenu);
 }
 
 
@@ -49,11 +55,12 @@ int CCore::init(HWND _hWnd, POINT _ptResolution)
 	m_hWnd = _hWnd;
 	m_ptResolution = _ptResolution;
 	
-	// 입력받은 해상도에 맞게 윈도우 크기 조절
-	RECT rt = {0, 0, m_ptResolution.x, m_ptResolution.y};
-	AdjustWindowRect(&rt, WS_OVERLAPPEDWINDOW, true);
 
-	SetWindowPos(m_hWnd, nullptr, 100, 100, rt.right - rt.left, rt.bottom - rt.top, 0);
+	// 입력받은 해상도에 맞게 윈도우 크기 조절
+	ChangeWindowSize(Vec2((float)_ptResolution.x, (float)_ptResolution.y), false);
+
+	// 메뉴바 생성 (메모리 해제 필요)
+	m_hMenu = LoadMenu(nullptr, MAKEINTRESOURCEW(IDC_CLIENT));
 
 	m_hDC = GetDC(m_hWnd);
 
@@ -108,7 +115,7 @@ void CCore::progress()
 	// ==========
 	// 버퍼 텍스처의 DC에 그림을 그린다
 	// 화면 Clear
-	Rectangle(m_pMemTex->GetDC(), -1, -1, m_ptResolution.x + 1, m_ptResolution.y + 1);
+	Clear();
 
 	CSceneMgr::GetInst()->render(m_pMemTex->GetDC());
 
@@ -125,16 +132,48 @@ void CCore::progress()
 	CEventMgr::GetInst()->update();
 }
 
+void CCore::Clear()
+{
+	SelectGDI gdi(m_pMemTex->GetDC(), BRUSH_TYPE::BLACK);
+	Rectangle(m_pMemTex->GetDC(), -1, -1, m_ptResolution.x + 1, m_ptResolution.y + 1);
+}
+
 // 브러시와 펜은 윈도우를 통해 얻을 수도 있겠으나, 코어를 통해 얻어오도록 하자!
 void CCore::CreateBrushPen()
 {
 	// GetStockObject는 자주 사용되는 도구의 집합을 윈도우에서 지정해둔 것이며
 	// 따로 삭제 신경 쓸 필요 없음
 	m_arrBrush[(UINT)BRUSH_TYPE::HOLLOW] = (HBRUSH)GetStockObject(HOLLOW_BRUSH);
+	m_arrBrush[(UINT)BRUSH_TYPE::BLACK] = (HBRUSH)GetStockObject(BLACK_BRUSH);
 
-	//red, green, blue pen
+
+	// red, green, blue pen
+	// 직접 만든 거라 지워줘야 함
 	m_arrPen[(UINT)PEN_TYPE::RED] = CreatePen(PS_SOLID, 1, RGB(255, 0, 0));
 	m_arrPen[(UINT)PEN_TYPE::GREEN] = CreatePen(PS_SOLID, 1, RGB(0, 255, 0));
 	m_arrPen[(UINT)PEN_TYPE::BLUE] = CreatePen(PS_SOLID, 1, RGB(0, 0, 255));
 
+}
+
+
+void CCore::DockMenu()
+{
+	// 툴씬에서 사용할 메뉴를 붙인다
+	SetMenu(m_hWnd, m_hMenu);
+	ChangeWindowSize(GetResolution(), true);
+}
+
+void CCore::DivideMenu()
+{
+	// nullptr: 메인 윈도우에서 메뉴를 뺀다는 뜻
+	SetMenu(m_hWnd, nullptr);
+	ChangeWindowSize(GetResolution(), false);
+}
+
+void CCore::ChangeWindowSize(Vec2 _vResolution, bool _bMenu)
+{
+	RECT rt = { 0, 0, (long)_vResolution.x, (long)_vResolution.y };
+	// 사각형 사이즈, 가장 기본적인 옵션, 메뉴바 유무
+	AdjustWindowRect(&rt, WS_OVERLAPPEDWINDOW, _bMenu);
+	SetWindowPos(m_hWnd, nullptr, 100, 100, rt.right - rt.left, rt.bottom - rt.top, 0);
 }

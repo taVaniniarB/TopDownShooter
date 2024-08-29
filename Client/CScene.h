@@ -1,5 +1,8 @@
 #pragma once
 #include "global.h"
+
+#include "CMonFactory.h"
+
 // 컴파일 속도 올리기 위해 헤더 참조 대신 전방선언
 // 헤더참조 했다면, object 변경할 때마다 scene쪽도 매번 확인돼서 느려짐
 // 구체적으로는 모르고, 이런 애가 있다~ 정도만 알게되는거임
@@ -18,6 +21,8 @@ private:
 	UINT				m_iTileX; // 타일 가로 개수
 	UINT				m_iTileY; // 타일 세로 개수
 
+	CObject*			m_pPlayer; // Player
+
 public:
 	void SetName(const wstring& _strName) { m_strName = _strName; }
 	const wstring& GetName() { return m_strName; }
@@ -25,6 +30,8 @@ public:
 
 	UINT GetTileX() { return m_iTileX; }
 	UINT GetTileY() { return m_iTileY; }
+
+	CObject* GetPlayer() { return m_pPlayer; }
 
 
 	virtual void update();
@@ -48,10 +55,8 @@ public:
 
 public:
 
-	void AddObject(CObject* _pObj, GROUP_TYPE _eType)
-	{
-		m_arrObj[(UINT)_eType].push_back(_pObj);
-	}
+	void AddObject(CObject* _pObj, GROUP_TYPE _eType) { m_arrObj[(UINT)_eType].push_back(_pObj); }
+	void RegisterPlayer(CObject* _pPlayer) { m_pPlayer = _pPlayer; }
 
 	// 벡터 복제 안되게 벡터 그룹 그 자체를 주도록 함 (참조) + 수정방지 const
 	const vector<CObject*>& GetGroupObject(GROUP_TYPE _eType) { return m_arrObj[(UINT)_eType]; }

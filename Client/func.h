@@ -2,12 +2,14 @@
 // 자주 쓰이는 전역 함수를 모아두는 헤더
 
 class CObject;
+class AI;
 
 // 오브젝트 생성 이벤트 생성
 // 인자: 오브젝트, 그룹
 void CreateObject(CObject* _pObj, GROUP_TYPE e_Group);
 void DeleteObject(CObject* _pObj);
 void ChangeScene(SCENE_TYPE _eNext);
+void ChangeAIState(AI* _pAI, MON_STATE _eNextState);
 
 // 벡터 안에 포인터를 넣었을 시
 // 이걸 지울 때 단순히 벡터만 클리어할 게 아니라

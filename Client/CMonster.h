@@ -1,20 +1,35 @@
 #pragma once
 #include "CObject.h"
+
+struct tMonInfo
+{
+    float   fSpeed;       // 초당 이동할 픽셀 수
+    int     iHP;          // 체력
+    float   fRecogRange;  // 인지 범위
+    float   fAttackRAnge; // 공격 사거리
+};
+
+
+
+class AI;
+
 class CMonster :
     public CObject
 {
 private:
-    Vec2    m_vCenterPos; // 와리가리 칠건데, 중앙 좌표
-    float   m_fSpeed;       // 초당 이동할 픽셀 수
-    float   m_fMaxDistance; // 와리가리 거리
-    int     m_iDir;     //1(우측), -1(좌측)
-    int     m_iHP;
+    tMonInfo m_tInfo;
+    AI*    m_pAI;
 
 public:
-    float GetSpeed() { return m_fSpeed; }
-    void SetSpeed(float _f) { m_fSpeed = _f; }
-    void SetMoveDist(float _f) { m_fMaxDistance = _f; }
-    void SetCenterPos(Vec2 _vPos) { m_vCenterPos = _vPos; }
+    float GetSpeed() { return m_tInfo.fSpeed; }
+    void SetSpeed(float _f) { m_tInfo.fSpeed = _f; }
+    void SetAI(AI* _AI);
+    const tMonInfo& GetInfo() { return m_tInfo; } // 구조체 크기가 크므로 레퍼런스 사용
+
+private:
+    // 아무나 몬스터 스탯을 바꾸면 안 되기 때문에 private
+    // 대신 몬스터팩토리와 friend 클래스
+    void SetMonInfo(const tMonInfo& _info) { m_tInfo = _info; }
 
 public:
     virtual void OnCollisionEnter(CCollider* _pOther);
@@ -26,5 +41,7 @@ public:
 public:
     CMonster();
     ~CMonster();
+
+    friend class CMonFactory;
 };
 

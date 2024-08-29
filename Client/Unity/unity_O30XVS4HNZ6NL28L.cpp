@@ -1,4 +1,7 @@
 
+#include "C:\Users\hayeon\Source\Repos\WinApiLecture\Client\AI.cpp"
+
+
 #include "C:\Users\hayeon\Source\Repos\WinApiLecture\Client\CAnimation.cpp"
 
 
@@ -21,6 +24,9 @@
 
 
 #include "C:\Users\hayeon\Source\Repos\WinApiLecture\Client\CEventMgr.cpp"
+
+
+#include "C:\Users\hayeon\Source\Repos\WinApiLecture\Client\CIdleState.cpp"
 
 
 #include "C:\Users\hayeon\Source\Repos\WinApiLecture\Client\CKeyMgr.cpp"

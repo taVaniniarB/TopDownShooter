@@ -14,6 +14,7 @@
 CScene::CScene()
 	: m_iTileX(0)
 	, m_iTileY(0)
+	, m_pPlayer(nullptr)
 {
 }
 
@@ -172,8 +173,8 @@ void CScene::render_tile(HDC _dc)
 			// 2. 현재 열은 총 타일 가로 개수보다 클 수 없다
 			// 3. 현재 행은 음수가 될 수 없다
 			// 4. 현재 행은 총 타일 세로 개수보다 클 수 없다
-			if (iCurCol < 0 || m_iTileX <= iCurCol
-				|| iCurRow < 0 || m_iTileY <= iCurRow)
+			if ((UINT)iCurCol < 0 || m_iTileX <= (UINT)iCurCol
+				|| iCurRow < 0 || m_iTileY <= (UINT)iCurRow)
 			{
 				continue;
 			}

@@ -22,7 +22,11 @@ private:
 	HBRUSH	m_arrBrush[(UINT)BRUSH_TYPE::END];
 	HPEN	m_arrPen[(UINT)PEN_TYPE::END];;
 
+	// 메뉴
+	HMENU m_hMenu; // Tool Scene 에서만 사용하기 위한 메뉴
+
 private:
+	void Clear();
 	void CreateBrushPen();
 
 public: //코어 클래스의 초기화 함수를 만들자
@@ -31,8 +35,14 @@ public: //코어 클래스의 초기화 함수를 만들자
 	void progress(); //메시지가 없는 동안의 코어 클래스의 작업
 	
 public:
+	void DockMenu();
+	void DivideMenu();
+	void ChangeWindowSize(Vec2 _vResolution, bool _bMenu);
+
+public:
 	HWND GetMainHwnd() { return m_hWnd; }
 	HDC GetMainDC() { return m_hDC; }
+
 	POINT GetResolution() { return m_ptResolution; }
 	HBRUSH GetBrush(BRUSH_TYPE _eType) { return m_arrBrush[(UINT)_eType]; }
 	HPEN GetPen(PEN_TYPE _eType) { return m_arrPen[(UINT)_eType]; }

@@ -16,6 +16,10 @@
 #include "CSceneMgr.h"
 #include "CCamera.h"
 
+#include "AI.h"
+#include "CIdleState.h"
+#include "CTraceState.h"
+
 CScene_Start::CScene_Start()
 {
 }
@@ -32,13 +36,13 @@ void CScene_Start::update()
 	{
 		ChangeScene(SCENE_TYPE::TOOL); // 이벤트 만들음
 	}
-	if (KEY_TAP(KEY::LBTN))
-	{
-		// 마우스 좌표를 알아와서 거기를 Lookat으로 잡자
-		// 마우스 좌표는 렌더링 기준이라, 그걸 진짜좌표로 변환
-		Vec2 vMousePos = CCamera::GetInst()->GetRealPos(MOUSE_POS);
-		CCamera::GetInst()->SetLookAt(vMousePos);
-	}
+	//if (KEY_TAP(KEY::LBTN))
+	//{
+	//	// 마우스 좌표를 알아와서 거기를 Lookat으로 잡자
+	//	// 마우스 좌표는 렌더링 기준이라, 그걸 진짜좌표로 변환
+	//	Vec2 vMousePos = CCamera::GetInst()->GetRealPos(MOUSE_POS);
+	//	CCamera::GetInst()->SetLookAt(vMousePos);
+	//}
 }
 
 void CScene_Start::Enter()
@@ -46,11 +50,11 @@ void CScene_Start::Enter()
 	// Object 추가
 	// 플레이어 오브젝트를 부모포인터로 저장
 	CObject* pObj = new CPlayer;
-
 	pObj->SetPos(Vec2(640.f, 360.f));
 	pObj->SetScale(Vec2(100.f, 100.f));
-
 	AddObject(pObj, GROUP_TYPE::PLAYER);
+
+	RegisterPlayer(pObj);
 
 	//CObject* pOtherPlayer = new CPlayer(*(CPlayer*)pObj);
 	
@@ -59,30 +63,16 @@ void CScene_Start::Enter()
 	AddObject(pOtherPlayer, GROUP_TYPE::PLAYER);*/
 
 	// Follow Player
-	//CCamera::GetInst()->SetTarget(pObj);
+	CCamera::GetInst()->SetTarget(pObj);
 
 
-	// 몬스터 추가
-	int iMonsterCount = 2;
-	float fMoveDist = 25.f;
-	float fObjectScale = 50.f;
-
-	// 변수 선언과 동시에 대입하면 대입연산자가 아닌, 복사생성자 취급
-	// > Vec2의 생성자에서 처리 > 생성자 오버로딩
 	Vec2 vResolution = CCore::GetInst()->GetResolution();
-	float fTerm = (vResolution.x - ((fMoveDist + fObjectScale/2.f) * 2)) / (float)(iMonsterCount - 1);
-	CMonster* pMonsterObj = nullptr;
-
-	for (int i = 0; i < iMonsterCount; ++i)
-	{
-		pMonsterObj = new CMonster;
-		pMonsterObj->SetName(L"Monster");
-		pMonsterObj->SetPos(Vec2((fMoveDist + fObjectScale / 2.f) + (float)i * fTerm, 50.f));
-		pMonsterObj->SetScale(Vec2(fObjectScale, fObjectScale));
-		pMonsterObj->SetMoveDist(fMoveDist);
-		pMonsterObj->SetCenterPos(pMonsterObj->GetPos());
-		AddObject(pMonsterObj, GROUP_TYPE::MONSTER);
-	}
+	// 몬스터 배치
+	CMonster* pMon = CMonFactory::CreateMonster(MON_TYPE::NORMAL, vResolution / 2.f - Vec2(0.f, 300));
+	// AddObject와 CreateObject는 지연처리 유무에 따라 판단
+	// 예: Scene이 한창 돌아가는 도중 생성이라면 Create 통한 이벤트처리로 해아함
+	// CreateObject(pMon, GROUP_TYPE::MONSTER);
+	AddObject(pMon, GROUP_TYPE::MONSTER);
 
 	//타일 로딩
 	//LoadTile(L"Tile\\start.tile");

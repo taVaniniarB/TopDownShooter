@@ -104,6 +104,27 @@
     <Filter Include="Engine\03. Manager\ResMgr">
       <UniqueIdentifier>{8ff6d2bc-7f59-4e45-9e1f-107e8b8c4b2e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\08. Module\AI">
+      <UniqueIdentifier>{48562cd9-22c3-4f0b-96e3-35de8d3000ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\08. Module\AI\State">
+      <UniqueIdentifier>{5ed18582-6a2b-4ab7-8635-fed5e766cbf9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\08. Module\AI\State\Idle">
+      <UniqueIdentifier>{3524bf71-9014-4a18-933c-9073d66d0f88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\08. Module\AI\State\Trace">
+      <UniqueIdentifier>{ba35def2-f2ad-4283-acd4-656d3325304c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\08. Module\AI\State\Attack">
+      <UniqueIdentifier>{1046ea7e-7867-4cd5-8797-41794df81417}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\08. Module\AI\State\Dead">
+      <UniqueIdentifier>{8b9ff5da-010f-4cb1-953c-4b48fcf95658}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\09. Factory">
+      <UniqueIdentifier>{4d354d99-4584-4fdc-a254-9186f4b72fe6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CCore.h">
@@ -216,7 +237,19 @@
       <Filter>Engine\04. Object\UI\BtnUI</Filter>
     </ClInclude>
     <ClInclude Include="AI.h">
-      <Filter>Engine\08. Module</Filter>
+      <Filter>Engine\08. Module\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="CState.h">
+      <Filter>Engine\08. Module\AI\State</Filter>
+    </ClInclude>
+    <ClInclude Include="CIdleState.h">
+      <Filter>Engine\08. Module\AI\State\Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="CTraceState.h">
+      <Filter>Engine\08. Module\AI\State\Trace</Filter>
+    </ClInclude>
+    <ClInclude Include="CMonFactory.h">
+      <Filter>Engine\09. Factory</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -322,7 +355,19 @@
       <Filter>Engine\04. Object\UI\BtnUI</Filter>
     </ClCompile>
     <ClCompile Include="AI.cpp">
-      <Filter>Engine\08. Module</Filter>
+      <Filter>Engine\08. Module\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="CState.cpp">
+      <Filter>Engine\08. Module\AI\State</Filter>
+    </ClCompile>
+    <ClCompile Include="CIdleState.cpp">
+      <Filter>Engine\08. Module\AI\State\Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="CTraceState.cpp">
+      <Filter>Engine\08. Module\AI\State\Trace</Filter>
+    </ClCompile>
+    <ClCompile Include="CMonFactory.cpp">
+      <Filter>Engine\09. Factory</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
