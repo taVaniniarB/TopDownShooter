@@ -3,8 +3,10 @@
 // 오브젝트는 카메라를 참조해서,
 // 랜더링 시 중심좌표-카메라좌표 차이값 반영
 #include "CCamera.h"
+
 class CCollider;
 class CAnimator;
+class CRigidBody;
 
 
 // 헤더에서 헤더참조는 어지간해선 안 하려 하지만
@@ -19,8 +21,9 @@ private:
 	Vec2		m_vScale;
 
 	// Component
-	CCollider*	m_pCollider; // nullptr > 충돌체 필요없음
-	CAnimator*	m_pAnimator;
+	CCollider*	m_pCollider; // nullptr > 충돌체 필요 없음
+	CAnimator*	m_pAnimator; // nullptr > 애니메이션 필요 없음
+	CRigidBody* m_pRigidBody; // nullptr > 물리 영향 안 받음
 
 	bool		m_bAlive; // 오브젝트 활성화 체크
 
@@ -36,11 +39,13 @@ public:
 
 	CCollider* GetCollider() { return m_pCollider; }
 	CAnimator* GetAnimator() { return m_pAnimator; }
+	CRigidBody* GetRigidBody() { return m_pRigidBody; }
 
 	bool IsDead() { return !m_bAlive; }
 
 	void CreateCollider();
 	void CreateAnimator();
+	void CreateRigidBody();
 
 	// 순수 가상함수화
 	// 모든 Object 파생 클래스들은 자기만의 업데이트를 구현하도록 강제한다

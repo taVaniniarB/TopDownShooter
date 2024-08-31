@@ -1,4 +1,7 @@
 
+#include "C:\Users\hayeon\Source\Repos\WinApiLecture\Client\CSound.cpp"
+
+
 #include "C:\Users\hayeon\Source\Repos\WinApiLecture\Client\CState.cpp"
 
 

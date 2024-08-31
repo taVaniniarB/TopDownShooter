@@ -20,6 +20,9 @@
 #include "C:\Users\hayeon\Source\Repos\WinApiLecture\Client\CResMgr.cpp"
 
 
+#include "C:\Users\hayeon\Source\Repos\WinApiLecture\Client\CRigidBody.cpp"
+
+
 #include "C:\Users\hayeon\Source\Repos\WinApiLecture\Client\CScene.cpp"
 
 
@@ -30,7 +33,4 @@
 
 
 #include "C:\Users\hayeon\Source\Repos\WinApiLecture\Client\CScene_Tool.cpp"
-
-
-#include "C:\Users\hayeon\Source\Repos\WinApiLecture\Client\CSound.cpp"
 

@@ -63,7 +63,7 @@ void CScene_Start::Enter()
 	AddObject(pOtherPlayer, GROUP_TYPE::PLAYER);*/
 
 	// Follow Player
-	CCamera::GetInst()->SetTarget(pObj);
+	//CCamera::GetInst()->SetTarget(pObj);
 
 
 	Vec2 vResolution = CCore::GetInst()->GetResolution();
