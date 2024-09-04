@@ -33,6 +33,10 @@ void CEventMgr::update()
 	for (size_t i = 0; i < m_vecEvent.size(); ++i)
 	{
 		Excute(m_vecEvent[i]);
+
+		// Scene Change 발생 시, 다음의 이벤트들은 무시한다.
+		if (m_vecEvent[i].eEven == EVENT_TYPE::SCENE_CHANGE)
+			break;
 	}
 	//일괄처리 후 벡터 클리어
 	m_vecEvent.clear();

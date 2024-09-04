@@ -4,9 +4,11 @@
 // 랜더링 시 중심좌표-카메라좌표 차이값 반영
 #include "CCamera.h"
 
+
 class CCollider;
 class CAnimator;
 class CRigidBody;
+class CGravity;
 
 
 // 헤더에서 헤더참조는 어지간해선 안 하려 하지만
@@ -24,6 +26,7 @@ private:
 	CCollider*	m_pCollider; // nullptr > 충돌체 필요 없음
 	CAnimator*	m_pAnimator; // nullptr > 애니메이션 필요 없음
 	CRigidBody* m_pRigidBody; // nullptr > 물리 영향 안 받음
+	CGravity*	m_pGravity;
 
 	bool		m_bAlive; // 오브젝트 활성화 체크
 
@@ -40,13 +43,18 @@ public:
 	CCollider* GetCollider() { return m_pCollider; }
 	CAnimator* GetAnimator() { return m_pAnimator; }
 	CRigidBody* GetRigidBody() { return m_pRigidBody; }
+	CGravity* GetGravity() { return m_pGravity; }
 
 	bool IsDead() { return !m_bAlive; }
 
 	void CreateCollider();
 	void CreateAnimator();
 	void CreateRigidBody();
+	void CreateGravity();
 
+	virtual void start() {} // Scene이 시작되기 전에 호출되는 함수
+	// Scene이 시작되는 순간 할 일이 있는 obj들은 이 함수를 오버라이딩 하도록 한다.
+	
 	// 순수 가상함수화
 	// 모든 Object 파생 클래스들은 자기만의 업데이트를 구현하도록 강제한다
 	virtual void update() = 0;

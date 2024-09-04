@@ -23,7 +23,10 @@ CMonster::~CMonster()
 
 void CMonster::update()
 {
-	m_pAI->update();
+	if (nullptr != m_pAI)
+	{
+		m_pAI->update();
+	}
 }
 
 // AI - 몬스터가 서로를 알도록 함

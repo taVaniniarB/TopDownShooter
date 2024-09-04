@@ -14,6 +14,7 @@ CCollider::CCollider()
 	// collider 생성 때마다 id가 1 증가해서 겹칠 수 없게 됨
 	, m_iID(g_iNextID++)
 	, m_iCol(0)
+	, m_bActive(true)
 {
 }
 
@@ -26,6 +27,7 @@ CCollider::CCollider(const CCollider& _origin)
 	, m_vScale(_origin.m_vScale)
 	, m_iID(g_iNextID++)
 	, m_iCol(0)
+	, m_bActive(_origin.m_bActive)
 {
 }
 

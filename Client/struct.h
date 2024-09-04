@@ -21,12 +21,18 @@ public:
 	Vec2& Nomalize()
 	{
 		float fLen = Length();
-		
+
 		assert(fLen != 0.f);
 		x /= fLen;
 		y /= fLen;
 
 		return *this;
+	}
+
+public:
+	Vec2 operator - ()
+	{
+		return Vec2(-x, -y);
 	}
 
 public:
@@ -43,6 +49,21 @@ public:
 	{
 		x += _vOther.x;
 		y += _vOther.y;
+	}
+	void operator -= (Vec2 _vOther)
+	{
+		x -= _vOther.x;
+		y -= _vOther.y;
+	}
+	void operator -= (float _f)
+	{
+		x -= _f;
+		y -= _f;
+	}
+	void operator *= (float _f)
+	{
+		x *= _f;
+		y *= _f;
 	}
 	Vec2 operator - (Vec2 _vOther)
 	{

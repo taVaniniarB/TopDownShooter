@@ -4,6 +4,7 @@
 #include "CCollider.h"
 #include "CAnimator.h"
 #include "CRigidBody.h"
+#include "CGravity.h"
 
 CObject::CObject()
 	: m_vPos{}
@@ -11,6 +12,7 @@ CObject::CObject()
 	, m_pCollider(nullptr)
 	, m_pAnimator(nullptr)
 	, m_pRigidBody(nullptr)
+	, m_pGravity(nullptr)
 	, m_bAlive(true)
 {
 }
@@ -22,6 +24,7 @@ CObject::CObject(const CObject& _origin)
 	, m_pCollider(nullptr)
 	, m_pAnimator(nullptr)
 	, m_pRigidBody(nullptr)
+	, m_pGravity(nullptr)
 	, m_bAlive(true)
 {
 	//컴포넌트의 깊은 복사 구현
@@ -51,6 +54,12 @@ CObject::CObject(const CObject& _origin)
 		m_pRigidBody = new CRigidBody(*_origin.m_pRigidBody);
 		m_pRigidBody->m_pOwner = this;
 	}
+
+	if (_origin.m_pGravity)
+	{
+		m_pGravity = new CGravity(*_origin.m_pGravity);
+		m_pGravity->m_pOwner = this;
+	}
 }
 
 CObject::~CObject()
@@ -69,19 +78,33 @@ CObject::~CObject()
 	{
 		delete m_pRigidBody;
 	}
+
+	if (nullptr != m_pGravity)
+	{
+		delete m_pGravity;
+	}
 }
 
 
 void CObject::finalUpdate()
 {
-	if (m_pCollider)
-		m_pCollider->finalUpdate();
 
 	if (m_pAnimator)
 		m_pAnimator->finalUpdate();
 
+	// 중력에서 힘을 받은 후, RigidBody 컴포넌트에서 이를 계산
+	if (m_pGravity)
+		m_pGravity->finalUpdate();
+
 	if (m_pRigidBody)
 		m_pRigidBody->finalUpdate();
+
+
+	// Collider의 FinalUpdate에서 Collider가 플레이어를 따라잡아야 하므로
+	// Collider Update는 점프에 의한 좌표 세팅 작업이 이루어지는 RigidBody 뒤에 위치해야 함
+
+	if (m_pCollider)
+		m_pCollider->finalUpdate();
 }
 
 void CObject::render(HDC _dc)
@@ -99,14 +122,14 @@ void CObject::render(HDC _dc)
 
 void CObject::component_render(HDC _dc)
 {
-	if (nullptr != m_pCollider)
-	{
-		m_pCollider->render(_dc);
-	}
-
 	if (nullptr != m_pAnimator)
 	{
 		m_pAnimator->render(_dc);
+	}
+
+	if (nullptr != m_pCollider)
+	{
+		m_pCollider->render(_dc);
 	}
 }
 
@@ -126,4 +149,10 @@ void CObject::CreateRigidBody()
 {
 	m_pRigidBody = new CRigidBody;
 	m_pRigidBody->m_pOwner = this;
+}
+
+void CObject::CreateGravity()
+{
+	m_pGravity = new CGravity;
+	m_pGravity->m_pOwner = this;
 }

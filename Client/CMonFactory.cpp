@@ -7,6 +7,8 @@
 #include "CIdleState.h"
 #include "CTraceState.h"
 
+#include "CRigidBody.h"
+
 // 몬스터 팩토리 객체 안 만든다
 // 클래스로 선언했지만, 객체 있을 필요 X
 
@@ -32,6 +34,9 @@ CMonster* CMonFactory::CreateMonster(MON_TYPE _eType, Vec2 _vPos)
 		info.iHP = 3;
 
 		pMon->SetMonInfo(info);
+
+		pMon->CreateRigidBody();
+		pMon->GetRigidBody()->SetMass(1.f);
 
 		AI* pAI = new AI;
 
