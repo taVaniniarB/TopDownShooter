@@ -41,3 +41,8 @@ void Safe_Delete_Map(map<T1, T2>& _map)
 
 	_map.clear();
 }
+
+// wstring 객체를 직렬화하여 파일에 저장하는 함수
+void SaveWstring(const wstring& _str, FILE* _pFile);
+// 파일로부터 문자열을 읽어서 _str에 저장하는 함수
+void LoadWstring(wstring& _str, FILE* _pFile);

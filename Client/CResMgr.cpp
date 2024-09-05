@@ -36,7 +36,7 @@ CTexture* CResMgr::LoadTexture(const wstring& _strKey, const wstring& _strRelati
 	
 	// 텍스처가 스스로의 경로와 스스로 어떤 키(이름)으로 저장됐는지 알게 한다
 	pTex->SetKey(_strKey);
-	pTex->SetRelativePath(strFilePath);
+	pTex->SetRelativePath(_strRelativePath);
 
 	m_mapTex.insert(make_pair(_strKey, pTex));
 

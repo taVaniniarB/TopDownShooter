@@ -60,6 +60,16 @@ void CAnimator::CreateAnimation(const wstring& _strName, CTexture* _pTex,
 	m_mapAnim.insert(make_pair(_strName, pAnim));
 }
 
+void CAnimator::LoadAnimation(const wstring& _strRelativePath)
+{
+	CAnimation* pAnim = new CAnimation;
+	// Load와 동시에 애니메이션 객체의 멤버가 채워짐
+	pAnim->Load(_strRelativePath);
+
+	pAnim->m_pAnimator = this;
+	m_mapAnim.insert(make_pair(pAnim->GetName(), pAnim));
+}
+
 CAnimation* CAnimator::FindAnimation(const wstring& _strName)
 {
 	map<wstring, CAnimation*>::iterator iter = m_mapAnim.find(_strName);

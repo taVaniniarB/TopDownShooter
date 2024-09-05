@@ -8,6 +8,10 @@
 #include "CObject.h"
 #include "CCamera.h"
 
+#include "CResMgr.h"
+#include "CPathMgr.h"
+
+
 CAnimation::CAnimation()
 	: m_pAnimator(nullptr)
 	, m_pTex(nullptr)
@@ -91,4 +95,80 @@ void CAnimation::Create(CTexture* _pTex, Vec2 _vLT, Vec2 _vSliceSize, Vec2 _vSte
 
 		m_vecFrm.push_back(frm);
 	}
+}
+
+
+void CAnimation::Save(const wstring& _strRelativePath)
+{
+	// 절대경로 만들기
+	wstring strFilePath = CPathMgr::GetInst()->GetContentPath();
+	strFilePath += _strRelativePath;
+
+	// 파일 스트림 오픈
+	FILE* pFile = nullptr;
+	_wfopen_s(&pFile, strFilePath.c_str(), L"wb");
+	assert(pFile);
+
+	
+	// Animation의 이름을 저장한다.
+	SaveWstring(m_strName, pFile);
+
+
+	// 텍스처
+	// 포인터인데... 주소를 고대로 저장해선 안 됨
+	SaveWstring(m_pTex->GetKey(), pFile);
+	SaveWstring(m_pTex->GetRelativePath(), pFile);
+
+
+	// 각 프레임의 정보가 담긴 구조체 벡터 m_vecFrm를 저장한다.
+	// 여러 개의 데이터 집합이므로, 파일 읽을 때를 고려하여 데이터 개수 먼저 저장
+	size_t iFrameCount = m_vecFrm.size();
+	// 프레임 구조체 벡터 저장
+	fwrite(&iFrameCount, sizeof(size_t), 1, pFile);
+	
+	
+	// 벡터가 관리하고 있는 시작주소(data()), 구조체 사이즈, 프레임 개수만큼 저장
+	fwrite(m_vecFrm.data(), sizeof(tAnimFrm), iFrameCount, pFile);
+
+
+	// 파일 스트림 닫기
+	fclose(pFile);
+}
+
+void CAnimation::Load(const wstring& _strRelativePath)
+{
+	// 절대경로 만들기
+	wstring strFilePath = CPathMgr::GetInst()->GetContentPath();
+	strFilePath += _strRelativePath;
+
+	// 파일 스트림 오픈 (읽기 모드)
+	FILE* pFile = nullptr;
+	_wfopen_s(&pFile, strFilePath.c_str(), L"rb");
+	assert(pFile);
+
+	// 파일로부터 로드한 애니메이션 이름 데이터를 멤버에 채운다
+	LoadWstring(m_strName, pFile);
+
+
+	// 텍스처의 키 읽기
+	wstring strTexKey, strTexPath;
+	LoadWstring(strTexKey, pFile);
+	LoadWstring(strTexPath, pFile);
+	// 읽은 키로 리소스매니저로부터 텍스처를 받아옴
+	m_pTex = CResMgr::GetInst()->LoadTexture(strTexKey, strTexPath);
+
+	// 프레임 개수 저장
+	size_t iFrameCount = 0;
+	fread(&iFrameCount, sizeof(size_t), 1, pFile);
+	
+	// 모든 프레임 정보 (구조체 벡터) 저장
+	// write 때와 다르게 하나하나 push back 해주어야 함
+	// 혹은 벡터.resizse 함수로 iFrameCount만한 공간 미리 확보해두고 저장하면
+	// 한 번에 모든 프레임 읽어들여서 채우기 가능
+	m_vecFrm.resize(iFrameCount);
+	fread(m_vecFrm.data(), sizeof(tAnimFrm), iFrameCount, pFile);
+	// 반복문에 비해 좋은점: push back은 공간 모자랄 때마다 공간 재할당 하는 과정 있는데
+	// 한 번에 공간을 확보함으로써 재할당 비용 감소
+	
+	fclose(pFile);
 }
