@@ -8,8 +8,7 @@ CRigidBody::CRigidBody()
 	: m_pOwner(nullptr)
 	, m_fMass(1.f)
 	, m_fFricCoeff(100.f)
-	, m_vMaxVelocity(Vec2(300.f, 600.f))
-	//, m_fMaxVelocity(300.f)
+	, m_fMaxVelocity(300.f)
 {
 }
 
@@ -39,7 +38,7 @@ void CRigidBody::finalUpdate()
 	m_vVelocity += m_vAccel * fDT;
 
 
-	
+
 	// 마찰 적용 > 최대속도제한 순서 (그래야 최대속도에 도달 가능함)
 
 	// 마찰력에 의한 반대 방향으로의 가속도
@@ -59,34 +58,34 @@ void CRigidBody::finalUpdate()
 			m_vVelocity += vFriction;
 		}
 	}
-	//
-	//// 탑뷰 속도 제한 검사
-	//if (m_fMaxVelocity < m_vVelocity.Length())
-	//{
-	//	// 최대 속도를 넘겼을 시
-	//	// 속도의 단위벡터에 최대속도를 곱해서, 기존의 방향을 유지하며 딱 최대속력인 벡터로 만들어준다
-	//	Vec2 vDir = m_vVelocity;
-	//	if (!m_vVelocity.isZero())
-	//	{
-	//		vDir.Nomalize();
-	//	}
-	//	m_vVelocity = vDir * m_fMaxVelocity;
-	//}
-	
-	// 횡스크롤 속도 제한 검사 (x, y 따로 최대속력이 존재)
-	if (abs(m_vMaxVelocity.x) < abs(m_vVelocity.x))
+
+	// 탑뷰 속도 제한 검사
+	if (m_fMaxVelocity < m_vVelocity.Length())
 	{
 		// 최대 속도를 넘겼을 시
-		// 기존 방향에 최대 속도를 곱해서, 기존의 방향을 유지하며 딱 최대속력인 벡터로 만들어준다
+		// 속도의 단위벡터에 최대속도를 곱해서, 기존의 방향을 유지하며 딱 최대속력인 벡터로 만들어준다
+		Vec2 vDir = m_vVelocity;
+		if (!m_vVelocity.isZero())
+		{
+			vDir.Nomalize();
+		}
+		m_vVelocity = vDir * m_fMaxVelocity;
+	}
+	//
+	//// 횡스크롤 속도 제한 검사 (x, y 따로 최대속력이 존재)
+	//if (abs(m_vMaxVelocity.x) < abs(m_vVelocity.x))
+	//{
+	//	// 최대 속도를 넘겼을 시
+	//	// 기존 방향에 최대 속도를 곱해서, 기존의 방향을 유지하며 딱 최대속력인 벡터로 만들어준다
 
-		// 방향 (-1, 1)
-		m_vVelocity.x = m_vVelocity.x / abs(m_vVelocity.x) * abs(m_vMaxVelocity.x);
-	}
-	if (abs(m_vMaxVelocity.y) < abs(m_vVelocity.y))
-	{
-		// 방향 (-1, 1)
-		m_vVelocity.y = m_vVelocity.y / abs(m_vVelocity.y) * abs(m_vMaxVelocity.y);
-	}
+	//	// 방향 (-1, 1)
+	//	m_vVelocity.x = m_vVelocity.x / abs(m_vVelocity.x) * abs(m_vMaxVelocity.x);
+	//}
+	//if (abs(m_vMaxVelocity.y) < abs(m_vVelocity.y))
+	//{
+	//	// 방향 (-1, 1)
+	//	m_vVelocity.y = m_vVelocity.y / abs(m_vVelocity.y) * abs(m_vMaxVelocity.y);
+	//}
 
 
 

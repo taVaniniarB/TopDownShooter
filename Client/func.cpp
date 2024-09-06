@@ -40,6 +40,23 @@ void ChangeAIState(AI* _pAI, MON_STATE _eNextState)
 
 	CEventMgr::GetInst()->AddEvent(evn);
 }
+void UIBTNDown(CScene* _pScene)
+{
+	tEvent evn = {};
+	evn.eEven = EVENT_TYPE::UI_BTN_DOWN;
+	evn.lParam = (DWORD_PTR)(_pScene);
+
+	CEventMgr::GetInst()->AddEvent(evn);
+}
+
+void UIBTNUp(CScene* _pScene)
+{
+	tEvent evn = {};
+	evn.eEven = EVENT_TYPE::UI_BTN_UP;
+	evn.lParam = (DWORD_PTR)(_pScene);
+
+	CEventMgr::GetInst()->AddEvent(evn);
+}
 
 void FScanf(char* _pOutBuff, FILE* _pFile)
 {

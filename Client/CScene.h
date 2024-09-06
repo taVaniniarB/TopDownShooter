@@ -23,10 +23,14 @@ private:
 
 	CObject*			m_pPlayer; // Player
 
+	bool m_bUIClicked; // 이번 프레임 클릭이 UI 클릭인가?
+
 public:
 	void SetName(const wstring& _strName) { m_strName = _strName; }
 	const wstring& GetName() { return m_strName; }
 
+	void SetUIClicked(bool _b) { m_bUIClicked = _b; }
+	bool GetUIClicked() { return m_bUIClicked; }
 
 	UINT GetTileX() { return m_iTileX; }
 	UINT GetTileY() { return m_iTileY; }

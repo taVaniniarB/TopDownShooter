@@ -24,11 +24,12 @@ void CBtnUI::MouseOn()
 
 void CBtnUI::MouseLbtnDown()
 {
-	
+	CUI::MouseLbtnDown();
 }
 
 void CBtnUI::MousebtnUp()
 {
+	CUI::MousebtnUp();
 }
 
 void CBtnUI::MouseLbtnClicked()

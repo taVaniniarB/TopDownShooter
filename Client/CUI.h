@@ -1,14 +1,18 @@
 #pragma once
 #include "CObject.h"
 
+class CTexture;
+
 class CUI :
     public CObject
 {
 private:
     // 자신의 자식 UI를 관리
     vector<CUI*>    m_vecChildUI;
-    CUI*            m_pParentUI; // nullptr: 부모가 없는 최상위 UI
+    CUI* m_pParentUI; // nullptr: 부모가 없는 최상위 UI
     Vec2            m_vFinalPos; // 찐 최종 위치
+
+    CTexture* m_pTex;
 
     bool            m_bCamAffected; // UI의 카메라 영향 받음 유뮤
     bool            m_bMouseOn;     // UI 위에 마우스 있다
@@ -20,6 +24,8 @@ public:
     CUI* GetParent() { return m_pParentUI; }
     bool IsMouseOn() { return m_bMouseOn; }
     bool IsLbtnDown() { return m_bLbtnDown; }
+
+    
 
     // 자식 UI 들어오면 벡터에 넣고, 부모 연결
     void AddChild(CUI* _pUI)
@@ -63,4 +69,3 @@ public:
 
     friend class CUIMgr;
 };
-

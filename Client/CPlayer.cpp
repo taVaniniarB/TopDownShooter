@@ -66,7 +66,7 @@ CPlayer::CPlayer()
 	//
 
 
-	CreateGravity();
+	// CreateGravity();
 
 
 	// 애니메이션에 오프셋을 주는 코드
@@ -159,24 +159,24 @@ void CPlayer::CreateMissile()
 
 void CPlayer::update_state()
 {
-	if (KEY_HOLD(KEY::A) && GetGravity()->GetGround())
+	if (KEY_HOLD(KEY::A))
 	{
 		m_iDir = -1;
-		if (PLAYER_STATE::JUMP != m_eCurState)
-			m_eCurState = PLAYER_STATE::RUN;
+		m_eCurState = PLAYER_STATE::RUN;
+			
 	}
-	if (KEY_HOLD(KEY::D) && GetGravity()->GetGround())
+	if (KEY_HOLD(KEY::D) /*&& GetGravity()->GetGround()*/)
 	{
 		m_iDir = 1;
-		if (PLAYER_STATE::JUMP != m_eCurState)
-			m_eCurState = PLAYER_STATE::RUN;
+		m_eCurState = PLAYER_STATE::RUN;
 	}
+	// 처형
 	/*if (KEY_TAP(KEY::SPACE))
 	{
 		m_eCurState = PLAYER_STATE::ATTACK;
 	}*/
 	// 키를 누르지 않아도 속도가 남아 있을 때를 고려한 조건수정
-	if (0.f == GetRigidBody()->GetSpeed() && PLAYER_STATE::JUMP != m_eCurState)
+	if (0.f == GetRigidBody()->GetSpeed() /*&& PLAYER_STATE::JUMP != m_eCurState*/)
 	{
 		m_eCurState = PLAYER_STATE::IDLE;
 	}
@@ -187,7 +187,7 @@ void CPlayer::update_state()
 	}*/
 	if (KEY_TAP(KEY::W))
 	{
-		if (m_eCurState != PLAYER_STATE::JUMP)
+		/*if (m_eCurState != PLAYER_STATE::JUMP)
 		{
 			m_eCurState = PLAYER_STATE::JUMP;
 
@@ -195,9 +195,13 @@ void CPlayer::update_state()
 			{
 				GetRigidBody()->AddVelocity(Vec2(0.f, -500.f));
 			}
-		}
-
+		}*/
+		m_eCurState = PLAYER_STATE::RUN;
 		
+	}
+	if (KEY_TAP(KEY::S))
+	{
+		m_eCurState = PLAYER_STATE::RUN;
 	}
 }
 
@@ -209,10 +213,14 @@ void CPlayer::update_move()
 
 	Vec2 vPos = GetPos();
 
-	//if (KEY_HOLD(KEY::S))
-	//{
-	//	vPlaterMoveVec += Vec2(0.f, 200.f);
-	//}
+	if (KEY_HOLD(KEY::W))
+	{
+		vPlayerMoveVec += Vec2(0.f, -200.f);
+	}
+	if (KEY_HOLD(KEY::S))
+	{
+		vPlayerMoveVec += Vec2(0.f, 200.f);
+	}
 	if (KEY_HOLD(KEY::A))
 	{
 		vPlayerMoveVec += Vec2(-200.f, 0.f);
@@ -226,25 +234,28 @@ void CPlayer::update_move()
 	if (!vPlayerMoveVec.isZero())
 	{
 		vPlayerMoveVec.Nomalize();
-		pRigid->AddForce(vPlayerMoveVec * 200.f);
+		pRigid->SetVelocity(vPlayerMoveVec * 200.f);
 	}
 
 
-	if (KEY_TAP(KEY::W))
-	{
-	}
-	/*if (KEY_TAP(KEY::S))
-	{
-		pRigid->AddVelocity(Vec2(0.f, 100.f));
-	}*/
-	if (KEY_TAP(KEY::A))
-	{// 전 프레임과 같은 방향에서 눌렸을 때 또 가속도가 적용되면 안 됨
-		pRigid->SetVelocity(Vec2(-150.f, pRigid->GetVelocity().y));
-	}
-	if (KEY_TAP(KEY::D))
-	{
-		pRigid->SetVelocity(Vec2(150.f, pRigid->GetVelocity().y));
-	}
+	Vec2 CurVelocity = pRigid->GetVelocity();
+
+
+	//if (KEY_TAP(KEY::W))
+	//{
+	//}
+	///*if (KEY_TAP(KEY::S))
+	//{
+	//	pRigid->AddVelocity(Vec2(0.f, 100.f));
+	//}*/
+	//if (KEY_TAP(KEY::A))
+	//{// 전 프레임과 같은 방향에서 눌렸을 때 또 가속도가 적용되면 안 됨
+	//	pRigid->SetVelocity(Vec2(-150.f, pRigid->GetVelocity().y));
+	//}
+	//if (KEY_TAP(KEY::D))
+	//{
+	//	pRigid->SetVelocity(Vec2(150.f, pRigid->GetVelocity().y));
+	//}
 
 	SetPos(vPos);
 }
@@ -257,7 +268,6 @@ void CPlayer::update_attack()
 		CreateMissile();
 		break;
 	}
-	
 }
 
 void CPlayer::update_animation()
@@ -289,12 +299,12 @@ void CPlayer::update_animation()
 		else
 			GetAnimator()->Play(L"RUN", true);
 		break;
-	case PLAYER_STATE::JUMP:
-		if (m_iDir == -1)
-			GetAnimator()->Play(L"JUMP", true);
-		else
-			GetAnimator()->Play(L"JUMP", true);
-		break;
+	//case PLAYER_STATE::JUMP:
+	//	if (m_iDir == -1)
+	//		GetAnimator()->Play(L"JUMP", true);
+	//	else
+	//		GetAnimator()->Play(L"JUMP", true);
+	//	break;
 	case PLAYER_STATE::ATTACK:
 		break;
 	case PLAYER_STATE::DEAD:

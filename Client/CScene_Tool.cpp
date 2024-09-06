@@ -16,6 +16,10 @@
 #include "resource.h"
 #include "CPanelUI.h"
 #include "CBtnUI.h"
+#include "CTileBtnUI.h"
+
+#include "CResMgr.h"
+#include "CTexture.h"
 
 
 // 함수포인터 인자 전달해야 하는데 전역함수가 아래에 있어서 전방선언
@@ -24,7 +28,8 @@ void ChangeScene(DWORD_PTR, DWORD_PTR);
 
 CScene_Tool::CScene_Tool()
 	: m_pUI(nullptr)
-	, m_pSelectedTileIdx(0)
+	, m_pSelectedTileIdx(-1)
+	, m_eSelctedObj(SELECT_OPTION::NONE)
 {
 }
 
@@ -35,6 +40,8 @@ CScene_Tool::~CScene_Tool()
 
 void CScene_Tool::Enter()
 {
+	CCamera::GetInst()->FadeIn(1.f);
+
 	// 툴씬에서 사용할 메뉴 추가
 	CCore::GetInst()->DockMenu();
 
@@ -67,10 +74,10 @@ void CScene_Tool::Enter()
 	AddObject(pPanelUI, GROUP_TYPE::UI);
 
 
-    // 과제 - 타일 UI
+    // 타일 UI
 	CUI* pTilePanelUI = new CPanelUI;
 	pTilePanelUI->SetName(L"TileParentUI");
-	pTilePanelUI->SetScale(Vec2(300.f, 400.f));
+	pTilePanelUI->SetScale(Vec2(150.f, 400.f));
 	pTilePanelUI->SetPos(Vec2(vResolution.x - pTilePanelUI->GetScale().x, 100.f));
 	AddObject(pTilePanelUI, GROUP_TYPE::UI);
 
@@ -84,19 +91,25 @@ void CScene_Tool::Enter()
 		_itow_s(i, idx, 10);
 		wcscat_s(name, idx);
 
-		CBtnUI* pTileSelectUI = new CBtnUI;
+		CTileBtnUI* pTileSelectUI = new CTileBtnUI;
 		pTileSelectUI->SetName(name); //두 wchar 버퍼 합치기 함수로 타일에 이름을 부여
 
 		int iXScale = (int)(pTilePanelUI->GetScale().x / iMaxRow);
-		int iTileUIScale = 80;
+		int iTileUIScale = 50;
 		
 		pTileSelectUI->SetScale(Vec2((float)iTileUIScale, (float)iTileUIScale));
 		iRow = i / iMaxRow;
 		iCol = (int)(i % iMaxRow);
 		pTileSelectUI->SetPos(Vec2((float)iCol * iXScale, (float)iRow * iXScale));
 
-		((CBtnUI*)pTileSelectUI)->SetClickedCallBack(this, (SCENE_MEMFUNC_INT)&CScene_Tool::SetSelectedTile, i);
+		((CTileBtnUI*)pTileSelectUI)->SetClickedCallBack(this, (SCENE_MEMFUNC_INT)&CScene_Tool::SetSelectedTile, i);
 		pTilePanelUI->AddChild(pTileSelectUI);
+
+
+		// 타일 UI의 텍스처
+		CTexture* pTex = CResMgr::GetInst()->FindTexture(L"Tile");
+		pTileSelectUI->SetTexture(pTex);
+		pTileSelectUI->SetIdx(i);
 	}
 
 
@@ -123,6 +136,8 @@ void CScene_Tool::Enter()
 
 void CScene_Tool::Exit()
 {
+	CCamera::GetInst()->FadeOut(1.f);
+	// 화면이 잠깐 멈춰야할듯...?
 	CCore::GetInst()->DivideMenu();
 	DeleteAll();
 }
@@ -155,21 +170,56 @@ void CScene_Tool::update()
 		LoadTileData();
 	}
 
-	if (KEY_HOLD(KEY::LBTN) || KEY_TAP(KEY::LBTN))
+	if (!GetUIClicked() && (KEY_HOLD(KEY::LBTN) || KEY_TAP(KEY::LBTN)))
 	{
-		Vec2 vMousePos = MOUSE_POS;
-		vMousePos = CCamera::GetInst()->GetRealPos(vMousePos);
-		
-		int iTileX = GetTileX();
-		int iTileY = GetTileY();
-		if (iTileX)
+		switch (m_eSelctedObj)
+		{
+		case SELECT_OPTION::TILE:
+		{
+			Vec2 vMousePos = MOUSE_POS;
+			vMousePos = CCamera::GetInst()->GetRealPos(vMousePos);
 
-		// 클릭된 타일의 인덱스를 변경
-		ChangeTile(vMousePos, m_pSelectedTileIdx);
+			int iTileX = GetTileX();
+			int iTileY = GetTileY();
+			if (iTileX)
+				ChangeTile(vMousePos, m_pSelectedTileIdx);
+		}
+			break;
+		case SELECT_OPTION::MONSTER:
+		{
+			if (KEY_TAP(KEY::LBTN))
+			{
+
+			}
+		}
+			break;
+		case SELECT_OPTION::WALL:
+		{
+
+		}
+			break;
+		case SELECT_OPTION::PLAYER:
+		{
+			if (KEY_TAP(KEY::LBTN))
+			{
+
+			}
+		}
+			break;
+		default:
+			break;
+		}
+	}
+
+	// Start씬으로 전환
+	if (KEY_HOLD(KEY::LSHIFT) && KEY_TAP(KEY::ENTER))
+	{
+		ChangeScene(SCENE_TYPE::START); // 이벤트 만들음
 	}
 }
 
-
+// 타일 인덱스 1 증가시키는 함수
+/*
 void CScene_Tool::SetTileIdx()
 {
 	if (KEY_TAP(KEY::LBTN))
@@ -206,6 +256,7 @@ void CScene_Tool::SetTileIdx()
 	// 벡터 인덱스를 통해 반복문 안 쓰고 바로 접근 가능
 	
 }
+*/
 
 void CScene_Tool::SaveTileData()
 {
@@ -341,6 +392,7 @@ void CScene_Tool::LoadTileData()
 void CScene_Tool::SetSelectedTile(int _idx)
 {
 	m_pSelectedTileIdx = _idx;
+	m_eSelctedObj = SELECT_OPTION::TILE;
 }
 
 

@@ -4,7 +4,7 @@
 #include "CObject.h"
 #include "CPlayer.h"
 #include "CMonster.h"
-#include "CGround.h"
+#include "CWall.h"
 
 #include "CCore.h"
 
@@ -41,21 +41,22 @@ CScene_Start::~CScene_Start()
 
 void CScene_Start::update()
 {
-	// 클릭 > 힘 생성
-	if (KEY_HOLD(KEY::LBTN))
-	{
-		m_bUseForce = true;
-		CreateForce();
-	}
-	else
-	{
-		m_bUseForce = false;
-	}
+	//// 클릭 > 힘 생성
+	//if (KEY_HOLD(KEY::LBTN))
+	//{
+	//	m_bUseForce = true;
+	//	CreateForce();
+	//}
+	//else
+	//{
+	//	m_bUseForce = false;
+	//}
 
 	// Scene Update가 힘 생성의 영향을 받도록 함
 	// 부모 쪽의 update코드 재활용 하지 않고 자체 구현한다
-	//CScene::update(); //부모 코드 재활용
-	for (UINT i = 0; i < (UINT)GROUP_TYPE::END; ++i)
+	CScene::update(); //부모 코드 재활용
+
+	/*for (UINT i = 0; i < (UINT)GROUP_TYPE::END; ++i)
 	{
 		const vector<CObject*>& vecObj = GetGroupObject((GROUP_TYPE)i);
 
@@ -81,16 +82,20 @@ void CScene_Start::update()
 						vecObj[j]->GetRigidBody()->AddForce(vDiff.Nomalize() * fForce);
 					}
 				}
+
+				
 				vecObj[j]->update();
 			}
 		}
 	}
+	*/
+
 
 	// Scene 교체
-	//if (KEY_TAP(KEY::ENTER))
-	//{
-	//	ChangeScene(SCENE_TYPE::TOOL); // 이벤트 만들음
-	//}
+	if (KEY_TAP(KEY::ENTER))
+	{
+		ChangeScene(SCENE_TYPE::TOOL); // 이벤트 만들음
+	}
 
 
 
@@ -150,7 +155,7 @@ void CScene_Start::Enter()
 	AddObject(pOtherPlayer, GROUP_TYPE::PLAYER);*/
 
 	// Follow Player
-	//CCamera::GetInst()->SetTarget(pObj);
+	CCamera::GetInst()->SetTarget(pObj);
 
 
 	Vec2 vResolution = CCore::GetInst()->GetResolution();
@@ -164,7 +169,7 @@ void CScene_Start::Enter()
 
 
 	// 땅 물체 배치
-	CGround* pGround = new CGround;
+	CWall* pGround = new CWall;
 	pGround->SetPos(Vec2(640.f, 400.f));
 	pGround->SetScale(Vec2(500.f, 100.f));
 	pGround->SetName(L"Ground");
@@ -190,7 +195,7 @@ void CScene_Start::Enter()
 	CCamera::GetInst()->SetLookAt(vResolution / 2.f);
 	
 	// Camera 효과 지정
-	CCamera::GetInst()->FadeOut(1.f);
+	
 	CCamera::GetInst()->FadeIn(1.f);
 
 	// Scene Enter 말미에 꼭 Start를 넣어주자.
@@ -201,6 +206,7 @@ void CScene_Start::Enter()
 // 다음 씬에서는 다른 물체끼리의 충돌 검사할 수 있으니까
 void CScene_Start::Exit()
 {
+	CCamera::GetInst()->FadeOut(1.f);
 	// 씬의 객체 삭제
 	DeleteAll();
 

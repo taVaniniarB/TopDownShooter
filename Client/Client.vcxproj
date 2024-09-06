@@ -166,7 +166,8 @@
     <ClInclude Include="CCore.h" />
     <ClInclude Include="CEventMgr.h" />
     <ClInclude Include="CGravity.h" />
-    <ClInclude Include="CGround.h" />
+    <ClInclude Include="CTileBtnUI.h" />
+    <ClInclude Include="CWall.h" />
     <ClInclude Include="CIdleState.h" />
     <ClInclude Include="CKeyMgr.h" />
     <ClInclude Include="Client.h" />
@@ -214,7 +215,8 @@
     <ClCompile Include="CCore.cpp" />
     <ClCompile Include="CEventMgr.cpp" />
     <ClCompile Include="CGravity.cpp" />
-    <ClCompile Include="CGround.cpp" />
+    <ClCompile Include="CTileBtnUI.cpp" />
+    <ClCompile Include="CWall.cpp" />
     <ClCompile Include="CIdleState.cpp" />
     <ClCompile Include="CKeyMgr.cpp" />
     <ClCompile Include="CMissile.cpp" />

@@ -3,7 +3,7 @@
 
 
 
-class CGround :
+class CWall :
     public CObject
 {
 private:
@@ -14,9 +14,9 @@ public:
     virtual void OnCollisionEnter(CCollider* _pOther);
     virtual void OnCollision(CCollider* _pOther);
     virtual void OnCollisionExit(CCollider* _pOther);
-    CLONE(CGround);
+    CLONE(CWall);
 
 public:
-    CGround();
-    ~CGround();
+    CWall();
+    ~CWall();
 };

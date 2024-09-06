@@ -40,9 +40,11 @@ void CPanelUI::MouseOn()
 
 void CPanelUI::MouseLbtnDown()
 {
+	CUI::MouseLbtnDown();
 	m_vDragStart = MOUSE_POS;
 }
 
 void CPanelUI::MousebtnUp()
 {
+	CUI::MousebtnUp();
 }

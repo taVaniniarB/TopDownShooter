@@ -4,11 +4,17 @@
 
 #include "SelectGDI.h"
 
+#include "CSceneMgr.h"
+#include "CScene.h"
+
+#include "CTexture.h"
+
 CUI::CUI(bool _bCamAff)
 	: m_pParentUI(nullptr)
 	, m_bCamAffected(_bCamAff)
 	, m_bMouseOn(false)
 	, m_bLbtnDown(false)
+	, m_pTex(nullptr)
 {
 }
 
@@ -156,10 +162,16 @@ void CUI::MouseOn()
 
 void CUI::MouseLbtnDown()
 {
+	CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
+	
+	pCurScene->SetUIClicked(true);
+	//UIBTNDown(pCurScene);
 }
 
 void CUI::MousebtnUp()
 {
+	CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
+	UIBTNUp(pCurScene);
 }
 
 void CUI::MouseLbtnClicked()

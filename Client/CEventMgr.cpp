@@ -6,6 +6,7 @@
 #include "CUIMgr.h"
 #include "AI.h"
 #include "CState.h"
+#include "CScene.h"
 
 CEventMgr::CEventMgr()
 {
@@ -87,6 +88,16 @@ void CEventMgr::Excute(const tEvent& _eve)
 		MON_STATE eNextState = (MON_STATE)_eve.wParam;
 
 		pAI->SetCurState(eNextState);
+	}
+
+	break;
+
+	case EVENT_TYPE::UI_BTN_UP:
+	{
+		// lParam: Scene
+
+		CScene* pScene = (CScene*)_eve.lParam;
+		pScene->SetUIClicked(false);
 	}
 
 		break;

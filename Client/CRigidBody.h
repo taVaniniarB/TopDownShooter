@@ -11,8 +11,8 @@ private:
 	Vec2 m_vAccelA;			// 추가 가속도 (ex: 중력가속도)
 	Vec2 m_vVelocity;		// 속도 (속력과 방향)
 	
-	Vec2 m_vMaxVelocity;		// 최대 속도 (2차원), 횡스크롤에 해당
-	//float m_fMaxVelocity;	// 최대 속도 (모든 축에 해당), 탑뷰애 해당
+	//Vec2 m_vMaxVelocity;		// 최대 속도 (2차원), 횡스크롤에 해당
+	float m_fMaxVelocity;	// 최대 속도 (모든 축에 해당), 탑뷰애 해당
 	
 	float m_fMass;			// 질량
 	float m_fFricCoeff;		// 마찰 계수 (Friction Coefficient)
@@ -37,8 +37,8 @@ public:
 	void AddVelocity(Vec2 _vVel) { m_vVelocity += _vVel; }
 
 	// 최대속도 세팅
-	//void SetMaxVelocity(float _fMaxVel) { m_fMaxVelocity = _fMaxVel; } // 탑뷰
-	void SetMaxVelocity(Vec2 _vMaxVel) { m_vMaxVelocity = _vMaxVel; } // 횡스크롤
+	void SetMaxVelocity(float _fMaxVel) { m_fMaxVelocity = _fMaxVel; } // 탑뷰
+	//void SetMaxVelocity(Vec2 _vMaxVel) { m_vMaxVelocity = _vMaxVel; } // 횡스크롤
 	
 	// 본래 가속도란, 나에게 이 만큼의 '힘'이 주어졌으니, 질량을 고려하여
 	// 이 정도의 가속도가 생기겠다고 계산하는 개념인데

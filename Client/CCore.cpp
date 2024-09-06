@@ -113,6 +113,12 @@ void CCore::progress()
 	CKeyMgr::GetInst()->update(); // 키 상태 체크
 	CCamera::GetInst()->update();
 
+
+
+
+	// UI 이벤트 체크
+	CUIMgr::GetInst()->update();
+
 	// ============
 	// Scene Update
 	// ============
@@ -121,8 +127,6 @@ void CCore::progress()
 	// 충돌체크
 	CCollisionMgr::GetInst()->update();
 
-	// UI 이벤트 체크
-	CUIMgr::GetInst()->update();
 
 
 	// ==========
