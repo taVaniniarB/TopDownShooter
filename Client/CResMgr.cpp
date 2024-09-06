@@ -3,6 +3,7 @@
 
 #include "CPathMgr.h"
 #include "CTexture.h"
+#include "CSound.h"
 
 CResMgr::CResMgr()
 {
@@ -72,4 +73,40 @@ CTexture* CResMgr::FindTexture(const wstring& _strKey)
 	}
 
 	return (CTexture*)iter->second;
+}
+
+CSound* CResMgr::LoadSound(const wstring& _strKey, const wstring& _strRelativePath)
+{
+	CSound* pSound = FindSound(_strKey);
+	if (nullptr != pSound)
+	{
+		return pSound;
+	}
+
+	// content 폴더까지의 절대경로
+	wstring strFilePath = CPathMgr::GetInst()->GetContentPath();
+	strFilePath += _strRelativePath;
+
+	pSound = new CSound; // 리소스 매니저 내에서 new로 할당했기 때문에, 리소스 매니저 소멸자에서 메모리 해제 필요
+	pSound->Load(strFilePath);
+
+	// 텍스처가 스스로의 경로와 스스로 어떤 키(이름)으로 저장됐는지 알게 한다
+	pSound->SetKey(_strKey);
+	pSound->SetRelativePath(_strRelativePath);
+
+	m_mapSound.insert(make_pair(_strKey, pSound));
+
+	return pSound;
+}
+
+CSound* CResMgr::FindSound(const wstring& _strKey)
+{
+	map<wstring, CRes*>::iterator iter = m_mapSound.find(_strKey);
+
+	if (iter == m_mapSound.end())
+	{
+		return nullptr;
+	}
+
+	return (CSound*)iter->second;
 }

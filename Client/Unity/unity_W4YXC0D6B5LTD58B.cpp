@@ -28,12 +28,3 @@
 
 #include "C:\Users\hayeon\Source\Repos\WinApiLecture\Client\CGravity.cpp"
 
-
-#include "C:\Users\hayeon\Source\Repos\WinApiLecture\Client\CGround.cpp"
-
-
-#include "C:\Users\hayeon\Source\Repos\WinApiLecture\Client\CIdleState.cpp"
-
-
-#include "C:\Users\hayeon\Source\Repos\WinApiLecture\Client\CKeyMgr.cpp"
-

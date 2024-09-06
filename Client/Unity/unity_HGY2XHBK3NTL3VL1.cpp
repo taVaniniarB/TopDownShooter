@@ -1,4 +1,13 @@
 
+#include "C:\Users\hayeon\Source\Repos\WinApiLecture\Client\CGround.cpp"
+
+
+#include "C:\Users\hayeon\Source\Repos\WinApiLecture\Client\CIdleState.cpp"
+
+
+#include "C:\Users\hayeon\Source\Repos\WinApiLecture\Client\CKeyMgr.cpp"
+
+
 #include "C:\Users\hayeon\Source\Repos\WinApiLecture\Client\CMissile.cpp"
 
 
@@ -18,22 +27,4 @@
 
 
 #include "C:\Users\hayeon\Source\Repos\WinApiLecture\Client\CRes.cpp"
-
-
-#include "C:\Users\hayeon\Source\Repos\WinApiLecture\Client\CResMgr.cpp"
-
-
-#include "C:\Users\hayeon\Source\Repos\WinApiLecture\Client\CRigidBody.cpp"
-
-
-#include "C:\Users\hayeon\Source\Repos\WinApiLecture\Client\CScene.cpp"
-
-
-#include "C:\Users\hayeon\Source\Repos\WinApiLecture\Client\CSceneMgr.cpp"
-
-
-#include "C:\Users\hayeon\Source\Repos\WinApiLecture\Client\CScene_Start.cpp"
-
-
-#include "C:\Users\hayeon\Source\Repos\WinApiLecture\Client\CScene_Tool.cpp"
 
