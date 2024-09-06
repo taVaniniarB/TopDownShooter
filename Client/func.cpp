@@ -41,6 +41,25 @@ void ChangeAIState(AI* _pAI, MON_STATE _eNextState)
 	CEventMgr::GetInst()->AddEvent(evn);
 }
 
+void FScanf(char* _pOutBuff, FILE* _pFile)
+{
+	int i = 0;
+	while (true)
+	{
+		// 파일로부터 문자 하나하나 읽는 함수
+		char c = (char)getc(_pFile);
+
+		// 버퍼에 넣기 전 개행문자 여부 검사
+		if (c == '\n')
+		{
+			// 문자열의 끝을 표시하기 위해 종료 전 공백문자 삽입
+			_pOutBuff[i++] = '\0';
+			break;
+		}
+		_pOutBuff[i++] = c;
+	}
+}
+
 void SaveWstring(const wstring& _str, FILE* _pFile)
 {
 	// 데이터 직렬화

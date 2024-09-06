@@ -44,26 +44,26 @@ CPlayer::CPlayer()
 	
 	
 	
-	/*GetAnimator()->LoadAnimation(L"animation\\player_idle_left.anim");
+	GetAnimator()->LoadAnimation(L"animation\\player_idle_left.anim");
 	GetAnimator()->LoadAnimation(L"animation\\player_idle_right.anim");
 	GetAnimator()->LoadAnimation(L"animation\\player_run.anim");
 	GetAnimator()->LoadAnimation(L"animation\\player_jump.anim");
-	*/
 	
-	// Animator 안에 있는 IDLE이라는 Animation이 이 텍스처를 참조하고 이런 정보들을 참조했을 때
-	// 원하는 장면을 출력하도록 한다 (따라서, 플레이어는 텍스처 멤버를 가질 필요가 없어짐)
-	GetAnimator()->CreateAnimation(L"IDLE_RIGHT", pTex, Vec2(0.f, 0.f), Vec2(36.f, 40.f), Vec2(36.f, 0.f), 0.1f, 12);
-	GetAnimator()->CreateAnimation(L"IDLE_LEFT", pTex, Vec2(0.f, 0.f), Vec2(36.f, 40.f), Vec2(36.f, 0.f), 0.1f, 12);
-	GetAnimator()->CreateAnimation(L"RUN", pTex, Vec2(0.f, 52.f), Vec2(46.f, 38.f), Vec2(46.f, 0.f), 0.1f, 10);
-	GetAnimator()->CreateAnimation(L"JUMP", pTex, Vec2(0.f, 135.f), Vec2(36.f, 45.f), Vec2(36.f, 0.f), 0.1f, 8);
-	
-	
-	// Animation 저장해보기
-	GetAnimator()->FindAnimation(L"IDLE_LEFT")->Save(L"animation\\player_idle_left.anim");
-	GetAnimator()->FindAnimation(L"IDLE_RIGHT")->Save(L"animation\\player_idle_right.anim");
-	GetAnimator()->FindAnimation(L"RUN")->Save(L"animation\\player_run.anim");
-	GetAnimator()->FindAnimation(L"JUMP")->Save(L"animation\\player_jump.anim");
-	
+	//
+	//// Animator 안에 있는 IDLE이라는 Animation이 이 텍스처를 참조하고 이런 정보들을 참조했을 때
+	//// 원하는 장면을 출력하도록 한다 (따라서, 플레이어는 텍스처 멤버를 가질 필요가 없어짐)
+	//GetAnimator()->CreateAnimation(L"IDLE_RIGHT", pTex, Vec2(0.f, 0.f), Vec2(36.f, 40.f), Vec2(36.f, 0.f), 0.1f, 12);
+	//GetAnimator()->CreateAnimation(L"IDLE_LEFT", pTex, Vec2(0.f, 0.f), Vec2(36.f, 40.f), Vec2(36.f, 0.f), 0.1f, 12);
+	//GetAnimator()->CreateAnimation(L"RUN", pTex, Vec2(0.f, 52.f), Vec2(46.f, 38.f), Vec2(46.f, 0.f), 0.1f, 10);
+	//GetAnimator()->CreateAnimation(L"JUMP", pTex, Vec2(0.f, 135.f), Vec2(36.f, 45.f), Vec2(36.f, 0.f), 0.1f, 8);
+	//
+	//
+	//// Animation 저장해보기
+	//GetAnimator()->FindAnimation(L"IDLE_LEFT")->Save(L"animation\\player_idle_left.anim");
+	//GetAnimator()->FindAnimation(L"IDLE_RIGHT")->Save(L"animation\\player_idle_right.anim");
+	//GetAnimator()->FindAnimation(L"RUN")->Save(L"animation\\player_run.anim");
+	//GetAnimator()->FindAnimation(L"JUMP")->Save(L"animation\\player_jump.anim");
+	//
 
 
 	CreateGravity();

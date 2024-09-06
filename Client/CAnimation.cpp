@@ -110,26 +110,52 @@ void CAnimation::Save(const wstring& _strRelativePath)
 	assert(pFile);
 
 	
-	// Animation의 이름을 저장한다.
-	SaveWstring(m_strName, pFile);
-
+	// Animation의 이름을 저장한다
+	fprintf(pFile, "[Animation Name]\n");
+	// 1바이트 문자열로 변환
+	string strName = string(m_strName.begin(), m_strName.end());
+	fprintf(pFile, strName.c_str());
+	fprintf(pFile, "\n");
 
 	// 텍스처
 	// 포인터인데... 주소를 고대로 저장해선 안 됨
-	SaveWstring(m_pTex->GetKey(), pFile);
-	SaveWstring(m_pTex->GetRelativePath(), pFile);
+	fprintf(pFile, "[Texture Name]\n");
+	// 1바이트 문자열로 변환
+	strName = string(m_pTex->GetKey().begin(), m_pTex->GetKey().end());
+	fprintf(pFile, strName.c_str());
+	fprintf(pFile, "\n");
+
+	fprintf(pFile, "[Texture Path]\n");
+	strName = string(m_pTex->GetRelativePath().begin(), m_pTex->GetRelativePath().end());
+	fprintf(pFile, strName.c_str());
+	fprintf(pFile, "\n");
 
 
-	// 각 프레임의 정보가 담긴 구조체 벡터 m_vecFrm를 저장한다.
-	// 여러 개의 데이터 집합이므로, 파일 읽을 때를 고려하여 데이터 개수 먼저 저장
-	size_t iFrameCount = m_vecFrm.size();
-	// 프레임 구조체 벡터 저장
-	fwrite(&iFrameCount, sizeof(size_t), 1, pFile);
+	// 프레임 개수
+	fprintf(pFile, "[Frame Count]\n");
+	fprintf(pFile, "%d\n", (int)m_vecFrm.size());
 	
-	
-	// 벡터가 관리하고 있는 시작주소(data()), 구조체 사이즈, 프레임 개수만큼 저장
-	fwrite(m_vecFrm.data(), sizeof(tAnimFrm), iFrameCount, pFile);
+	// 각 프레임의 정보가 담긴 구조체 벡터 m_vecFrm를 저장
 
+	for (size_t i = 0; i < m_vecFrm.size(); ++i)
+	{
+		fprintf(pFile, "\n\n");
+
+		fprintf(pFile, "[Frame Index]\n");
+		fprintf(pFile, "%d\n", (int)i);
+
+		fprintf(pFile, "[Left Top Position]\n");
+		fprintf(pFile, "%d %d\n", (int)m_vecFrm[i].vLT.x, (int)m_vecFrm[i].vLT.y);
+
+		fprintf(pFile, "[Slice Size]\n");
+		fprintf(pFile, "%d %d\n", (int)m_vecFrm[i].vSlice.x, (int)m_vecFrm[i].vSlice.y);
+
+		fprintf(pFile, "[Offset]\n");
+		fprintf(pFile, "%d %d\n", (int)m_vecFrm[i].vOffset.x, (int)m_vecFrm[i].vOffset.y);
+
+		fprintf(pFile, "[Duration]\n");
+		fprintf(pFile, "%f\n", m_vecFrm[i].fDuration);
+	}
 
 	// 파일 스트림 닫기
 	fclose(pFile);
@@ -146,29 +172,97 @@ void CAnimation::Load(const wstring& _strRelativePath)
 	_wfopen_s(&pFile, strFilePath.c_str(), L"rb");
 	assert(pFile);
 
-	// 파일로부터 로드한 애니메이션 이름 데이터를 멤버에 채운다
-	LoadWstring(m_strName, pFile);
+	// Animation의 이름을 읽어온다
+	// fscanf(%s)로 문자열 읽기의 문제점: 공백 만나면 입력을 종료
+	// 개행문자가 나올 때까지 버퍼에 문자 하나하나를 저장하는 함수를 만들었다.
+	// 마지막에 \0으로 막아둘 것이므로, 지역변수 버퍼는 계속 재사용하도록 하자.
+	char szBuff[256];
+	// 변환용 string객체
+	string str;
+
+	FScanf(szBuff, pFile); // 여기서는 [Animation Name]이란 필드 이름이 읽힐 거임
+	FScanf(szBuff, pFile); // 읽어서 저장해야 하는 실질적 데이터
+	str = szBuff;
+
+	m_strName = wstring(str.begin(), str.end());
 
 
-	// 텍스처의 키 읽기
-	wstring strTexKey, strTexPath;
-	LoadWstring(strTexKey, pFile);
-	LoadWstring(strTexPath, pFile);
-	// 읽은 키로 리소스매니저로부터 텍스처를 받아옴
+
+	//참조하는 텍스처 이름 및 경로
+
+	FScanf(szBuff, pFile); // [Texture Name]
+	FScanf(szBuff, pFile);
+	str = szBuff;
+	wstring strTexKey = wstring(str.begin(), str.end());
+
+
+	FScanf(szBuff, pFile); // [Texture Path]
+	FScanf(szBuff, pFile);
+	str = szBuff;
+	wstring strTexPath = wstring(str.begin(), str.end());
+
+
+	// 키와 경로 기반으로 텍스처 로드
 	m_pTex = CResMgr::GetInst()->LoadTexture(strTexKey, strTexPath);
 
-	// 프레임 개수 저장
-	size_t iFrameCount = 0;
-	fread(&iFrameCount, sizeof(size_t), 1, pFile);
-	
-	// 모든 프레임 정보 (구조체 벡터) 저장
-	// write 때와 다르게 하나하나 push back 해주어야 함
-	// 혹은 벡터.resizse 함수로 iFrameCount만한 공간 미리 확보해두고 저장하면
-	// 한 번에 모든 프레임 읽어들여서 채우기 가능
-	m_vecFrm.resize(iFrameCount);
-	fread(m_vecFrm.data(), sizeof(tAnimFrm), iFrameCount, pFile);
-	// 반복문에 비해 좋은점: push back은 공간 모자랄 때마다 공간 재할당 하는 과정 있는데
-	// 한 번에 공간을 확보함으로써 재할당 비용 감소
+
+
+	// 프레임 개수
+	FScanf(szBuff, pFile); // 제목
+
+	int iFrameCount = 0;
+	// 숫자이기 때문에 fscanf_s(%d) 이용해서 읽을 수 있다
+	fscanf_s(pFile, "%d", &iFrameCount);
+
+
+
+	// 각 프레임의 정보가 담긴 구조체 벡터 m_vecFrm를 저장
+	tAnimFrm frm = {};
+	for (int i = 0; i < iFrameCount; ++i)
+	{
+		POINT pt = {}; // 정수 2개로 구성된 구조체
+
+		while (true)
+		{
+			FScanf(szBuff, pFile);
+
+			// 두 문자열이 같은지 비교하는 함수
+			// 같으면 0 반환하기 때문에 조건 뒤집기
+			if (!strcmp("[Frame Index]", szBuff))
+			{
+				fscanf_s(pFile, "%d", &pt.x);
+			}
+			else if (!strcmp("[Left Top Position]", szBuff))
+			{
+				// 포맷이 %d라서, 정수에 해당하는 값이 있을 때까지 계속 읽어들임(즉 공백무시)
+				fscanf_s(pFile, "%d", &pt.x);
+				fscanf_s(pFile, "%d", &pt.y);
+
+				frm.vLT = pt;
+			}
+			else if (!strcmp("[Slice Size]", szBuff))
+			{
+				fscanf_s(pFile, "%d", &pt.x);
+				fscanf_s(pFile, "%d", &pt.y);
+
+				frm.vSlice = pt;
+			}
+			else if (!strcmp("[Offset]", szBuff))
+			{
+				fscanf_s(pFile, "%d", &pt.x);
+				fscanf_s(pFile, "%d", &pt.y);
+
+				frm.vOffset = pt;
+			}
+			else if (!strcmp("[Duration]", szBuff))
+			{
+				fscanf_s(pFile, "%f", &frm.fDuration);
+				break;
+			}
+		}
+		
+		m_vecFrm.push_back(frm);
+	}
 	
 	fclose(pFile);
 }
