@@ -12,6 +12,7 @@ CResMgr::CResMgr()
 CResMgr::~CResMgr()
 {
 	Safe_Delete_Map(m_mapTex);
+	Safe_Delete_Map(m_mapSound);
 	// 전역함수를 통해 priviate인 자식(텍스쳐)의 소멸자를 호출하는법
 	// 맵의 데이터 타입을 부모(리소스)로 해서, 지우기 함수를 호출한다
 	// 그럼 오버라이딩 된 자식 소멸자가 호출됨

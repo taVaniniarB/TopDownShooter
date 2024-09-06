@@ -135,7 +135,7 @@ void CScene_Tool::update()
 	CScene::update();
 
 	// 마우스 좌표 받아서 타일 인덱스를 변환
-	SetTileIdx();
+	//SetTileIdx();
 
 	// G키를 누르면 툴씬이 기억하고 있는 UI로 강제 포커싱
 	if (KEY_TAP(KEY::G))
