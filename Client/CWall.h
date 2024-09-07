@@ -9,6 +9,7 @@ class CWall :
 private:
     virtual void start();
     virtual void update();
+    virtual void render(HDC _dc);
     
 public:
     virtual void OnCollisionEnter(CCollider* _pOther);

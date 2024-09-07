@@ -173,7 +173,7 @@ void CScene_Start::Enter()
 	pGround->SetPos(Vec2(640.f, 400.f));
 	pGround->SetScale(Vec2(500.f, 100.f));
 	pGround->SetName(L"Ground");
-	AddObject(pGround, GROUP_TYPE::GROUND);
+	AddObject(pGround, GROUP_TYPE::WALL);
 
 
 
@@ -187,7 +187,7 @@ void CScene_Start::Enter()
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::PLAYER, GROUP_TYPE::MONSTER); // 플레이어-몬스터
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::MONSTER, GROUP_TYPE::PROJ_PLAYER); // 몬스터-총알
 	
-	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::PLAYER, GROUP_TYPE::GROUND);
+	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::PLAYER, GROUP_TYPE::WALL);
 
 	// Camera Start 지정
 	// 	   위에 해상도 받아다 몬스터 위치지정 하는 코드 있어서 일단 주석처리

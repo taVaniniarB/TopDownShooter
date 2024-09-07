@@ -74,6 +74,11 @@ public:
 	void CreateTile(UINT _iXCount, UINT _iYCount);
 	void ChangeTile(Vec2 _vMousePos, int _idx);
 
+	// 벽 객체를 만드는 함수
+	void CreateWall(Vec2 vMousePos);
+	void CreateWall(Vec2 vMousePos, WALL_DIR _eSelectedWallDir);
+	void DeleteWall(Vec2 vMousePos);
+
 	// Tool Scene에서 파일을 세이브하고, 씬(을 상속받은 다른 씬들)은 그것을 load한다
 	void LoadTile(const wstring& _sttRelativePath);
 

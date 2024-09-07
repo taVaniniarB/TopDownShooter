@@ -89,7 +89,10 @@ int CCore::init(HWND _hWnd, POINT _ptResolution)
 	CSoundMgr::GetInst()->init();
 
 	// Sound 로드 테스트
-	CResMgr::GetInst()->LoadSound(L"BGM_01", L"sound\\IAmTheProgram.wav");
+	//CResMgr::GetInst()->LoadSound(L"BGM_01", L"sound\\IAmTheProgram.wav");
+	CResMgr::GetInst()->LoadSound(L"BGM_01", L"sound\\Megalovania.wav");
+	
+	
 	CSound* pNewSound = CResMgr::GetInst()->FindSound(L"BGM_01");
 
 	pNewSound->Play();

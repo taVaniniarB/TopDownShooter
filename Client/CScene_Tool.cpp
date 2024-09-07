@@ -20,6 +20,7 @@
 
 #include "CResMgr.h"
 #include "CTexture.h"
+#include "CWall.h"
 
 
 // 함수포인터 인자 전달해야 하는데 전역함수가 아래에 있어서 전방선언
@@ -28,7 +29,7 @@ void ChangeScene(DWORD_PTR, DWORD_PTR);
 
 CScene_Tool::CScene_Tool()
 	: m_pUI(nullptr)
-	, m_pSelectedTileIdx(-1)
+	, m_iSelectedTileIdx(-1)
 	, m_eSelctedObj(SELECT_OPTION::NONE)
 {
 }
@@ -40,13 +41,13 @@ CScene_Tool::~CScene_Tool()
 
 void CScene_Tool::Enter()
 {
-	CCamera::GetInst()->FadeIn(1.f);
+	CCamera::GetInst()->SetTarget(nullptr);
 
 	// 툴씬에서 사용할 메뉴 추가
 	CCore::GetInst()->DockMenu();
 
 	// 타일 생성
-	CreateTile(5, 5);
+	CreateTile(50, 30);
 	
 	// UI 생성
 	Vec2 vResolution = CCore::GetInst()->GetResolution();
@@ -77,27 +78,21 @@ void CScene_Tool::Enter()
     // 타일 UI
 	CUI* pTilePanelUI = new CPanelUI;
 	pTilePanelUI->SetName(L"TileParentUI");
-	pTilePanelUI->SetScale(Vec2(150.f, 400.f));
+	pTilePanelUI->SetScale(Vec2(200.f, 400.f));
 	pTilePanelUI->SetPos(Vec2(vResolution.x - pTilePanelUI->GetScale().x, 100.f));
 	AddObject(pTilePanelUI, GROUP_TYPE::UI);
 
+	// 타일 자식 UI
 	for (UINT i = 0; i < 12; ++i)
 	{
-		const int iMaxRow = 3;
+		const int iMaxRow = 4;
 		int iRow = 0; int iCol = 0;
 
-		wchar_t name[20] = L"ChildUI";
-		wchar_t idx[10];
-		_itow_s(i, idx, 10);
-		wcscat_s(name, idx);
-
 		CTileBtnUI* pTileSelectUI = new CTileBtnUI;
-		pTileSelectUI->SetName(name); //두 wchar 버퍼 합치기 함수로 타일에 이름을 부여
-
-		int iXScale = (int)(pTilePanelUI->GetScale().x / iMaxRow);
-		int iTileUIScale = 50;
 		
-		pTileSelectUI->SetScale(Vec2((float)iTileUIScale, (float)iTileUIScale));
+		int iXScale = (int)(pTilePanelUI->GetScale().x / iMaxRow);
+		
+		pTileSelectUI->SetScale(Vec2(50.f, 50.f));
 		iRow = i / iMaxRow;
 		iCol = (int)(i % iMaxRow);
 		pTileSelectUI->SetPos(Vec2((float)iCol * iXScale, (float)iRow * iXScale));
@@ -105,13 +100,22 @@ void CScene_Tool::Enter()
 		((CTileBtnUI*)pTileSelectUI)->SetClickedCallBack(this, (SCENE_MEMFUNC_INT)&CScene_Tool::SetSelectedTile, i);
 		pTilePanelUI->AddChild(pTileSelectUI);
 
-
 		// 타일 UI의 텍스처
 		CTexture* pTex = CResMgr::GetInst()->FindTexture(L"Tile");
 		pTileSelectUI->SetTexture(pTex);
 		pTileSelectUI->SetIdx(i);
 	}
 
+	for (UINT i = 0; i < (UINT)WALL_DIR::MAX; ++i)
+	{
+		CTileBtnUI* pTileSelectUI = new CTileBtnUI;
+		pTileSelectUI->SetScale(Vec2(50.f, 50.f));
+		pTileSelectUI->SetPos(Vec2(0.f, 210.f));
+
+		((CTileBtnUI*)pTileSelectUI)->SetClickedCallBack(this, (SCENE_MEMFUNC_INT)&CScene_Tool::SetSelectedWall, i);
+		pTilePanelUI->AddChild(pTileSelectUI);
+
+	}
 
 	// 복사본 UI
 	/* 복사본 UI
@@ -170,19 +174,19 @@ void CScene_Tool::update()
 		LoadTileData();
 	}
 
-	if (!GetUIClicked() && (KEY_HOLD(KEY::LBTN) || KEY_TAP(KEY::LBTN)))
+	if (!GetUIClicked() && !(KEY_NONE(KEY::LBTN)))
 	{
+		Vec2 vMousePos = MOUSE_POS;
+		vMousePos = CCamera::GetInst()->GetRealPos(vMousePos);
+
 		switch (m_eSelctedObj)
 		{
 		case SELECT_OPTION::TILE:
 		{
-			Vec2 vMousePos = MOUSE_POS;
-			vMousePos = CCamera::GetInst()->GetRealPos(vMousePos);
-
 			int iTileX = GetTileX();
 			int iTileY = GetTileY();
 			if (iTileX)
-				ChangeTile(vMousePos, m_pSelectedTileIdx);
+				ChangeTile(vMousePos, m_iSelectedTileIdx);
 		}
 			break;
 		case SELECT_OPTION::MONSTER:
@@ -195,7 +199,16 @@ void CScene_Tool::update()
 			break;
 		case SELECT_OPTION::WALL:
 		{
-
+			if (KEY_TAP(KEY::LBTN))
+			{
+				CScene::CreateWall(vMousePos, m_eSelectedWallDir);
+				break;
+			}
+			if (KEY_HOLD(KEY::LSHIFT) && KEY_TAP(KEY::LBTN))
+			{
+				CScene::DeleteWall(vMousePos);
+				break;
+			}
 		}
 			break;
 		case SELECT_OPTION::PLAYER:
@@ -257,6 +270,37 @@ void CScene_Tool::SetTileIdx()
 	
 }
 */
+// 드래그하면 좌상단 우하단 산출하고 그 자리에 Wall을 만들음
+/*
+void CScene_Tool::CreateWall(Vec2 _vStartPos, Vec2 _vEndPos)
+{
+	// 좌상우하 산출
+	Vec2 vLT = {};
+	Vec2 vRB = {};
+	Vec2 vScale = {};
+
+
+
+	// 좌상단 X좌표 (둘 중 작은것)
+	(_vStartPos.x < _vEndPos.x) ? (vLT.x = _vStartPos.x) : (vLT.x = _vEndPos.x);
+	// 좌상단 Y좌표 (둘 중 작은것)
+	(_vStartPos.y < _vEndPos.y) ? (vLT.y = _vStartPos.y) : (vLT.y = _vEndPos.y);
+
+	// 우하단 X좌표 (둘 중 큰것)
+	(_vStartPos.x > _vEndPos.x) ? (vRB.x = _vStartPos.x) : (vRB.x = _vEndPos.x);
+	// 우하단 Y좌표 (둘 중 큰것)
+	(_vStartPos.y > _vEndPos.y) ? (vRB.y = _vStartPos.y) : (vRB.y = _vEndPos.y);
+
+	vScale = Vec2((vRB.x - vLT.x), (vRB.y - vLT.y));
+
+	CWall* pWall = new CWall;
+	pWall->SetScale(vScale);
+	pWall->SetPos(Vec2((vRB.x - vLT.x / 2), (vRB.y - vLT.y / 2)));
+}
+*/
+
+
+
 
 void CScene_Tool::SaveTileData()
 {
@@ -391,8 +435,14 @@ void CScene_Tool::LoadTileData()
 
 void CScene_Tool::SetSelectedTile(int _idx)
 {
-	m_pSelectedTileIdx = _idx;
+	m_iSelectedTileIdx = _idx;
 	m_eSelctedObj = SELECT_OPTION::TILE;
+}
+
+void CScene_Tool::SetSelectedWall(int _wallPos)
+{
+	m_eSelectedWallDir = (WALL_DIR)_wallPos;
+	m_eSelctedObj = SELECT_OPTION::WALL;
 }
 
 

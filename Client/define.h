@@ -31,12 +31,13 @@
 #define PI 3.1415926535f
 
 #define TILE_SIZE 32
+#define WALL_THICKNESS 8
 
 enum class GROUP_TYPE
 {
 	DEFAULT,
 	TILE,
-	GROUND,
+	WALL,
 	MONSTER,
 	PLAYER,
 	PROJ_PLAYER,
@@ -92,4 +93,13 @@ enum class MON_STATE
 	RUN,
 	DEAD,
 	END,
+};
+
+enum class WALL_DIR
+{
+	TOP,
+	BOTTOM,
+	LEFT,
+	RIGHT,
+	MAX,
 };

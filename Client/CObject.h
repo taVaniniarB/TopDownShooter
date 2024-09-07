@@ -22,7 +22,7 @@ private:
 	wstring		m_strName;
 	Vec2		m_vPos;
 	Vec2		m_vScale;
-	CTexture* m_pTex;
+	CTexture*	m_pTex;
 
 	// Component
 	CCollider*	m_pCollider; // nullptr > 충돌체 필요 없음

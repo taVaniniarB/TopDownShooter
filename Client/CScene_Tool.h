@@ -28,7 +28,15 @@ private:
 	SELECT_OPTION m_eSelctedObj;
 
 	// 현재 선택된 타일 인덱스
-	int m_pSelectedTileIdx;
+	int m_iSelectedTileIdx;
+	// 현재 선택된 벽 인덱스
+	WALL_DIR m_eSelectedWallDir;
+
+	// 현재 드래그 중인가?
+	bool m_vWallDrag;
+	// 벽 만들 때 드래그 좌표
+	Vec2 m_vDragStartPos;
+	Vec2 m_vDragEndPos;
 
 public:
 	virtual void Enter();
@@ -44,13 +52,16 @@ public:
 	void SaveTile(const wstring& _strFilePath);
 	void SetSelectedTile(int _idx);
 	
+	void SetSelectedWall(int _wallPos);
 	
 	void LoadTileData();
 
 	void SetSelectedObj(SELECT_OPTION _eOption) { m_eSelctedObj = _eOption; }
 	SELECT_OPTION GetSelectedObj() { return m_eSelctedObj; }
 
-	
+private:
+	// 드래그로 Wall을 만드는 함수
+	//void CreateWall(Vec2 _vStartPos, Vec2 _vEndPos);
 	
 
 public:

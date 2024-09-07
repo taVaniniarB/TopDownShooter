@@ -1,7 +1,7 @@
 #include "CWall.h"
 
 #include "CCollider.h"
-#include "CGravity.h"
+//#include "CGravity.h"
 
 CWall::CWall()
 {
@@ -20,6 +20,18 @@ void CWall::start()
 
 void CWall::update()
 {
+}
+
+void CWall::render(HDC _dc)
+{
+	Vec2 vRenderPos = CCamera::GetInst()->GetRenderPos(GetPos());
+	Vec2 vScale = GetScale();
+
+	Rectangle(_dc
+		, (int)(vRenderPos.x)
+		, (int)(vRenderPos.y)
+		, (int)(vRenderPos.x + vScale.x)
+		, (int)(vRenderPos.y + vScale.y));
 }
 
 // 충돌체에서 충돌 이벤트 발생 시 실행될 함수

@@ -2,6 +2,7 @@
 #include "CScene.h"
 #include "CObject.h"
 #include "CTile.h"
+#include "CWall.h"
 #include "CResMgr.h"
 #include "CPathMgr.h"
 #include "CKeyMgr.h"
@@ -79,6 +80,82 @@ void CScene::ChangeTile(Vec2 _vMousePos, int _idx)
 	const vector<CObject*>& vecTile = GetGroupObject(GROUP_TYPE::TILE);
 	CTile* changeTile = dynamic_cast<CTile*>(vecTile[iIdx]);
 	changeTile->SetImgIdx(_idx);
+}
+
+
+void CScene::CreateWall(Vec2 vMousePos)
+{
+}
+
+void CScene::CreateWall(Vec2 vMousePos, WALL_DIR _eSelectedWallDir)
+{
+	CWall* pNewWall = new CWall;
+
+
+	Vec2 vPos = {};
+	Vec2 vScale = {};
+
+
+	// 음수좌표 고려하여 int
+	int iCol = (int)vMousePos.x / TILE_SIZE;
+	int iRow = (int)vMousePos.y / TILE_SIZE;
+
+	switch (_eSelectedWallDir)
+	{
+	case WALL_DIR::TOP:
+	{
+		vPos = Vec2((iCol * TILE_SIZE), (iRow * TILE_SIZE));
+		vScale = Vec2(TILE_SIZE, WALL_THICKNESS);
+	}
+		break;
+	case WALL_DIR::BOTTOM:
+	{
+		vPos = Vec2((iCol * TILE_SIZE), (iRow * TILE_SIZE + (TILE_SIZE - WALL_THICKNESS)));
+		vScale = Vec2(TILE_SIZE, WALL_THICKNESS);
+	}
+		break;
+	case WALL_DIR::LEFT:
+	{
+		vPos = Vec2((iCol * TILE_SIZE), (iRow * TILE_SIZE));
+		vScale = Vec2(WALL_THICKNESS, TILE_SIZE);
+	}
+		break;
+	case WALL_DIR::RIGHT:
+	{
+		vPos = Vec2((iCol * TILE_SIZE) + (TILE_SIZE - WALL_THICKNESS), (iRow * TILE_SIZE));
+		vScale = Vec2(WALL_THICKNESS, TILE_SIZE);
+	}
+		break;
+	case WALL_DIR::MAX:
+		break;
+	default:
+		break;
+	}
+	
+	pNewWall->SetPos(vPos);
+	pNewWall->SetScale(vScale);
+
+	AddObject(pNewWall, GROUP_TYPE::WALL);
+}
+void CScene::DeleteWall(Vec2 vMousePos)
+{
+	// 음수좌표 고려하여 int
+	int iCol = (int)(vMousePos.x / TILE_SIZE);
+	int iRow = (int)(vMousePos.y / TILE_SIZE);
+
+	Vec2 WallPos = Vec2(iCol * TILE_SIZE, iRow* TILE_SIZE);
+
+	HDC dc = CCore::GetInst()->GetMainDC();
+	vector<CObject*> vWall = GetGroupObject(GROUP_TYPE::WALL);
+	for (int i = 0; i < vWall.size(); ++i)
+	{
+		Vec2 vCompare = vWall[i]->GetPos();
+		if (WallPos.x == vCompare.x && WallPos.y == vCompare.y)
+		{
+			DeleteObject(vWall[i]);
+			break;
+		}
+	}
 }
 
 
