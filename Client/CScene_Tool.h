@@ -27,10 +27,14 @@ private:
 	// 현재 선택된 오브젝트 옵션
 	SELECT_OPTION m_eSelctedObj;
 
+	// 선택 중인 벽 옵션
+	WALL_TYPE m_eSelectedWall;
+
 	// 현재 선택된 타일 인덱스
 	int m_iSelectedTileIdx;
 	// 현재 선택된 벽 인덱스
 	WALL_DIR m_eSelectedWallDir;
+	WALL_DIR m_eSelectedWallDir2;
 
 	// 현재 드래그 중인가?
 	bool m_vWallDrag;
@@ -52,7 +56,8 @@ public:
 	void SaveTile(const wstring& _strFilePath);
 	void SetSelectedTile(int _idx);
 	
-	void SetSelectedWall(int _wallPos);
+	void SetSelectedWall();
+	void SetSelectedCorner();
 	
 	void LoadTileData();
 

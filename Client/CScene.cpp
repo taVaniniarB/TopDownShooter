@@ -83,18 +83,42 @@ void CScene::ChangeTile(Vec2 _vMousePos, int _idx)
 }
 
 
-void CScene::CreateWall(Vec2 vMousePos)
+void CScene::CreateWall(Vec2 vMousePos, WALL_DIR _eSelectedWallDir1, WALL_DIR _eSelectedWallDir2)
 {
+	DeleteWall(vMousePos);
+
+	GenerateWall(vMousePos, _eSelectedWallDir1);
+	GenerateWall(vMousePos, _eSelectedWallDir2);
 }
 
-void CScene::CreateWall(Vec2 vMousePos, WALL_DIR _eSelectedWallDir)
+void CScene::CreateWall(Vec2 vMousePos, WALL_DIR _eSelectedWallDir, WALL_TYPE _eWallType)
+{
+
+	switch (_eWallType)
+	{
+	case WALL_TYPE::WALL:
+		DeleteWall(vMousePos);
+		GenerateWall(vMousePos, _eSelectedWallDir);
+		break;
+	case WALL_TYPE::CORNER:
+		DeleteCorner(vMousePos);
+		GenerateCorner(vMousePos, _eSelectedWallDir);
+		break;
+	case WALL_TYPE::TILE:
+		GenerateTileWall(vMousePos);
+		break;
+	default:
+		break;
+	}
+}
+
+
+void CScene::GenerateWall(Vec2 vMousePos, WALL_DIR _eSelectedWallDir)
 {
 	CWall* pNewWall = new CWall;
 
-
 	Vec2 vPos = {};
 	Vec2 vScale = {};
-
 
 	// 음수좌표 고려하여 int
 	int iCol = (int)vMousePos.x / TILE_SIZE;
@@ -107,56 +131,160 @@ void CScene::CreateWall(Vec2 vMousePos, WALL_DIR _eSelectedWallDir)
 		vPos = Vec2((iCol * TILE_SIZE), (iRow * TILE_SIZE));
 		vScale = Vec2(TILE_SIZE, WALL_THICKNESS);
 	}
-		break;
+	break;
 	case WALL_DIR::BOTTOM:
 	{
 		vPos = Vec2((iCol * TILE_SIZE), (iRow * TILE_SIZE + (TILE_SIZE - WALL_THICKNESS)));
 		vScale = Vec2(TILE_SIZE, WALL_THICKNESS);
 	}
-		break;
+	break;
 	case WALL_DIR::LEFT:
 	{
 		vPos = Vec2((iCol * TILE_SIZE), (iRow * TILE_SIZE));
 		vScale = Vec2(WALL_THICKNESS, TILE_SIZE);
 	}
-		break;
+	break;
 	case WALL_DIR::RIGHT:
 	{
 		vPos = Vec2((iCol * TILE_SIZE) + (TILE_SIZE - WALL_THICKNESS), (iRow * TILE_SIZE));
 		vScale = Vec2(WALL_THICKNESS, TILE_SIZE);
 	}
-		break;
-	case WALL_DIR::MAX:
+	break;
+	case WALL_DIR::END:
 		break;
 	default:
 		break;
 	}
-	
+
 	pNewWall->SetPos(vPos);
 	pNewWall->SetScale(vScale);
 
 	AddObject(pNewWall, GROUP_TYPE::WALL);
 }
+
+void CScene::GenerateCorner(Vec2 vMousePos, WALL_DIR _eSelectedWallDir)
+{
+	CWall* pNewWall = new CWall;
+
+	Vec2 vPos = {};
+	Vec2 vScale = {};
+
+	// 음수좌표 고려하여 int
+	int iCol = (int)vMousePos.x / TILE_SIZE;
+	int iRow = (int)vMousePos.y / TILE_SIZE;
+
+	vScale = Vec2(WALL_THICKNESS, WALL_THICKNESS);
+
+	switch (_eSelectedWallDir)
+	{
+	case WALL_DIR::TOP:
+	{
+		vPos = Vec2((iCol * TILE_SIZE), (iRow * TILE_SIZE));
+	}
+	break;
+	case WALL_DIR::BOTTOM:
+	{
+		vPos = Vec2((iCol * TILE_SIZE), (iRow * TILE_SIZE + (TILE_SIZE - WALL_THICKNESS)));
+	}
+	break;
+	case WALL_DIR::LEFT:
+	{
+		vPos = Vec2((iCol * TILE_SIZE) + (TILE_SIZE - WALL_THICKNESS), (iRow * TILE_SIZE));
+	}
+	break;
+	case WALL_DIR::RIGHT:
+	{
+		vPos = Vec2((iCol * TILE_SIZE) + (TILE_SIZE - WALL_THICKNESS), (iRow * TILE_SIZE) + (TILE_SIZE - WALL_THICKNESS));
+	}
+	break;
+	case WALL_DIR::END:
+		break;
+	default:
+		break;
+	}
+
+	pNewWall->SetPos(vPos);
+	pNewWall->SetScale(vScale);
+
+	AddObject(pNewWall, GROUP_TYPE::CORNER);
+}
+
+void CScene::GenerateTileWall(Vec2 vMousePos)
+{
+	CWall* pNewWall = new CWall;
+
+	Vec2 vPos = {};
+	Vec2 vScale = {};
+
+	// 음수좌표 고려하여 int
+	int iCol = (int)vMousePos.x / TILE_SIZE;
+	int iRow = (int)vMousePos.y / TILE_SIZE;
+
+	vPos = Vec2((iCol * TILE_SIZE), (iRow * TILE_SIZE));
+	vScale = Vec2(TILE_SIZE, TILE_SIZE);
+
+	pNewWall->SetPos(vPos);
+	pNewWall->SetScale(vScale);
+
+	AddObject(pNewWall, GROUP_TYPE::TILE_WALL);
+}
+
 void CScene::DeleteWall(Vec2 vMousePos)
 {
 	// 음수좌표 고려하여 int
 	int iCol = (int)(vMousePos.x / TILE_SIZE);
 	int iRow = (int)(vMousePos.y / TILE_SIZE);
 
-	Vec2 WallPos = Vec2(iCol * TILE_SIZE, iRow* TILE_SIZE);
+	Vec2 WallPos = Vec2(iCol * TILE_SIZE, iRow * TILE_SIZE);
 
 	HDC dc = CCore::GetInst()->GetMainDC();
 	vector<CObject*> vWall = GetGroupObject(GROUP_TYPE::WALL);
 	for (int i = 0; i < vWall.size(); ++i)
 	{
 		Vec2 vCompare = vWall[i]->GetPos();
-		if (WallPos.x == vCompare.x && WallPos.y == vCompare.y)
+
+		for (int j = 0; j < (int)WALL_DIR::END; ++j)
 		{
-			DeleteObject(vWall[i]);
-			break;
+			if (WallPos.x == vCompare.x && WallPos.y == vCompare.y // Left, Top
+				|| WallPos.x == vCompare.x && WallPos.y + (TILE_SIZE - WALL_THICKNESS) == vCompare.y // Bottom
+				|| WallPos.x + (TILE_SIZE - WALL_THICKNESS) == vCompare.x && WallPos.y == vCompare.y) // Right
+			{
+				DeleteObject(vWall[i]);
+				break;
+			}
 		}
 	}
 }
+
+
+void CScene::DeleteCorner(Vec2 vMousePos)
+{
+	// 음수좌표 고려하여 int
+	int iCol = (int)(vMousePos.x / TILE_SIZE);
+	int iRow = (int)(vMousePos.y / TILE_SIZE);
+
+	Vec2 WallPos = Vec2(iCol * TILE_SIZE, iRow * TILE_SIZE);
+
+	HDC dc = CCore::GetInst()->GetMainDC();
+	vector<CObject*> vWall = GetGroupObject(GROUP_TYPE::CORNER);
+	for (int i = 0; i < vWall.size(); ++i)
+	{
+		Vec2 vCompare = vWall[i]->GetPos();
+
+		for (int j = 0; j < (int)WALL_DIR::END; ++j)
+		{
+			if (WallPos.x == vCompare.x && WallPos.y == vCompare.y
+				|| WallPos.x == vCompare.x && WallPos.y + (TILE_SIZE - WALL_THICKNESS) == vCompare.y
+				|| WallPos.x + (TILE_SIZE - WALL_THICKNESS) == vCompare.x && WallPos.y == vCompare.y
+				|| WallPos.x + (TILE_SIZE - WALL_THICKNESS) == vCompare.x && WallPos.y + (TILE_SIZE - WALL_THICKNESS) == vCompare.y)
+			{
+				DeleteObject(vWall[i]);
+				break;
+			}
+		}
+	}
+}
+
 
 
 void CScene::start()
@@ -241,10 +369,10 @@ void CScene::render_tile(HDC _dc)
 	Vec2 CameraLookat = CCamera::GetInst()->GetLookAt();
 	Vec2 Res = CCore::GetInst()->GetResolution();
 	Vec2 vLT = { (CameraLookat.x - Res.x / 2.f), (CameraLookat.y - Res.y / 2.f) };
-	
+
 	// 스크린 좌상단 인덱스
 	int iLTCol = (int)vLT.x / TILE_SIZE;
-	
+
 	int iLTRow = (int)vLT.y / TILE_SIZE;
 
 	int iClientWidth = ((int)Res.x / TILE_SIZE) + 1; // 화면 내에 들어오는 타일 개수(가로) / 잘림 방지 위해 + 1

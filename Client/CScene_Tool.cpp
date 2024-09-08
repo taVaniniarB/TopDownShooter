@@ -48,7 +48,7 @@ void CScene_Tool::Enter()
 
 	// 타일 생성
 	CreateTile(50, 30);
-	
+
 	// UI 생성
 	Vec2 vResolution = CCore::GetInst()->GetResolution();
 
@@ -68,14 +68,14 @@ void CScene_Tool::Enter()
 	// 멤버함수 포인터의 경우 함수명 앞에 & 붙여줘야만 주소로 인식
 	// BtnUI에서 부모 클래스의 함수를 받도록 해줬으므로 부모 오브젝트로 캐스팅 필요
 	((CBtnUI*)pBtnUI)->SetClickedCallBack(this, (SCENE_MEMFUNC)&CScene_Tool::SaveTileData);
-	
+
 	pPanelUI->AddChild(pBtnUI);
 
 	// pUI 하나만 씬에 넣어두면, 계층적으로 자식을 호출
 	AddObject(pPanelUI, GROUP_TYPE::UI);
 
 
-    // 타일 UI
+	// 타일 UI
 	CUI* pTilePanelUI = new CPanelUI;
 	pTilePanelUI->SetName(L"TileParentUI");
 	pTilePanelUI->SetScale(Vec2(200.f, 400.f));
@@ -89,9 +89,9 @@ void CScene_Tool::Enter()
 		int iRow = 0; int iCol = 0;
 
 		CTileBtnUI* pTileSelectUI = new CTileBtnUI;
-		
+
 		int iXScale = (int)(pTilePanelUI->GetScale().x / iMaxRow);
-		
+
 		pTileSelectUI->SetScale(Vec2(50.f, 50.f));
 		iRow = i / iMaxRow;
 		iCol = (int)(i % iMaxRow);
@@ -106,25 +106,34 @@ void CScene_Tool::Enter()
 		pTileSelectUI->SetIdx(i);
 	}
 
-	for (UINT i = 0; i < (UINT)WALL_DIR::MAX; ++i)
+	// 벽 버튼
 	{
 		CTileBtnUI* pTileSelectUI = new CTileBtnUI;
 		pTileSelectUI->SetScale(Vec2(50.f, 50.f));
-		pTileSelectUI->SetPos(Vec2(0.f, 210.f));
-
-		((CTileBtnUI*)pTileSelectUI)->SetClickedCallBack(this, (SCENE_MEMFUNC_INT)&CScene_Tool::SetSelectedWall, i);
+		pTileSelectUI->SetPos(Vec2(0.f, 170.f));
+		pTileSelectUI->SetName(L"Wall");
+		((CTileBtnUI*)pTileSelectUI)->SetClickedCallBack(this, (SCENE_MEMFUNC)&CScene_Tool::SetSelectedWall);
 		pTilePanelUI->AddChild(pTileSelectUI);
+	}
 
+	// 모서리 버튼
+	{
+		CTileBtnUI* pTileSelectUI = new CTileBtnUI;
+		pTileSelectUI->SetScale(Vec2(50.f, 50.f));
+		pTileSelectUI->SetPos(Vec2(50.f, 170.f));
+		pTileSelectUI->SetName(L"Corner");
+		((CTileBtnUI*)pTileSelectUI)->SetClickedCallBack(this, (SCENE_MEMFUNC)&CScene_Tool::SetSelectedCorner);
+		pTilePanelUI->AddChild(pTileSelectUI);
 	}
 
 	// 복사본 UI
 	/* 복사본 UI
 	CUI* pClonePanel = pPanelUI->Clone();
 	pClonePanel->SetPos(pClonePanel->GetPos() + Vec2(-100.f, 100.f));
-	
+
 	// 복제한 UI의 버튼에 콜백함수 등록
 	((CBtnUI*)pClonePanel->GetChildUI()[0])->SetClickedCallBack(&ChangeScene, 0, 0);
-	
+
 	AddObject(pClonePanel, GROUP_TYPE::UI);
 
 	m_pUI = pClonePanel;
@@ -183,12 +192,9 @@ void CScene_Tool::update()
 		{
 		case SELECT_OPTION::TILE:
 		{
-			int iTileX = GetTileX();
-			int iTileY = GetTileY();
-			if (iTileX)
-				ChangeTile(vMousePos, m_iSelectedTileIdx);
+			ChangeTile(vMousePos, m_iSelectedTileIdx);
 		}
-			break;
+		break;
 		case SELECT_OPTION::MONSTER:
 		{
 			if (KEY_TAP(KEY::LBTN))
@@ -196,21 +202,71 @@ void CScene_Tool::update()
 
 			}
 		}
-			break;
+		break;
 		case SELECT_OPTION::WALL:
 		{
-			if (KEY_TAP(KEY::LBTN))
-			{
-				CScene::CreateWall(vMousePos, m_eSelectedWallDir);
-				break;
-			}
+			// shift + 클릭: 삭제
 			if (KEY_HOLD(KEY::LSHIFT) && KEY_TAP(KEY::LBTN))
 			{
-				CScene::DeleteWall(vMousePos);
+				if (m_eSelectedWall == WALL_TYPE::CORNER)
+					CScene::DeleteCorner(vMousePos);
+				else
+					CScene::DeleteWall(vMousePos);
 				break;
 			}
+			// 클릭: wsad + 클릭: 해당 위치의 벽 생성
+			if (KEY_TAP(KEY::LBTN))
+			{
+				if (KEY_HOLD(KEY::W))
+				{
+					m_eSelectedWallDir = WALL_DIR::TOP;
+				}
+				if (KEY_HOLD(KEY::A))
+				{
+					m_eSelectedWallDir = WALL_DIR::LEFT;
+				}
+				if (KEY_HOLD(KEY::S))
+				{
+					m_eSelectedWallDir = WALL_DIR::BOTTOM;
+				}
+				if (KEY_HOLD(KEY::D))
+				{
+					m_eSelectedWallDir = WALL_DIR::RIGHT;
+				}
+
+				if (m_eSelectedWallDir != WALL_DIR::END)
+				{
+					if (KEY_HOLD(KEY::W) && m_eSelectedWallDir != WALL_DIR::TOP)
+					{
+						m_eSelectedWallDir2 = WALL_DIR::TOP;
+					}
+					if (KEY_HOLD(KEY::A) && m_eSelectedWallDir != WALL_DIR::LEFT)
+					{
+						m_eSelectedWallDir2 = WALL_DIR::LEFT;
+					}
+					if (KEY_HOLD(KEY::S) && m_eSelectedWallDir != WALL_DIR::BOTTOM)
+					{
+						m_eSelectedWallDir2 = WALL_DIR::BOTTOM;
+					}
+					if (KEY_HOLD(KEY::D) && m_eSelectedWallDir != WALL_DIR::RIGHT)
+					{
+						m_eSelectedWallDir2 = WALL_DIR::RIGHT;
+					}
+				}
+
+
+				if (m_eSelectedWallDir2 != WALL_DIR::END)
+				{
+					CScene::CreateWall(vMousePos, m_eSelectedWallDir, m_eSelectedWallDir2);
+					m_eSelectedWallDir2 = WALL_DIR::END;
+				}
+				else
+					CScene::CreateWall(vMousePos, m_eSelectedWallDir, m_eSelectedWall);
+				break;
+			}
+
 		}
-			break;
+		break;
 		case SELECT_OPTION::PLAYER:
 		{
 			if (KEY_TAP(KEY::LBTN))
@@ -218,7 +274,7 @@ void CScene_Tool::update()
 
 			}
 		}
-			break;
+		break;
 		default:
 			break;
 		}
@@ -267,7 +323,7 @@ void CScene_Tool::SetTileIdx()
 	// 마우스 좌표.x, y를 각각 타일 사이즈로 나누면 몇 번째 행, 열인지 알 수 있다
 	// 이렇게 구한 행, 열과, 타일 생성 시 입력한 최대 행, 열 값을 가지고 오브젝트의 타일 그룹 벡터를 조회
 	// 벡터 인덱스를 통해 반복문 안 쓰고 바로 접근 가능
-	
+
 }
 */
 // 드래그하면 좌상단 우하단 산출하고 그 자리에 Wall을 만들음
@@ -337,7 +393,7 @@ void CScene_Tool::SaveTileData()
 
 
 	// 세팅한 정보 바탕으로 창 열기
-	if (GetSaveFileName(&ofn)) 
+	if (GetSaveFileName(&ofn))
 	{
 		SaveTile(szName);
 	}
@@ -428,7 +484,7 @@ void CScene_Tool::LoadTileData()
 	{
 		// 상대경로 변환
 		wstring strRelativePath = CPathMgr::GetInst()->GetRelativePath(szName);
-		
+
 		LoadTile(strRelativePath);
 	}
 }
@@ -439,10 +495,17 @@ void CScene_Tool::SetSelectedTile(int _idx)
 	m_eSelctedObj = SELECT_OPTION::TILE;
 }
 
-void CScene_Tool::SetSelectedWall(int _wallPos)
+void CScene_Tool::SetSelectedWall()
 {
-	m_eSelectedWallDir = (WALL_DIR)_wallPos;
+	//m_eSelectedWallDir = (WALL_DIR)_wallPos;
 	m_eSelctedObj = SELECT_OPTION::WALL;
+	m_eSelectedWall = WALL_TYPE::WALL;
+}
+
+void CScene_Tool::SetSelectedCorner()
+{
+	m_eSelctedObj = SELECT_OPTION::WALL;
+	m_eSelectedWall = WALL_TYPE::CORNER;
 }
 
 

@@ -17,6 +17,12 @@ public:
     virtual void OnCollisionExit(CCollider* _pOther);
     CLONE(CWall);
 
+
+public:
+    virtual void Save(FILE* _pFile);
+    virtual void Load(FILE* _pFile);
+
+
 public:
     CWall();
     ~CWall();

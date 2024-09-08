@@ -31,13 +31,15 @@
 #define PI 3.1415926535f
 
 #define TILE_SIZE 32
-#define WALL_THICKNESS 8
+#define WALL_THICKNESS 10
 
 enum class GROUP_TYPE
 {
 	DEFAULT,
 	TILE,
+	TILE_WALL,
 	WALL,
+	CORNER,
 	MONSTER,
 	PLAYER,
 	PROJ_PLAYER,
@@ -101,5 +103,12 @@ enum class WALL_DIR
 	BOTTOM,
 	LEFT,
 	RIGHT,
-	MAX,
+	END,
+};
+
+enum class WALL_TYPE
+{
+	WALL,
+	CORNER,
+	TILE,
 };

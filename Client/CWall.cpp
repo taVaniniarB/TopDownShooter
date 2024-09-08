@@ -117,3 +117,16 @@ void CWall::OnCollisionExit(CCollider* _pOther)
 		//pOtherObj->GetGravity()->SetGround(false);
 	}
 }
+
+void CWall::Save(FILE* _pFile)
+{
+	Vec2 vPos = GetPos();
+	fwrite(&vPos, sizeof(Vec2), 1, _pFile);
+}
+
+void CWall::Load(FILE* _pFile)
+{
+	Vec2 vPos = {};
+	fread(&vPos, sizeof(Vec2), 1, _pFile);
+	SetPos(vPos);
+}
