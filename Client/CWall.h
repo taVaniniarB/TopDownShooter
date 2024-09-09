@@ -7,6 +7,10 @@ class CWall :
     public CObject
 {
 private:
+    int m_iImgIdx;
+    WALL_TYPE m_eType;
+
+private:
     virtual void start();
     virtual void update();
     virtual void render(HDC _dc);
@@ -21,6 +25,16 @@ public:
 public:
     virtual void Save(FILE* _pFile);
     virtual void Load(FILE* _pFile);
+
+public:
+    void SetType(WALL_TYPE _eType) { m_eType = _eType; }
+
+
+public:
+    void SetImgIdx(int _idx)
+    {
+        m_iImgIdx = _idx;
+    }
 
 
 public:

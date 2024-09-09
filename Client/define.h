@@ -31,7 +31,7 @@
 #define PI 3.1415926535f
 
 #define TILE_SIZE 32
-#define WALL_THICKNESS 10
+#define WALL_THICKNESS 12
 
 enum class GROUP_TYPE
 {
@@ -108,7 +108,8 @@ enum class WALL_DIR
 
 enum class WALL_TYPE
 {
+	TILE,
 	WALL,
 	CORNER,
-	TILE,
+	NONE,
 };

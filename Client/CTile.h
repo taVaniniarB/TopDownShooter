@@ -3,6 +3,7 @@
 
 class CTexture;
 
+
 class CTile :
     public CObject
 {

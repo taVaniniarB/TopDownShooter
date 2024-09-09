@@ -42,11 +42,16 @@ private:
 	Vec2 m_vDragStartPos;
 	Vec2 m_vDragEndPos;
 
+	// 그리드 표시
+	bool m_bGrid;
+
 public:
 	virtual void Enter();
 	virtual void Exit();
 	virtual void update();
+	virtual void render(HDC _dc);
 
+	// 타일
 public:
 	// 마우스 클릭 시 타일 인덱스 1 증가
 	//void SetTileIdx();
@@ -58,9 +63,17 @@ public:
 	
 	void SetSelectedWall();
 	void SetSelectedCorner();
-	
+	void SetSelectedTileWall(int _idx);
+
 	void LoadTileData();
 
+	// 벽
+public:
+	void SaveWallData();
+	void SaveWall(const wstring& _strFilePath);
+	void LoadWallData();
+
+public:
 	void SetSelectedObj(SELECT_OPTION _eOption) { m_eSelctedObj = _eOption; }
 	SELECT_OPTION GetSelectedObj() { return m_eSelctedObj; }
 

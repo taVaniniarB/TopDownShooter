@@ -77,15 +77,17 @@ public:
 	// 벽 객체를 만드는 함수
 	void GenerateWall(Vec2 vMousePos, WALL_DIR _eSelectedWallDir);
 	void GenerateCorner(Vec2 vMousePos, WALL_DIR _eSelectedWallDir);
-	void GenerateTileWall(Vec2 vMousePos);
+	void GenerateTileWall(Vec2 vMousePos, int _idx);
 	//void CreateWall(Vec2 vMousePos);
-	void CreateWall(Vec2 vMousePos, WALL_DIR _eSelectedWallDir, WALL_TYPE _eWallType);
+	void CreateWall(Vec2 vMousePos, WALL_DIR _eSelectedWallDir, WALL_TYPE _eWallType, int _idx);
 	void CreateWall(Vec2 vMousePos, WALL_DIR _eSelectedWallDir1, WALL_DIR _eSelectedWallDir2);
-	void DeleteWall(Vec2 vMousePos);
-	void DeleteCorner(Vec2 vMousePos);
+	void DeleteWall(Vec2 vMousePos, WALL_TYPE _eType);
+	//void DeleteCorner(Vec2 vMousePos);
 
 	// Tool Scene에서 파일을 세이브하고, 씬(을 상속받은 다른 씬들)은 그것을 load한다
 	void LoadTile(const wstring& _sttRelativePath);
+
+	void LoadWall(const wstring& _strRelativePath);
 
 public:
 	CScene();

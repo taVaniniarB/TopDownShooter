@@ -16,6 +16,7 @@ CScene::CScene()
 	: m_iTileX(0)
 	, m_iTileY(0)
 	, m_pPlayer(nullptr)
+	, m_bUIClicked(false)
 {
 }
 
@@ -85,27 +86,29 @@ void CScene::ChangeTile(Vec2 _vMousePos, int _idx)
 
 void CScene::CreateWall(Vec2 vMousePos, WALL_DIR _eSelectedWallDir1, WALL_DIR _eSelectedWallDir2)
 {
-	DeleteWall(vMousePos);
+	DeleteWall(vMousePos, WALL_TYPE::WALL);
 
 	GenerateWall(vMousePos, _eSelectedWallDir1);
 	GenerateWall(vMousePos, _eSelectedWallDir2);
 }
 
-void CScene::CreateWall(Vec2 vMousePos, WALL_DIR _eSelectedWallDir, WALL_TYPE _eWallType)
+void CScene::CreateWall(Vec2 vMousePos, WALL_DIR _eSelectedWallDir, WALL_TYPE _eWallType, int _idx)
 {
 
 	switch (_eWallType)
 	{
 	case WALL_TYPE::WALL:
-		DeleteWall(vMousePos);
+		DeleteWall(vMousePos, _eWallType);
 		GenerateWall(vMousePos, _eSelectedWallDir);
 		break;
 	case WALL_TYPE::CORNER:
-		DeleteCorner(vMousePos);
+		DeleteWall(vMousePos, _eWallType);
 		GenerateCorner(vMousePos, _eSelectedWallDir);
 		break;
 	case WALL_TYPE::TILE:
-		GenerateTileWall(vMousePos);
+		ChangeTile(vMousePos, -1);
+		DeleteWall(vMousePos, _eWallType);
+		GenerateTileWall(vMousePos, _idx);
 		break;
 	default:
 		break;
@@ -116,7 +119,8 @@ void CScene::CreateWall(Vec2 vMousePos, WALL_DIR _eSelectedWallDir, WALL_TYPE _e
 void CScene::GenerateWall(Vec2 vMousePos, WALL_DIR _eSelectedWallDir)
 {
 	CWall* pNewWall = new CWall;
-
+	
+	
 	Vec2 vPos = {};
 	Vec2 vScale = {};
 
@@ -156,8 +160,15 @@ void CScene::GenerateWall(Vec2 vMousePos, WALL_DIR _eSelectedWallDir)
 		break;
 	}
 
+	CTexture* pWallTex = CResMgr::GetInst()->LoadTexture(L"Tile", L"texture\\tile\\tile.bmp");
+	pNewWall->SetTexture(pWallTex);
+	if (_eSelectedWallDir == WALL_DIR::TOP || _eSelectedWallDir == WALL_DIR::BOTTOM)
+		pNewWall->SetImgIdx(9);
+	else
+		pNewWall->SetImgIdx(8);
 	pNewWall->SetPos(vPos);
 	pNewWall->SetScale(vScale);
+	pNewWall->SetType(WALL_TYPE::WALL);
 
 	AddObject(pNewWall, GROUP_TYPE::WALL);
 }
@@ -184,17 +195,17 @@ void CScene::GenerateCorner(Vec2 vMousePos, WALL_DIR _eSelectedWallDir)
 	break;
 	case WALL_DIR::BOTTOM:
 	{
-		vPos = Vec2((iCol * TILE_SIZE), (iRow * TILE_SIZE + (TILE_SIZE - WALL_THICKNESS)));
+		vPos = Vec2((iCol * (float)TILE_SIZE) + (float)(TILE_SIZE - WALL_THICKNESS), (iRow * TILE_SIZE + (TILE_SIZE - WALL_THICKNESS)));
 	}
 	break;
 	case WALL_DIR::LEFT:
 	{
-		vPos = Vec2((iCol * TILE_SIZE) + (TILE_SIZE - WALL_THICKNESS), (iRow * TILE_SIZE));
+		vPos = Vec2((iCol * (float)TILE_SIZE), (float)(iRow * TILE_SIZE) + (float)(TILE_SIZE - WALL_THICKNESS));
 	}
 	break;
 	case WALL_DIR::RIGHT:
 	{
-		vPos = Vec2((iCol * TILE_SIZE) + (TILE_SIZE - WALL_THICKNESS), (iRow * TILE_SIZE) + (TILE_SIZE - WALL_THICKNESS));
+		vPos = Vec2((iCol * (float)TILE_SIZE) + (float)(TILE_SIZE - WALL_THICKNESS), (float)((iRow * TILE_SIZE)));
 	}
 	break;
 	case WALL_DIR::END:
@@ -203,13 +214,17 @@ void CScene::GenerateCorner(Vec2 vMousePos, WALL_DIR _eSelectedWallDir)
 		break;
 	}
 
+	CTexture* pWallTex = CResMgr::GetInst()->LoadTexture(L"Tile", L"texture\\tile\\tile.bmp");
+	pNewWall->SetTexture(pWallTex);
+	pNewWall->SetImgIdx(10);
 	pNewWall->SetPos(vPos);
 	pNewWall->SetScale(vScale);
+	pNewWall->SetType(WALL_TYPE::CORNER);
 
 	AddObject(pNewWall, GROUP_TYPE::CORNER);
 }
 
-void CScene::GenerateTileWall(Vec2 vMousePos)
+void CScene::GenerateTileWall(Vec2 vMousePos, int _idx)
 {
 	CWall* pNewWall = new CWall;
 
@@ -223,13 +238,17 @@ void CScene::GenerateTileWall(Vec2 vMousePos)
 	vPos = Vec2((iCol * TILE_SIZE), (iRow * TILE_SIZE));
 	vScale = Vec2(TILE_SIZE, TILE_SIZE);
 
+	CTexture* pWallTex = CResMgr::GetInst()->LoadTexture(L"Tile", L"texture\\tile\\tile.bmp");
+	pNewWall->SetTexture(pWallTex);
+	pNewWall->SetImgIdx(_idx);
 	pNewWall->SetPos(vPos);
 	pNewWall->SetScale(vScale);
-
+	pNewWall->SetType(WALL_TYPE::TILE);
+	
 	AddObject(pNewWall, GROUP_TYPE::TILE_WALL);
 }
 
-void CScene::DeleteWall(Vec2 vMousePos)
+void CScene::DeleteWall(Vec2 vMousePos, WALL_TYPE eType)
 {
 	// 음수좌표 고려하여 int
 	int iCol = (int)(vMousePos.x / TILE_SIZE);
@@ -238,7 +257,46 @@ void CScene::DeleteWall(Vec2 vMousePos)
 	Vec2 WallPos = Vec2(iCol * TILE_SIZE, iRow * TILE_SIZE);
 
 	HDC dc = CCore::GetInst()->GetMainDC();
-	vector<CObject*> vWall = GetGroupObject(GROUP_TYPE::WALL);
+
+
+	vector<CObject*> vWall;
+
+	switch (eType)
+	{
+	case WALL_TYPE::WALL:
+		vWall = GetGroupObject(GROUP_TYPE::WALL);
+		break;
+	case WALL_TYPE::CORNER:
+	{
+		vWall = GetGroupObject(GROUP_TYPE::CORNER);
+		for (int i = 0; i < vWall.size(); ++i)
+		{
+			Vec2 vCompare = vWall[i]->GetPos();
+
+			for (int j = 0; j < (int)WALL_DIR::END; ++j)
+			{
+				if (WallPos.x == vCompare.x && WallPos.y == vCompare.y
+					|| WallPos.x == vCompare.x && WallPos.y + (TILE_SIZE - WALL_THICKNESS) == vCompare.y
+					|| WallPos.x + (TILE_SIZE - WALL_THICKNESS) == vCompare.x && WallPos.y == vCompare.y
+					|| WallPos.x + (TILE_SIZE - WALL_THICKNESS) == vCompare.x && WallPos.y + (TILE_SIZE - WALL_THICKNESS) == vCompare.y)
+				{
+					DeleteObject(vWall[i]);
+					break;
+				}
+			}
+		}
+		return;
+	}
+		break;
+	case WALL_TYPE::TILE:
+		vWall = GetGroupObject(GROUP_TYPE::TILE_WALL);
+		break;
+	default:
+		break;
+	}
+
+
+	
 	for (int i = 0; i < vWall.size(); ++i)
 	{
 		Vec2 vCompare = vWall[i]->GetPos();
@@ -248,35 +306,6 @@ void CScene::DeleteWall(Vec2 vMousePos)
 			if (WallPos.x == vCompare.x && WallPos.y == vCompare.y // Left, Top
 				|| WallPos.x == vCompare.x && WallPos.y + (TILE_SIZE - WALL_THICKNESS) == vCompare.y // Bottom
 				|| WallPos.x + (TILE_SIZE - WALL_THICKNESS) == vCompare.x && WallPos.y == vCompare.y) // Right
-			{
-				DeleteObject(vWall[i]);
-				break;
-			}
-		}
-	}
-}
-
-
-void CScene::DeleteCorner(Vec2 vMousePos)
-{
-	// 음수좌표 고려하여 int
-	int iCol = (int)(vMousePos.x / TILE_SIZE);
-	int iRow = (int)(vMousePos.y / TILE_SIZE);
-
-	Vec2 WallPos = Vec2(iCol * TILE_SIZE, iRow * TILE_SIZE);
-
-	HDC dc = CCore::GetInst()->GetMainDC();
-	vector<CObject*> vWall = GetGroupObject(GROUP_TYPE::CORNER);
-	for (int i = 0; i < vWall.size(); ++i)
-	{
-		Vec2 vCompare = vWall[i]->GetPos();
-
-		for (int j = 0; j < (int)WALL_DIR::END; ++j)
-		{
-			if (WallPos.x == vCompare.x && WallPos.y == vCompare.y
-				|| WallPos.x == vCompare.x && WallPos.y + (TILE_SIZE - WALL_THICKNESS) == vCompare.y
-				|| WallPos.x + (TILE_SIZE - WALL_THICKNESS) == vCompare.x && WallPos.y == vCompare.y
-				|| WallPos.x + (TILE_SIZE - WALL_THICKNESS) == vCompare.x && WallPos.y + (TILE_SIZE - WALL_THICKNESS) == vCompare.y)
 			{
 				DeleteObject(vWall[i]);
 				break;
@@ -447,6 +476,42 @@ void CScene::LoadTile(const wstring& _strRelativePath)
 	{
 		((CTile*)vecTile[i])->Load(pFile);
 	}
+
+	// 이 파일에 대한 파일 입출력 닫기
+	fclose(pFile);
+
+}
+
+void CScene::LoadWall(const wstring& _strRelativePath)
+{
+	wstring strFilePath = CPathMgr::GetInst()->GetContentPath();
+	strFilePath += _strRelativePath;
+
+	// 커널 오브젝트
+	FILE* pFile = nullptr;
+
+	_wfopen_s(&pFile, strFilePath.c_str(), L"rb");
+
+	assert(pFile);
+
+	UINT size = 0;
+
+	fread(&size, sizeof(UINT), 1, pFile);
+
+	// 수량에 맞는 Wall 생성
+	for (UINT i = 0; i < size; ++i)
+	{
+		CWall* pWall = new CWall;
+		pWall->Load(pFile);
+	}
+
+	//// 만들어진 파일 개별로 필요한 정보 불러오게 함
+	//const vector<CObject*>& vWall = GetGroupObject(GROUP_TYPE::WALL);
+
+	//for (size_t i = 0; i < vWall.size(); ++i)
+	//{
+	//	((CWall*)vWall[i])->Load(pFile);
+	//}
 
 	// 이 파일에 대한 파일 입출력 닫기
 	fclose(pFile);

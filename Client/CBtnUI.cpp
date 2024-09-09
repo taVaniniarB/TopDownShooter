@@ -49,11 +49,12 @@ void CBtnUI::MouseLbtnClicked()
 	}
 
 	if (m_pSceneInst && m_pSceneFuncInt)
-	{
+	{/* 인자로 들어온 int가 0일 때도 실행되도록 조건 제거
 		if (m_param1)
 		{
 			(m_pSceneInst->*m_pSceneFuncInt)((int)m_param1);
-		}
+		}*/
+		(m_pSceneInst->*m_pSceneFuncInt)((int)m_param1);
 	}
 }
 
