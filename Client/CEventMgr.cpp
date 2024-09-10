@@ -21,9 +21,15 @@ void CEventMgr::update()
 	//============================================
 	// 이전 프레임에서 등록해둔 DeadObject들 삭제
 	//============================================
+
+	// Dangling Pointer 참조 방지
+	// 벡터 내 중복 원소 제거
+	m_vecDead.erase(unique(m_vecDead.begin(), m_vecDead.end()), m_vecDead.end());
+
 	for (size_t i = 0; i < m_vecDead.size(); ++i)
 	{
 		delete m_vecDead[i];
+		std::cout << "deleted" << "\n";
 	}
 	m_vecDead.clear();
 

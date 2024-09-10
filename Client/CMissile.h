@@ -5,7 +5,6 @@ class CMissile :
 {
 private:
     float   m_fTheta; // 이동 방향 각
-
     Vec2    m_vDir;   // 벡터로 나타내는 각
 
 public:

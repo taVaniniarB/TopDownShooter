@@ -5,6 +5,7 @@
 #include "CPlayer.h"
 #include "CMonster.h"
 #include "CWall.h"
+#include "CWeapon.h"
 
 #include "CCore.h"
 
@@ -135,6 +136,8 @@ void CScene_Start::Enter()
 {
 	LoadScene(L"scene\\lab");
 	//LoadScene(L"scene\\test");
+	 
+	 
 	// Object 추가
 	// 플레이어 오브젝트를 부모포인터로 저장
 	CObject* pObj = new CPlayer;
@@ -161,17 +164,25 @@ void CScene_Start::Enter()
 	//CMonster* pMon = CMonFactory::CreateMonster(MON_TYPE::NORMAL, vResolution / 2.f - Vec2(0.f, 300));
 	// AddObject와 CreateObject는 지연처리 유무에 따라 판단
 	// 예: Scene이 한창 돌아가는 도중 생성이라면 Create 통한 이벤트처리로 해아함
-	// CreateObject(pMon, GROUP_TYPE::MONSTER);
+	//CreateObject(pMon, GROUP_TYPE::MONSTER);
 	//AddObject(pMon, GROUP_TYPE::MONSTER);
 
-
+	WEAPON_TYPE eWeaponType = WEAPON_TYPE::GUN;
+	CWeapon* pWeapon = CWeaponFactory::CreateWeapon(eWeaponType, MELEE_TYPE::NONE, GUN_TYPE::M16);
+	pWeapon->SetScale(Vec2(10.f, 20.f));
+	AddObject(pWeapon, GROUP_TYPE::WEAPON);
+	
+	// 테스트용으로 public으로 풀어놨으니 나중에 다시 private으로 변경해둘것
+	((CPlayer*)pObj)->SetWeapon(pWeapon);
+	
 	// 충돌 지정
 	// Player 그룹과 Monster 그룹 간의 충돌체크
 	// scene은 마지막에 두 그룹 간의 충돌 여부를 검사
 	// 충돌 가능한 조합...을 만들어주는 개념 (마치 체크박스처럼)
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::PLAYER, GROUP_TYPE::MONSTER); // 플레이어-몬스터
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::MONSTER, GROUP_TYPE::PROJ_PLAYER); // 몬스터-총알
-	
+	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::PLAYER, GROUP_TYPE::DROPPED_WEAPON); // 떨어진 무기-플레이어
+	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::PROJ_PLAYER, GROUP_TYPE::WALL); // 벽-플레이어 총알
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::PLAYER, GROUP_TYPE::WALL);
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::PLAYER, GROUP_TYPE::TILE_WALL);
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::PLAYER, GROUP_TYPE::CORNER);

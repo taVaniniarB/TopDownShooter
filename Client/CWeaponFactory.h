@@ -13,6 +13,7 @@ enum class MELEE_TYPE
 	KNIFE,
 	PIPE,
 	FIST,
+	NONE,
 };
 
 enum class GUN_TYPE

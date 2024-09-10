@@ -2,6 +2,7 @@
 #include "global.h"
 
 #include "CMonFactory.h"
+#include "CWeaponFactory.h"
 
 // 컴파일 속도 올리기 위해 헤더 참조 대신 전방선언
 // 헤더참조 했다면, object 변경할 때마다 scene쪽도 매번 확인돼서 느려짐

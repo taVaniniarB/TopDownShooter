@@ -47,16 +47,16 @@ CWeapon* CWeaponFactory::CreateWeapon(WEAPON_TYPE _eWeaponType, MELEE_TYPE _eMel
 		{
 		case GUN_TYPE::M16:
 		{
-			((CGun*)pWeapon)->SetMaxBullet(26);
-			pWeapon->SetDelay(0.5f);
+			((CGun*)pWeapon)->SetMaxMissile(100);
+			pWeapon->SetDelay(0.2f);
 
 			((CObject*)pWeapon)->SetImgIdx(0);
 		}
 			break;
 		case GUN_TYPE::SHOTGUN:
 		{
-			((CGun*)pWeapon)->SetMaxBullet(6);
-			((CGun*)pWeapon)->SetDelay(1.f);
+			((CGun*)pWeapon)->SetMaxMissile(6);
+			((CGun*)pWeapon)->SetDelay(0.5f);
 
 			((CObject*)pWeapon)->SetImgIdx(1);
 		}
@@ -69,5 +69,5 @@ CWeapon* CWeaponFactory::CreateWeapon(WEAPON_TYPE _eWeaponType, MELEE_TYPE _eMel
 	default:
 		break;
 	}
-	return nullptr;
+	return pWeapon;
 }

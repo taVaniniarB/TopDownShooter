@@ -12,6 +12,7 @@ CWall::CWall()
 	, m_eType(WALL_TYPE::NONE)
 {
 	CreateCollider();
+	SetName(L"Wall");
 }
 
 CWall::~CWall()

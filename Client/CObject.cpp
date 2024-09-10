@@ -90,7 +90,6 @@ CObject::~CObject()
 
 void CObject::finalUpdate()
 {
-
 	if (m_pAnimator)
 		m_pAnimator->finalUpdate();
 

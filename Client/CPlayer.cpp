@@ -4,7 +4,6 @@
 #include "CScene.h"
 #include "CKeyMgr.h"
 #include "CTimeMgr.h"
-#include "CMissile.h"
 
 #include "CResMgr.h"
 #include "CTexture.h"
@@ -22,6 +21,7 @@ CPlayer::CPlayer()
 	, m_iDir(1)
 	, m_iPrevDir(1)
 	, m_pWeapon(nullptr)
+	, m_iHP(1)
 {
 	// 일단 컴포넌트는 부모의 private 멤버이다
 	// 근데 컴포넌트 필요한 자식 쪽에서 직접 생성했으면 하니까
@@ -66,9 +66,6 @@ CPlayer::CPlayer()
 	//
 
 
-	// CreateGravity();
-
-
 	// 애니메이션에 오프셋을 주는 코드
 	/*
 	CAnimation* pAnim = GetAnimator()->FindAnimation(L"IDLE_RIGHT");
@@ -111,6 +108,8 @@ void CPlayer::update()
 	// 이걸 첫 줄에 쓰면 prev와 cur이 같아져서 update_state 함수 예외처리에 걸려서 리턴돼버림
 	m_ePrevState = m_eCurState;
 	m_iPrevDir = m_iDir;
+
+	m_pWeapon->finalUpdate();
 }
 void CPlayer::render(HDC _dc)
 {
@@ -143,20 +142,7 @@ void CPlayer::render(HDC _dc)
 
 }
 
-void CPlayer::CreateMissile()
-{
-	Vec2 MissilePos = GetPos();
-	MissilePos.y -= GetScale().y / 2.f;
 
-	//미사일 객체
-	CMissile* pMissile = new CMissile;
-	pMissile->SetName(L"Player_Missile");
-	pMissile->SetPos(MissilePos);
-	pMissile->SetScale(Vec2(25.f, 25.f));
-	pMissile->SetDir(Vec2(0.f, -1.f));
-
-	CreateObject(pMissile, GROUP_TYPE::PROJ_PLAYER);
-}
 
 void CPlayer::update_state()
 {
@@ -346,8 +332,25 @@ void CPlayer::update_animation()
 
 void CPlayer::DropWeapon()
 {
-	m_pWeapon->Drop();
-	m_pWeapon = nullptr;
+	if (m_pWeapon)
+	{
+		m_pWeapon->Drop();
+		m_pWeapon = nullptr;
+	}
+}
+
+// 설정된 무기가 없는 상태에서만 실행
+void CPlayer::SetWeapon(CWeapon* _pWeapon)
+{
+	m_pWeapon = _pWeapon;
+	_pWeapon->SetOwner(this);
+}
+
+// 설정된 무기가 있는 상태에서만 실행
+void CPlayer::ExchangeWeapon(CWeapon* _pWeapon)
+{
+	DropWeapon();
+	SetWeapon(_pWeapon);
 }
 
 void CPlayer::OnCollisionEnter(CCollider* _pOther)
@@ -363,5 +366,12 @@ void CPlayer::OnCollisionEnter(CCollider* _pOther)
 	//		m_eCurState = PLAYER_STATE::IDLE;
 	//	}
 	//}
+
+	CObject* pOtherObj = _pOther->GetObj();
+	if (pOtherObj->GetName() == L"Missile")
+	{
+		--m_iHP;
+	}
+
 }
 

@@ -9,7 +9,7 @@ CMissile::CMissile()
 {
 	m_vDir.Nomalize();
 	CreateCollider();
-	GetCollider()->SetScale(Vec2(20.f, 20.f));
+	GetCollider()->SetScale(Vec2(10.f, 10.f));
 }
 
 CMissile::~CMissile()
@@ -45,7 +45,9 @@ void CMissile::render(HDC _dc)
 void CMissile::OnCollisionEnter(CCollider* _pOther)
 {
 	CObject* pObject = _pOther->GetObj();
-	if (L"Monster" == pObject->GetName())
+	if (L"Monster" == pObject->GetName()
+		|| L"Wall" == pObject->GetName()
+		|| L"Player" == pObject->GetName())
 	{
 		DeleteObject(this);
 	}

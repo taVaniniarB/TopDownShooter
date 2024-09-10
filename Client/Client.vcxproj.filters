@@ -113,9 +113,6 @@
     <Filter Include="Engine\08. Module\AI\State\Trace">
       <UniqueIdentifier>{ba35def2-f2ad-4283-acd4-656d3325304c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\08. Module\AI\State\Attack">
-      <UniqueIdentifier>{1046ea7e-7867-4cd5-8797-41794df81417}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\08. Module\AI\State\Dead">
       <UniqueIdentifier>{8b9ff5da-010f-4cb1-953c-4b48fcf95658}</UniqueIdentifier>
     </Filter>

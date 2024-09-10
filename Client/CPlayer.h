@@ -39,21 +39,27 @@ private:
     int m_iDir; // 움직이는 방향
     int m_iPrevDir;
 
+    int m_iHP;
+
     CWeapon* m_pWeapon;
 
 public:
     virtual void update();
     virtual void render(HDC _dc);
 
+    // 테스트용으로 public으로 풀어놨으니 나중에 다시 private으로 변경해둘것
+    void DropWeapon();
+    void ExchangeWeapon(CWeapon* _pWeapon);
+    void SetWeapon(CWeapon* _pWeapon);
+
 private:
-    void CreateMissile();
     void update_state();
     void update_move();
     void update_attack();
     void update_animation();
 
 
-    void DropWeapon();
+    
 
     virtual void OnCollisionEnter(CCollider* _pOther);
 
