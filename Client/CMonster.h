@@ -6,12 +6,10 @@ struct tMonInfo
     float   fSpeed;       // 초당 이동할 픽셀 수
     int     iHP;          // 체력
     float   fRecogRange;  // 인지 범위
-    float   fAttackRAnge; // 공격 사거리
 };
 
-
-
 class AI;
+class CWeapon;
 
 class CMonster :
     public CObject
@@ -19,6 +17,7 @@ class CMonster :
 private:
     tMonInfo m_tInfo;
     AI*    m_pAI;
+    CWeapon* m_pWeapon;
 
 public:
     float GetSpeed() { return m_tInfo.fSpeed; }

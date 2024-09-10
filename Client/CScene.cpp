@@ -447,8 +447,9 @@ void CScene::DeleteAll()
 // 상대경로 사용하는 이유
 // 툴에서는 특정 창 열어서 불러왔지만,
 // 씬 enter()에서 절대경로로 파일 불러오는 방식은 좋지 않을 것
-void CScene::LoadTile(const wstring& _strRelativePath)
+void CScene::LoadTile(const wstring& _strRelativePath, FILE* _pFile)
 {
+	/*
 	wstring strFilePath = CPathMgr::GetInst()->GetContentPath();
 	strFilePath += _strRelativePath;
 
@@ -458,13 +459,13 @@ void CScene::LoadTile(const wstring& _strRelativePath)
 	_wfopen_s(&pFile, strFilePath.c_str(), L"rb");
 
 	assert(pFile);
-
+	*/
 	// 타일 가로세로 개수 불러오기
 	UINT xCount = 0;
 	UINT yCount = 0;
 
-	fread(&xCount, sizeof(UINT), 1, pFile);
-	fread(&yCount, sizeof(UINT), 1, pFile);
+	fread(&xCount, sizeof(UINT), 1, _pFile);
+	fread(&yCount, sizeof(UINT), 1, _pFile);
 
 	// 불러온 개수에 맞게 EmptyTile들 만들어두기
 	CreateTile(xCount, yCount);
@@ -474,16 +475,17 @@ void CScene::LoadTile(const wstring& _strRelativePath)
 
 	for (size_t i = 0; i < vecTile.size(); ++i)
 	{
-		((CTile*)vecTile[i])->Load(pFile);
+		((CTile*)vecTile[i])->Load(_pFile);
 	}
 
 	// 이 파일에 대한 파일 입출력 닫기
-	fclose(pFile);
+	//fclose(_pFile);
 
 }
 
-void CScene::LoadWall(const wstring& _strRelativePath)
+void CScene::LoadWall(const wstring& _strRelativePath, FILE* _pFile)
 {
+	/*
 	wstring strFilePath = CPathMgr::GetInst()->GetContentPath();
 	strFilePath += _strRelativePath;
 
@@ -493,16 +495,16 @@ void CScene::LoadWall(const wstring& _strRelativePath)
 	_wfopen_s(&pFile, strFilePath.c_str(), L"rb");
 
 	assert(pFile);
-
+	*/
 	UINT size = 0;
 
-	fread(&size, sizeof(UINT), 1, pFile);
+	fread(&size, sizeof(UINT), 1, _pFile);
 
 	// 수량에 맞는 Wall 생성
 	for (UINT i = 0; i < size; ++i)
 	{
 		CWall* pWall = new CWall;
-		pWall->Load(pFile);
+		pWall->Load(_pFile);
 	}
 
 	//// 만들어진 파일 개별로 필요한 정보 불러오게 함
@@ -514,6 +516,25 @@ void CScene::LoadWall(const wstring& _strRelativePath)
 	//}
 
 	// 이 파일에 대한 파일 입출력 닫기
-	fclose(pFile);
+	//fclose(_pFile);
 
+}
+
+void CScene::LoadScene(const wstring& _strRelativePath)
+{
+	wstring strFilePath = CPathMgr::GetInst()->GetContentPath();
+	strFilePath += _strRelativePath;
+
+	// 커널 오브젝트
+	FILE* pFile = nullptr;
+
+	_wfopen_s(&pFile, strFilePath.c_str(), L"rb");
+
+	assert(pFile);
+
+	LoadTile(strFilePath, pFile);
+	LoadWall(strFilePath, pFile);
+
+
+	fclose(pFile);
 }

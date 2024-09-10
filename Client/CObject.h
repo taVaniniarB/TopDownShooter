@@ -23,6 +23,7 @@ private:
 	Vec2		m_vPos;
 	Vec2		m_vScale;
 	CTexture*	m_pTex;
+	UINT		m_iImgIdx;
 
 	// Component
 	CCollider*	m_pCollider; // nullptr > 충돌체 필요 없음
@@ -40,6 +41,7 @@ public:
 	void SetPos(Vec2 _vPos) { m_vPos = _vPos; }
 	void SetScale(Vec2 _vScale) { m_vScale = _vScale; }
 	void SetTexture(CTexture* _pTex) { m_pTex = _pTex; }
+	void SetImgIdx(UINT _i) { m_iImgIdx = _i; }
 	
 	void SetName(const wstring& _strName) { m_strName = _strName; };
 	const wstring& GetName() { return m_strName; }

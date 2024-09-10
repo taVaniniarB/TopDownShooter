@@ -207,23 +207,13 @@ void CScene_Tool::update()
 	// 컨트롤 + S 누르면 타일을 저장
 	if (KEY_TAP(KEY::S) && KEY_HOLD(KEY::CTRL))
 	{
-		SaveTileData();
-	}
-
-	// 컨트롤 + D 누르면 벽을 저장
-	if (KEY_TAP(KEY::D) && KEY_HOLD(KEY::CTRL))
-	{
-		SaveWallData();
+		SaveSceneData();
 	}
 
 	// F 누르면 파일 로드
 	if (KEY_TAP(KEY::F))
 	{
-		LoadTileData();
-	}
-	if (KEY_TAP(KEY::R))
-	{
-		LoadWallData();
+		LoadSceneData();
 	}
 
 	if (!GetUIClicked() && !(KEY_NONE(KEY::LBTN)))
@@ -368,76 +358,166 @@ void CScene_Tool::render(HDC _dc)
 	CScene::render(_dc);
 }
 
-// 타일 인덱스 1 증가시키는 함수
-/*
-void CScene_Tool::SetTileIdx()
+void CScene_Tool::SaveSceneData()
 {
-	if (KEY_TAP(KEY::LBTN))
+	// 창을 띄워서 어디에 뭐라 저장할지 정하고
+// 그 경로 받아와서 SaveTile 함수를 호출하자.
+
+	OPENFILENAME ofn = {};
+
+	// 저장될 파일의 절대경로를 넣을 변수
+	wchar_t szName[256] = {};
+
+	ofn.lStructSize = sizeof(OPENFILENAME);
+	ofn.hwndOwner = CCore::GetInst()->GetMainHwnd();
+
+	// 완성된 경로가 채워질 주소(배열의 시작주소)를 가리킨다
+	ofn.lpstrFile = szName;
+
+	ofn.nMaxFile = sizeof(szName); // 버퍼 크기 (바이트)
+	// lpstrFilter: 확장자 필터 규칙
+	ofn.lpstrFilter = L"ALL\0*.*\0Scene\0*.scene\0";
+	// 필터 인덱스: 골라놓은 것 중 초기 필터를 무엇으로 세팅하는가?
+	// 0선택: ALL이라는 뜻...
+	ofn.nFilterIndex = 0;
+	//창 오픈 시 캡션인데, 수정 가능한 값 줘야해서 일단 패스
+	ofn.lpstrFileTitle = nullptr;
+	ofn.nMaxFileTitle = 0;
+
+	wstring strTileFolder = CPathMgr::GetInst()->GetContentPath();
+	strTileFolder += L"scene";
+	// 저장창의 초기 경로
+	ofn.lpstrInitialDir = strTileFolder.c_str();
+	// 패스가 존재하고 파일이 존재해야 한다 (비트연산 조합)
+	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+
+
+	// 세팅한 정보 바탕으로 창 열기
+	if (GetSaveFileName(&ofn))
 	{
-		// 마우스 위치를 실제좌표로 변환
-		Vec2 vMousePos = MOUSE_POS;
-		vMousePos = CCamera::GetInst()->GetRealPos(vMousePos);
-
-		int iTileX = (int)GetTileX();
-		int iTileY = (int)GetTileY();
-
-		// 음수좌표 고려하여 int
-		int iCol = (int)vMousePos.x / TILE_SIZE;
-		int iRow = (int)vMousePos.y / TILE_SIZE;
-
-		// 타일 없는 곳 클릭 예외처리
-		if (vMousePos.x < 0.f || iCol >= iTileX
-			|| vMousePos.y < 0.f || iRow >= iTileY)
-		{
-			return;
-		}
-
-
-		UINT iIdx = iRow * iTileX + iCol;
-
-		const vector<CObject*>& vecTile = GetGroupObject(GROUP_TYPE::TILE);
-		// CObject 포인터이기 때문에, CTile 타입으로 캐스팅
-		// 뒤에서부터 읽음을 유념하여 괄호 쳐주기
-		((CTile*)vecTile[iIdx])->AddImgIdx();
+		SaveScene(szName);
 	}
-	// 마우스 좌표가 가리킨 타일이 어떤 타일인지 알아내기
-	// 마우스 좌표.x, y를 각각 타일 사이즈로 나누면 몇 번째 행, 열인지 알 수 있다
-	// 이렇게 구한 행, 열과, 타일 생성 시 입력한 최대 행, 열 값을 가지고 오브젝트의 타일 그룹 벡터를 조회
-	// 벡터 인덱스를 통해 반복문 안 쓰고 바로 접근 가능
-
 }
-*/
-// 드래그하면 좌상단 우하단 산출하고 그 자리에 Wall을 만들음
-/*
-void CScene_Tool::CreateWall(Vec2 _vStartPos, Vec2 _vEndPos)
+
+void CScene_Tool::SaveScene(const wstring& _strFilePath)
 {
-	// 좌상우하 산출
-	Vec2 vLT = {};
-	Vec2 vRB = {};
-	Vec2 vScale = {};
+	// 커널 오브젝트
+	FILE* pFile = nullptr;
+
+	// C++에서 기본으로 제공하는 입출력 함수
+	// 이중 포인터를 인자로 넘김으로써, 실행 후에 pFile은 무언가 가리키게 됨
+	// 파일포인터의 주소 / 절대경로(wchar*) / 모드(w: 쓰기)
+	_wfopen_s(&pFile, _strFilePath.c_str(), L"wb");
+
+	// 파일 열기(fopen) 실패. 성공했다면 어떤 주소가 채워져 있을테니...
+	assert(pFile);
+
+	// 데이터 저장
+	// 저장할 것: 타일 가로세로 개수
+	UINT xCount = GetTileX();
+	UINT yCount = GetTileY();
+
+	// 입력할 데이터의 시작주소 / 입력할 데이터의 크기 / 개수(배열일 경우 배열의크기) / 
+	// 시작주소가 void포인터인데, 어떤 데이터든 받을 수 있게 하기 위함임.
+	// 일단 받은 다음, 두 번째 인자 크기 단위로 읽는다.
+	// 저장할 데이터가 무엇이든 간에 범용적 적용을 위함.
+	fwrite(&xCount, sizeof(UINT), 1, pFile);
+	fwrite(&yCount, sizeof(UINT), 1, pFile);
 
 
+	// 타일 각각의 정보는 각자 자기(타일) 쪽에 구현 (세이브가 아닌 타일의 역할)
+	const vector<CObject*>& vecTile = GetGroupObject(GROUP_TYPE::TILE);
 
-	// 좌상단 X좌표 (둘 중 작은것)
-	(_vStartPos.x < _vEndPos.x) ? (vLT.x = _vStartPos.x) : (vLT.x = _vEndPos.x);
-	// 좌상단 Y좌표 (둘 중 작은것)
-	(_vStartPos.y < _vEndPos.y) ? (vLT.y = _vStartPos.y) : (vLT.y = _vEndPos.y);
 
-	// 우하단 X좌표 (둘 중 큰것)
-	(_vStartPos.x > _vEndPos.x) ? (vRB.x = _vStartPos.x) : (vRB.x = _vEndPos.x);
-	// 우하단 Y좌표 (둘 중 큰것)
-	(_vStartPos.y > _vEndPos.y) ? (vRB.y = _vStartPos.y) : (vRB.y = _vEndPos.y);
+	// 모든 타일을 개별적으로, 저장할 데이터 저장하게 함
+	// 타일 전체를 순회하며 각자 타일에게 저장할거있음 저장해라, save 함수 호출
+	// 타일들은 각각 자신을 save 한다
+	for (size_t i = 0; i < vecTile.size(); ++i)
+	{
+		((CTile*)vecTile[i])->Save(pFile);
+	}
 
-	vScale = Vec2((vRB.x - vLT.x), (vRB.y - vLT.y));
+	// 벽 개수 저장
+	const vector<CObject*>& vWall = GetGroupObject(GROUP_TYPE::WALL);
+	UINT wallSize = vWall.size();
 
-	CWall* pWall = new CWall;
-	pWall->SetScale(vScale);
-	pWall->SetPos(Vec2((vRB.x - vLT.x / 2), (vRB.y - vLT.y / 2)));
+	const vector<CObject*>& vCornerWall = GetGroupObject(GROUP_TYPE::CORNER);
+	UINT CornerSize = vCornerWall.size();
+
+	const vector<CObject*>& vTileWall = GetGroupObject(GROUP_TYPE::TILE_WALL);
+	UINT TileWallSize = vTileWall.size();
+
+	UINT size = wallSize + CornerSize + TileWallSize;
+
+	// 입력할 데이터의 시작주소 / 입력할 데이터의 크기 / 개수(배열일 경우 배열의크기) / 
+	// 시작주소가 void포인터인데, 어떤 데이터든 받을 수 있게 하기 위함임.
+	// 일단 받은 다음, 두 번째 인자 크기 단위로 읽는다.
+	// 저장할 데이터가 무엇이든 간에 범용적 적용을 위함.
+	fwrite(&size, sizeof(UINT), 1, pFile);
+
+
+	// 모든 타일을 개별적으로, 저장할 데이터 저장하게 함
+	// 타일 전체를 순회하며 각자 타일에게 저장할거있음 저장해라, save 함수 호출
+	// 타일들은 각각 자신을 save 한다
+	for (size_t i = 0; i < wallSize; ++i)
+	{
+		((CWall*)vWall[i])->Save(pFile);
+	}
+	for (size_t i = 0; i < CornerSize; ++i)
+	{
+		((CWall*)vCornerWall[i])->Save(pFile);
+	}
+	for (size_t i = 0; i < TileWallSize; ++i)
+	{
+		((CWall*)vTileWall[i])->Save(pFile);
+	}
+	// 이 파일에 대한 파일 입출력 닫기
+	fclose(pFile);
+
 }
-*/
+
+void CScene_Tool::LoadSceneData()
+{
+	// 창 열어서 경로를 알아내고 load tile 해야한다.
+
+	OPENFILENAME ofn = {};
+
+	// 오픈할 파일의 절대경로를 넣을 변수
+	wchar_t szName[256] = {};
+
+	ofn.lStructSize = sizeof(OPENFILENAME);
+	ofn.hwndOwner = CCore::GetInst()->GetMainHwnd();
+
+	// 선택한 파일의 경로가 채워질 주소(배열의 시작주소)를 가리킨다
+	ofn.lpstrFile = szName;
+
+	ofn.nMaxFile = sizeof(szName); // 버퍼 크기 (바이트)
+	// lpstrFilter: 확장자 필터 규칙....?
+	// 모든 파일: L"ALL\0*.*"
+	// 저장 창 열렸을 때 필더된 확장자 파일들만 목록에 뜨는거!!!!
+	ofn.lpstrFilter = L"ALL\0*.*\0Scene\0*.scene\0";
+	// 필터 인덱스: 골라놓은 것 중 초기 필터를 무엇으로 세팅하는가?
+	// 0선택: ALL이라는 뜻...
+	ofn.nFilterIndex = 0;
+	ofn.lpstrFileTitle = nullptr;
+	ofn.nMaxFileTitle = 0;
+
+	wstring strTileFolder = CPathMgr::GetInst()->GetContentPath();
+	strTileFolder += L"scene";
+	// 저장창의 초기 경로
+	ofn.lpstrInitialDir = strTileFolder.c_str();
+	// 패스가 존재하고 파일이 존재해야 한다 (비트연산 조합)
+	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
 
 
-
+	// 세팅한 정보 바탕으로 오픈 창 열기
+	if (GetOpenFileName(&ofn))
+	{
+		// 상대경로 변환
+		wstring strRelativePath = CPathMgr::GetInst()->GetRelativePath(szName);
+		LoadScene(strRelativePath);
+	}
+}
 
 void CScene_Tool::SaveTileData()
 {
@@ -565,7 +645,7 @@ void CScene_Tool::LoadTileData()
 		// 상대경로 변환
 		wstring strRelativePath = CPathMgr::GetInst()->GetRelativePath(szName);
 
-		LoadTile(strRelativePath);
+		//LoadTile(strRelativePath);
 	}
 }
 
@@ -709,7 +789,7 @@ void CScene_Tool::LoadWallData()
 		// 상대경로 변환
 		wstring strRelativePath = CPathMgr::GetInst()->GetRelativePath(szName);
 
-		LoadWall(strRelativePath);
+		//LoadWall(strRelativePath);
 	}
 }
 

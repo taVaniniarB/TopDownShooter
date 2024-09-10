@@ -11,15 +11,17 @@
 #include "CCollider.h"
 #include "CAnimator.h"
 #include "CAnimation.h"
-#include "CGravity.h"
 
 #include "CRigidBody.h"
+
+#include "CWeapon.h"
 
 CPlayer::CPlayer()
 	: m_eCurState(PLAYER_STATE::IDLE)
 	, m_ePrevState(PLAYER_STATE::WALK)
 	, m_iDir(1)
 	, m_iPrevDir(1)
+	, m_pWeapon(nullptr)
 {
 	// 일단 컴포넌트는 부모의 private 멤버이다
 	// 근데 컴포넌트 필요한 자식 쪽에서 직접 생성했으면 하니까
@@ -29,7 +31,7 @@ CPlayer::CPlayer()
 
 	CreateCollider();
 	GetCollider()->SetOffsetPos(Vec2(0.f, 3.f));
-	GetCollider()->SetScale(Vec2(20.f, 35.f));
+	GetCollider()->SetScale(Vec2(15.f, 15.f));
 	
 
 	CreateRigidBody();
@@ -39,9 +41,7 @@ CPlayer::CPlayer()
 	//CTexture* pTex = CResMgr::GetInst()->LoadTexture(L"PlayerTex", L"texture\\Fif.bmp");
 
 
-
 	CreateAnimator();
-	
 	
 	
 	GetAnimator()->LoadAnimation(L"animation\\player_idle_left.anim");
@@ -98,11 +98,11 @@ void CPlayer::update()
 	// 업데이트된 상태에 따라 애니메이션 업데이트
 	update_animation();
 
-	
-	if (KEY_TAP(KEY::ENTER))
+
+	/*if (KEY_TAP(KEY::ENTER))
 	{
 		SetPos(Vec2(640.f, 320.f));
-	}
+	}*/
 
 	GetAnimator()->update();
 
@@ -142,6 +142,7 @@ void CPlayer::render(HDC _dc)
 	//	, 0, 0, (int)width, (int)height, bf);
 
 }
+
 void CPlayer::CreateMissile()
 {
 	Vec2 MissilePos = GetPos();
@@ -180,22 +181,8 @@ void CPlayer::update_state()
 	{
 		m_eCurState = PLAYER_STATE::IDLE;
 	}
-	/*
-	if (KEY_NONE(KEY::A) && KEY_NONE(KEY::D)&& PLAYER_STATE::JUMP != m_eCurState)
-	{
-		m_eCurState = PLAYER_STATE::IDLE;
-	}*/
 	if (KEY_TAP(KEY::W))
 	{
-		/*if (m_eCurState != PLAYER_STATE::JUMP)
-		{
-			m_eCurState = PLAYER_STATE::JUMP;
-
-			if (GetRigidBody())
-			{
-				GetRigidBody()->AddVelocity(Vec2(0.f, -500.f));
-			}
-		}*/
 		m_eCurState = PLAYER_STATE::RUN;
 		
 	}
@@ -240,6 +227,30 @@ void CPlayer::update_move()
 
 	Vec2 CurVelocity = pRigid->GetVelocity();
 
+	/*if (pRigid->GetGround())
+	{
+		WALL_DIR groundType = pRigid->GetGroundType();
+		switch (groundType)
+		{
+		case WALL_DIR::TOP:
+			GetRigidBody()->SetVelocity(Vec2(CurVelocity.x, 0.f));
+			break;
+		case WALL_DIR::BOTTOM:
+			GetRigidBody()->SetVelocity(Vec2(CurVelocity.x, 0.f));
+			break;
+		case WALL_DIR::LEFT:
+			GetRigidBody()->SetVelocity(Vec2(0.f, CurVelocity.y));
+			break;
+		case WALL_DIR::RIGHT:
+			GetRigidBody()->SetVelocity(Vec2(0.f, CurVelocity.y));
+			break;
+		case WALL_DIR::END:
+			break;
+		default:
+			break;
+		}
+		
+	}*/
 
 	//if (KEY_TAP(KEY::W))
 	//{
@@ -257,16 +268,17 @@ void CPlayer::update_move()
 	//	pRigid->SetVelocity(Vec2(150.f, pRigid->GetVelocity().y));
 	//}
 
-	SetPos(vPos);
+	//SetPos(vPos);
 }
 
 void CPlayer::update_attack()
 {
-	switch (m_eCurState)
+	if (KEY_HOLD(KEY::LBTN))
 	{
-	case PLAYER_STATE::ATTACK:
-		CreateMissile();
-		break;
+		if (m_pWeapon)
+		{
+			m_pWeapon->Attack();
+		}
 	}
 }
 
@@ -313,37 +325,43 @@ void CPlayer::update_animation()
 		break;
 	}
 }
+//
+//void CPlayer::update_gravity()
+//{
+//	// 바닥에 붙어 있는 상태 = 이미 중력 '상쇄' 중이므로 가속도를 따로 붙이지 않음
+//	// 그러다가 허공에 뜬 상태가 됐을 때, 아래로 향하는 가속도를 붙여준다
+//	
+//	if (!GetGravity()->GetGround())
+//	{
+//		GetRigidBody()->SetAccelAlpha(Vec2(0.f, 500.f));
+//	}
+//
+//	// 점프를 해서 공중에 뜨는 그 '순간'부터 중력 적용됨
+//	// 점프란 공중을 향해 '힘'을 준 것...이지만
+//	// 게임적 허용으로, 점프 방향으로 바로 '속도'를 줌
+//
+//	// 중력은 고정 가속도를 부여한다
+//	// 즉 일정한 가속도를 적용시킨다
+//}
 
-void CPlayer::update_gravity()
+void CPlayer::DropWeapon()
 {
-	// 바닥에 붙어 있는 상태 = 이미 중력 '상쇄' 중이므로 가속도를 따로 붙이지 않음
-	// 그러다가 허공에 뜬 상태가 됐을 때, 아래로 향하는 가속도를 붙여준다
-	
-	if (!GetGravity()->GetGround())
-	{
-		GetRigidBody()->SetAccelAlpha(Vec2(0.f, 500.f));
-	}
-
-	// 점프를 해서 공중에 뜨는 그 '순간'부터 중력 적용됨
-	// 점프란 공중을 향해 '힘'을 준 것...이지만
-	// 게임적 허용으로, 점프 방향으로 바로 '속도'를 줌
-
-	// 중력은 고정 가속도를 부여한다
-	// 즉 일정한 가속도를 적용시킨다
+	m_pWeapon->Drop();
+	m_pWeapon = nullptr;
 }
 
 void CPlayer::OnCollisionEnter(CCollider* _pOther)
 {
-	CObject* pOtherObj = _pOther->GetObj();
-	if (pOtherObj->GetName() == L"Ground")
-	{
-		Vec2 vPos = GetPos();
+	//CObject* pOtherObj = _pOther->GetObj();
+	//if (pOtherObj->GetName() == L"Wall")
+	//{
+	//	Vec2 vPos = GetPos();
 
-		// Ground보다 Player 좌표가 더 위다, 즉 Ground 위에 올라섰을 때
-		if (vPos.y < pOtherObj->GetPos().y)
-		{
-			m_eCurState = PLAYER_STATE::IDLE;
-		}
-	}
+	//	// Ground보다 Player 좌표가 더 위다, 즉 Ground 위에 올라섰을 때
+	//	if (vPos.y < pOtherObj->GetPos().y)
+	//	{
+	//		m_eCurState = PLAYER_STATE::IDLE;
+	//	}
+	//}
 }
 

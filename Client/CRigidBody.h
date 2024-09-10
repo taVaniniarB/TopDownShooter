@@ -10,6 +10,9 @@ private:
 	Vec2 m_vAccel;			// 가속도
 	Vec2 m_vAccelA;			// 추가 가속도 (ex: 중력가속도)
 	Vec2 m_vVelocity;		// 속도 (속력과 방향)
+
+	bool m_bGround; // 벽에 붙었나
+	WALL_DIR m_eGroundWallDir; // 어떤 벽에 붙었나
 	
 	//Vec2 m_vMaxVelocity;		// 최대 속도 (2차원), 횡스크롤에 해당
 	float m_fMaxVelocity;	// 최대 속도 (모든 축에 해당), 탑뷰애 해당
@@ -31,6 +34,10 @@ public:
 	float GetMass(){ return m_fMass; }
 	float GetSpeed() { return m_vVelocity.Length(); }
 	Vec2 GetVelocity() { return m_vVelocity; }
+
+	void SetGround(bool _b, WALL_DIR _dir) { m_bGround = _b; m_eGroundWallDir = _dir; }
+	bool GetGround() { return m_bGround; }
+	WALL_DIR GetGroundType() { return m_eGroundWallDir; }
 
 	// 속도란 원래 가속도를 붙인 값이지만, 한 순간에 속도를 일정 값으로 세팅해야 하는 경우가 있을지도 모름
 	void SetVelocity(Vec2 _vVel) { m_vVelocity = _vVel; }

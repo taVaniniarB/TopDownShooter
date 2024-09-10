@@ -36,12 +36,6 @@ private:
 	WALL_DIR m_eSelectedWallDir;
 	WALL_DIR m_eSelectedWallDir2;
 
-	// 현재 드래그 중인가?
-	bool m_vWallDrag;
-	// 벽 만들 때 드래그 좌표
-	Vec2 m_vDragStartPos;
-	Vec2 m_vDragEndPos;
-
 	// 그리드 표시
 	bool m_bGrid;
 
@@ -51,21 +45,27 @@ public:
 	virtual void update();
 	virtual void render(HDC _dc);
 
+public:
+	void SaveSceneData();
+	void SaveScene(const wstring& _strFilePath);
+	void LoadSceneData();
+
 	// 타일
 public:
 	// 마우스 클릭 시 타일 인덱스 1 증가
 	//void SetTileIdx();
 	
+
 	void SaveTileData();
 	// 타일을 파일로 저장 (절대경로 사용)
 	void SaveTile(const wstring& _strFilePath);
+	void LoadTileData();
+
 	void SetSelectedTile(int _idx);
-	
 	void SetSelectedWall();
 	void SetSelectedCorner();
 	void SetSelectedTileWall(int _idx);
 
-	void LoadTileData();
 
 	// 벽
 public:

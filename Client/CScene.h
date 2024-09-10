@@ -85,9 +85,11 @@ public:
 	//void DeleteCorner(Vec2 vMousePos);
 
 	// Tool Scene에서 파일을 세이브하고, 씬(을 상속받은 다른 씬들)은 그것을 load한다
-	void LoadTile(const wstring& _sttRelativePath);
+	void LoadTile(const wstring& _sttRelativePath, FILE* pFile);
 
-	void LoadWall(const wstring& _strRelativePath);
+	void LoadWall(const wstring& _strRelativePath, FILE* pFile);
+
+	void LoadScene(const wstring& _strRelativePath);
 
 public:
 	CScene();

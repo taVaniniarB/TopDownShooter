@@ -11,6 +11,7 @@ private:
 	CObject*	m_pOwner;		// Collider 소유하는 오브젝트
 	Vec2		m_vOffsetPos;	// 오브젝트로부터 상대적 위치
 	Vec2		m_vFinalPos;	// final update에서 매 프레임마다 계산하는 최종값
+	Vec2		m_vPrevPos;		// 이전 프레임에서의 Final Pos
 	Vec2		m_vScale;		// 충돌체 크기
 
 	UINT		m_iID;			// 충돌체 고유한 ID 값
@@ -26,6 +27,7 @@ public:
 	Vec2 GetScale() { return m_vScale; }
 
 	Vec2 GetFinalPos() { return m_vFinalPos; }
+	Vec2 GetPrevPos() { return m_vPrevPos; }
 
 	CObject* GetObj() { return m_pOwner; }
 

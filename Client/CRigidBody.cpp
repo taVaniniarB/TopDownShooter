@@ -7,8 +7,9 @@
 CRigidBody::CRigidBody()
 	: m_pOwner(nullptr)
 	, m_fMass(1.f)
-	, m_fFricCoeff(100.f)
+	, m_fFricCoeff(1000.f)
 	, m_fMaxVelocity(300.f)
+	, m_bGround(false)
 {
 }
 
@@ -86,8 +87,6 @@ void CRigidBody::finalUpdate()
 	//	// 방향 (-1, 1)
 	//	m_vVelocity.y = m_vVelocity.y / abs(m_vVelocity.y) * abs(m_vMaxVelocity.y);
 	//}
-
-
 
 	// 속도에 따른 이동
 	Move();

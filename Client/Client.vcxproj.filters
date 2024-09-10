@@ -95,9 +95,6 @@
     <Filter Include="Engine\04. Object\UI\Panel">
       <UniqueIdentifier>{1f559895-d060-4c6f-a6ad-188b4695fc44}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\03. Manager\EvenMgr\CollisionMgr">
-      <UniqueIdentifier>{61b5ee21-9556-4e4a-ade6-3d68d3d54783}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\04. Object\UI\BtnUI">
       <UniqueIdentifier>{440f4a19-90ba-452e-bbd0-d85b7f84f477}</UniqueIdentifier>
     </Filter>
@@ -139,6 +136,18 @@
     </Filter>
     <Filter Include="Engine\04. Object\UI\TileBtnUI">
       <UniqueIdentifier>{a1de7bd5-7606-4463-825b-be5922601987}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\03. Manager\CollisionMgr">
+      <UniqueIdentifier>{61b5ee21-9556-4e4a-ade6-3d68d3d54783}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Object\Weapon">
+      <UniqueIdentifier>{af3a0f2e-1164-4c6d-88a9-5bc07bf1b11a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Object\Weapon\Gun">
+      <UniqueIdentifier>{d62fe936-8346-4ec9-835a-da62f6a0cfde}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Object\Weapon\Melee">
+      <UniqueIdentifier>{8dbecbec-f172-4244-8759-9c9c0ab5aed7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -210,7 +219,7 @@
       <Filter>Engine\08. Module</Filter>
     </ClInclude>
     <ClInclude Include="CCollisionMgr.h">
-      <Filter>Engine\03. Manager\EvenMgr\CollisionMgr</Filter>
+      <Filter>Engine\03. Manager\CollisionMgr</Filter>
     </ClInclude>
     <ClInclude Include="CEventMgr.h">
       <Filter>Engine\03. Manager\EvenMgr</Filter>
@@ -281,6 +290,18 @@
     <ClInclude Include="CTileBtnUI.h">
       <Filter>Engine\04. Object\UI\TileBtnUI</Filter>
     </ClInclude>
+    <ClInclude Include="CWeapon.h">
+      <Filter>Engine\04. Object\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="CGun.h">
+      <Filter>Engine\04. Object\Weapon\Gun</Filter>
+    </ClInclude>
+    <ClInclude Include="CMelee.h">
+      <Filter>Engine\04. Object\Weapon\Melee</Filter>
+    </ClInclude>
+    <ClInclude Include="CWeaponFactory.h">
+      <Filter>Engine\09. Factory</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
@@ -346,7 +367,7 @@
       <Filter>Engine\08. Module</Filter>
     </ClCompile>
     <ClCompile Include="CCollisionMgr.cpp">
-      <Filter>Engine\03. Manager\EvenMgr\CollisionMgr</Filter>
+      <Filter>Engine\03. Manager\CollisionMgr</Filter>
     </ClCompile>
     <ClCompile Include="CEventMgr.cpp">
       <Filter>Engine\03. Manager\EvenMgr</Filter>
@@ -413,6 +434,18 @@
     </ClCompile>
     <ClCompile Include="CTileBtnUI.cpp">
       <Filter>Engine\04. Object\UI\TileBtnUI</Filter>
+    </ClCompile>
+    <ClCompile Include="CWeapon.cpp">
+      <Filter>Engine\04. Object\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="CGun.cpp">
+      <Filter>Engine\04. Object\Weapon\Gun</Filter>
+    </ClCompile>
+    <ClCompile Include="CMelee.cpp">
+      <Filter>Engine\04. Object\Weapon\Melee</Filter>
+    </ClCompile>
+    <ClCompile Include="CWeaponFactory.cpp">
+      <Filter>Engine\09. Factory</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

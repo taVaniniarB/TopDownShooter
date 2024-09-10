@@ -82,8 +82,6 @@ void CScene_Start::update()
 						vecObj[j]->GetRigidBody()->AddForce(vDiff.Nomalize() * fForce);
 					}
 				}
-
-				
 				vecObj[j]->update();
 			}
 		}
@@ -98,7 +96,6 @@ void CScene_Start::update()
 	}
 
 
-
 	//if (KEY_TAP(KEY::LBTN))
 	//{
 	//	// 마우스 좌표를 알아와서 거기를 Lookat으로 잡자
@@ -106,8 +103,6 @@ void CScene_Start::update()
 	//	Vec2 vMousePos = CCamera::GetInst()->GetRealPos(MOUSE_POS);
 	//	CCamera::GetInst()->SetLookAt(vMousePos);
 	//}
-
-	
 }
 
 void CScene_Start::render(HDC _dc)
@@ -138,11 +133,13 @@ void CScene_Start::render(HDC _dc)
 
 void CScene_Start::Enter()
 {
+	LoadScene(L"scene\\lab");
+	//LoadScene(L"scene\\test");
 	// Object 추가
 	// 플레이어 오브젝트를 부모포인터로 저장
 	CObject* pObj = new CPlayer;
 	pObj->SetName(L"Player");
-	pObj->SetPos(Vec2(640.f, 320.f));
+	pObj->SetPos(Vec2(640.f, 500.f));
 	pObj->SetScale(Vec2(100.f, 100.f));
 	AddObject(pObj, GROUP_TYPE::PLAYER);
 
@@ -160,25 +157,13 @@ void CScene_Start::Enter()
 
 	Vec2 vResolution = CCore::GetInst()->GetResolution();
 	// 몬스터 배치
-	CMonster* pMon = CMonFactory::CreateMonster(MON_TYPE::NORMAL, vResolution / 2.f - Vec2(0.f, 300));
+
+	//CMonster* pMon = CMonFactory::CreateMonster(MON_TYPE::NORMAL, vResolution / 2.f - Vec2(0.f, 300));
 	// AddObject와 CreateObject는 지연처리 유무에 따라 판단
 	// 예: Scene이 한창 돌아가는 도중 생성이라면 Create 통한 이벤트처리로 해아함
 	// CreateObject(pMon, GROUP_TYPE::MONSTER);
-	AddObject(pMon, GROUP_TYPE::MONSTER);
+	//AddObject(pMon, GROUP_TYPE::MONSTER);
 
-
-
-	// 땅 물체 배치
-	CWall* pGround = new CWall;
-	pGround->SetPos(Vec2(640.f, 400.f));
-	pGround->SetScale(Vec2(500.f, 100.f));
-	pGround->SetName(L"Ground");
-	AddObject(pGround, GROUP_TYPE::WALL);
-
-
-
-	//타일 로딩
-	//LoadTile(L"Tile\\start.tile");
 
 	// 충돌 지정
 	// Player 그룹과 Monster 그룹 간의 충돌체크
@@ -188,14 +173,14 @@ void CScene_Start::Enter()
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::MONSTER, GROUP_TYPE::PROJ_PLAYER); // 몬스터-총알
 	
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::PLAYER, GROUP_TYPE::WALL);
-
+	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::PLAYER, GROUP_TYPE::TILE_WALL);
+	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::PLAYER, GROUP_TYPE::CORNER);
 	// Camera Start 지정
 	// 	   위에 해상도 받아다 몬스터 위치지정 하는 코드 있어서 일단 주석처리
 	//Vec2 vResolution = CCore::GetInst()->GetResolution();
 	CCamera::GetInst()->SetLookAt(vResolution / 2.f);
 	
 	// Camera 효과 지정
-	
 	CCamera::GetInst()->FadeIn(1.f);
 
 	// Scene Enter 말미에 꼭 Start를 넣어주자.

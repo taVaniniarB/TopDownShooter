@@ -1,7 +1,4 @@
 
-#include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CTexture.cpp"
-
-
 #include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CTile.cpp"
 
 
@@ -15,6 +12,12 @@
 
 
 #include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CUIMgr.cpp"
+
+
+#include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CWeapon.cpp"
+
+
+#include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CWeaponFactory.cpp"
 
 
 #include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\func.cpp"

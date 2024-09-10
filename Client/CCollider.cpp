@@ -37,6 +37,9 @@ CCollider::~CCollider()
 
 void CCollider::finalUpdate()
 {
+	// 이전 좌표로서 사용될 변경 전 final pos 저장
+	m_vPrevPos = m_vFinalPos;
+
 	// 오브젝트의 위치를 따라간다
 
 	Vec2 vObjectPos = m_pOwner->GetPos();

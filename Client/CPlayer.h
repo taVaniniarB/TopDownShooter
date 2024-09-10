@@ -28,17 +28,18 @@ enum class PLAYER_ATTACK
 
 
 class CTexture;
+class CWeapon;
 
 class CPlayer :
     public CObject
 {
 private:
-    // vector<CObject*> m_vColObj;
-
     PLAYER_STATE m_eCurState;
     PLAYER_STATE m_ePrevState;
-    int m_iDir;
+    int m_iDir; // 움직이는 방향
     int m_iPrevDir;
+
+    CWeapon* m_pWeapon;
 
 public:
     virtual void update();
@@ -50,7 +51,9 @@ private:
     void update_move();
     void update_attack();
     void update_animation();
-    void update_gravity();
+
+
+    void DropWeapon();
 
     virtual void OnCollisionEnter(CCollider* _pOther);
 

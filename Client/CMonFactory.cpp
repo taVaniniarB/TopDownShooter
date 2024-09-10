@@ -28,10 +28,9 @@ CMonster* CMonFactory::CreateMonster(MON_TYPE _eType, Vec2 _vPos)
 		pMon->SetPos(_vPos);
 
 		tMonInfo info = {};
-		info.fAttackRAnge = 50.f;
 		info.fRecogRange = 300.f;
 		info.fSpeed = 50.f;
-		info.iHP = 3;
+		info.iHP = 1;
 
 		pMon->SetMonInfo(info);
 
