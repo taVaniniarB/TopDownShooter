@@ -5,8 +5,19 @@
 #include "CMissile.h"
 
 CGun::CGun()
+	: m_iMaxMissile(0)
+	, m_iRemainMissile(0)
+	, m_pEmptySound(nullptr)
 {
 }
+//
+//CGun::CGun(const CGun& _origin)
+//	: m_iMaxMissile(_origin.m_iMaxMissile)
+//	, m_iRemainMissile(_origin.m_iRemainMissile)
+//	, m_pEmptySound(_origin.m_pEmptySound)
+//{
+//
+//}
 
 CGun::~CGun()
 {
@@ -18,14 +29,16 @@ void CGun::Attack()
 	float fCurDelay = GetCurDelay();
 	if (fCurDelay > fDelay)
 	{
-		if (m_iCurMissile > 0)
+		if (m_iRemainMissile > 0)
 		{
 			//vPos = GetPos();
 			CreateMissile();
 			// 사운드 재생
 
-			m_iCurMissile--;
+			m_iRemainMissile--;
 			SetCurDelay(0.f);
+			
+			std::cout << "장탄 수: " << m_iRemainMissile << "\n";
 		}
 	}
 	else
@@ -37,19 +50,17 @@ void CGun::Attack()
 
 void CGun::update()
 {
-	if (KEY_HOLD(KEY::LBTN))
+	CWeapon::update();
+	if (GetOwner() && KEY_HOLD(KEY::LBTN))
 	{
 		Attack();
 	}
 }
 
-void CGun::render()
-{
-}
 
 void CGun::CreateMissile()
 {
-	Vec2 vMissilePos = GetFinalPos();
+	Vec2 vMissilePos = GetPos();
 	vMissilePos.y -= GetScale().y / 2.f;
 	Vec2 vAimDir = GetAimDir();
 

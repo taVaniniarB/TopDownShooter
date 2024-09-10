@@ -101,6 +101,11 @@ void CPlayer::update()
 		SetPos(Vec2(640.f, 320.f));
 	}*/
 
+	if (KEY_TAP(KEY::RBTN))
+	{
+		DropWeapon();
+	}
+
 	GetAnimator()->update();
 
 	// 왜 첫줄 말고 마지막에 둬야할까...
@@ -109,7 +114,6 @@ void CPlayer::update()
 	m_ePrevState = m_eCurState;
 	m_iPrevDir = m_iDir;
 
-	m_pWeapon->finalUpdate();
 }
 void CPlayer::render(HDC _dc)
 {
@@ -334,44 +338,71 @@ void CPlayer::DropWeapon()
 {
 	if (m_pWeapon)
 	{
-		m_pWeapon->Drop();
+		//m_pWeapon->Drop();
+
+		CObject* pNewWeapon = m_pWeapon->Clone();
+		((CWeapon*)pNewWeapon)->Drop();
+		CreateObject(pNewWeapon, GROUP_TYPE::DROPPED_WEAPON);
+		DeleteObject(m_pWeapon);
 		m_pWeapon = nullptr;
 	}
 }
 
-// 설정된 무기가 없는 상태에서만 실행
+
+
+
 void CPlayer::SetWeapon(CWeapon* _pWeapon)
 {
 	m_pWeapon = _pWeapon;
 	_pWeapon->SetOwner(this);
 }
 
+// 설정된 무기가 없는 상태에서만 실행
+void CPlayer::GetWeapon(CWeapon* _pWeapon)
+{
+	// 떨어진 무기를 주운 상황일 경우
+	if (_pWeapon->GetStatus() == WEAPON_STATUS::DROPPED)
+	{
+		CObject* pNewWeapon = _pWeapon->Clone();
+		DeleteObject(_pWeapon);
+		CreateObject(pNewWeapon, GROUP_TYPE::WEAPON);
+		((CWeapon*)pNewWeapon)->SetStatus(WEAPON_STATUS::HOLD);
+		SetWeapon((CWeapon*)pNewWeapon);
+	}
+}
+
 // 설정된 무기가 있는 상태에서만 실행
 void CPlayer::ExchangeWeapon(CWeapon* _pWeapon)
 {
 	DropWeapon();
-	SetWeapon(_pWeapon);
+	GetWeapon(_pWeapon);
 }
+
 
 void CPlayer::OnCollisionEnter(CCollider* _pOther)
 {
-	//CObject* pOtherObj = _pOther->GetObj();
-	//if (pOtherObj->GetName() == L"Wall")
-	//{
-	//	Vec2 vPos = GetPos();
-
-	//	// Ground보다 Player 좌표가 더 위다, 즉 Ground 위에 올라섰을 때
-	//	if (vPos.y < pOtherObj->GetPos().y)
-	//	{
-	//		m_eCurState = PLAYER_STATE::IDLE;
-	//	}
-	//}
-
 	CObject* pOtherObj = _pOther->GetObj();
 	if (pOtherObj->GetName() == L"Missile")
 	{
 		--m_iHP;
 	}
-
 }
 
+
+void CPlayer::OnCollision(CCollider* _pOther)
+{
+	CObject* pOtherObj = _pOther->GetObj();
+	if (pOtherObj->GetName() == L"Weapon")
+	{
+		CWeapon* pWeapon = (CWeapon*)pOtherObj;
+		// 무기이자 드롭된무기이자 우클릭상태일 때
+		if (pWeapon->GetStatus() == WEAPON_STATUS::DROPPED
+			&& KEY_TAP(KEY::RBTN))
+		{
+			if (m_pWeapon)
+				ExchangeWeapon(pWeapon);
+			else
+				GetWeapon(pWeapon);
+		}
+	}
+}

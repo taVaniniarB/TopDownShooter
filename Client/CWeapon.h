@@ -25,27 +25,33 @@ private:
 	Vec2 m_vAimDir; // 조준방향
 	Vec2 m_vPrevAimDir; // 이전 프레임 조준방향
 
-	Vec2 m_vFinalPos;
+	Vec2 m_vPos;
 	Vec2 m_vOffsetPos;
 
 
 public:
-	void finalUpdate();
-	void render();
+	virtual void start();
+	virtual void update();
+	virtual void render(HDC _dc);
 
 public:
 	void SetDelay(float _f) { m_fDelay = _f; m_fCurDelay = _f; }
+	CObject* GetOwner() { return m_pOwner; }
 	void SetOnwer(CObject* _pOwner) { m_pOwner = _pOwner; }
+	
 	void Drop();
 
 	float GetDelay() { return m_fDelay; }
 	float GetCurDelay() { return m_fCurDelay; }
 	void SetCurDelay(float _f) { m_fCurDelay = _f; }
 
-	Vec2 GetFinalPos() { return m_vFinalPos; }
-	Vec2 GetAimDir() { return m_vAimDir; }
+	WEAPON_STATUS GetStatus() { return m_eWeaponStatus; }
+	void SetStatus(WEAPON_STATUS _eStatus) { m_eWeaponStatus = _eStatus; }
 
+	Vec2 GetAimDir() { return m_vAimDir; }
 	void SetOwner(CObject* _pOwner) { m_pOwner = _pOwner; }
+
+	void OncollisionEnter(CCollider* _pOther);
 
 private:
 	void SetAimDir();

@@ -47,10 +47,13 @@ public:
     virtual void update();
     virtual void render(HDC _dc);
 
-    // 테스트용으로 public으로 풀어놨으니 나중에 다시 private으로 변경해둘것
+public:
+    void SetWeapon(CWeapon* _pWeapon);
+    
+private:
     void DropWeapon();
     void ExchangeWeapon(CWeapon* _pWeapon);
-    void SetWeapon(CWeapon* _pWeapon);
+    void GetWeapon(CWeapon* _pWeapon);
 
 private:
     void update_state();
@@ -58,9 +61,8 @@ private:
     void update_attack();
     void update_animation();
 
-
-    
-
+public:
+    virtual void OnCollision(CCollider* _pOther);
     virtual void OnCollisionEnter(CCollider* _pOther);
 
     CLONE(CPlayer);

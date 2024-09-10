@@ -43,6 +43,7 @@ void CCollider::finalUpdate()
 	// 오브젝트의 위치를 따라간다
 
 	Vec2 vObjectPos = m_pOwner->GetPos();
+	
 	m_vFinalPos = vObjectPos + m_vOffsetPos;
 
 	assert(0 <= m_iCol);

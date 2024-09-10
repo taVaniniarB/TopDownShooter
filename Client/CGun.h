@@ -8,21 +8,17 @@ class CGun:
 
 {
 private:
-	int     m_iMaxMissile;   // 최대 총알 수
-	int		m_iCurMissile;	// 남은 총알 수
+	int     m_iMaxMissile;		// 최대 총알 수
+	int		m_iRemainMissile;	// 남은 총알 수
+	CSound* m_pEmptySound;		// 빈 탄창일 때 효과음 리소스
 
-	// 빈 탄창일 때 효과음 리소스
-	CSound* m_pEmptySound;
-
-public:
-	void update();
-	void render();
 
 private:
-	void SetMaxMissile(int _i) { m_iMaxMissile = _i; m_iCurMissile = _i; }
-	
-private:
+	void SetMaxMissile(int _i) { m_iMaxMissile = _i; m_iRemainMissile = _i; }
 	void CreateMissile();
+
+private:
+	virtual void update();
 
 public:
 	void Attack();
