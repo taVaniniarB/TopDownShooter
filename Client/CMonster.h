@@ -35,6 +35,7 @@ public:
     
 public:
     void update();
+    void render(HDC _dc);
     CLONE(CMonster);
 
 public:

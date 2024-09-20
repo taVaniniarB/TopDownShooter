@@ -9,7 +9,7 @@ class CUI :
 private:
     // 자신의 자식 UI를 관리
     vector<CUI*>    m_vecChildUI;
-    CUI* m_pParentUI; // nullptr: 부모가 없는 최상위 UI
+    CUI*            m_pParentUI; // nullptr: 부모가 없는 최상위 UI
     Vec2            m_vFinalPos; // 찐 최종 위치
 
     CTexture* m_pTex;

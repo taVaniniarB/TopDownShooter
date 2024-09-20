@@ -26,13 +26,16 @@
 #define KEY_TAP(key) KEY_CHECK(key, KEY_STATE::TAP)
 #define KEY_AWAY(key) KEY_CHECK(key, KEY_STATE::AWAY)
 #define KEY_NONE(key) KEY_CHECK(key, KEY_STATE::NONE)
-// ·»´õ¸µ ÁÂÇ¥ ¹ÝÈ¯?
+// ·»´õ¸µ ÁÂÇ¥ ¹ÝÈ¯
 #define MOUSE_POS CKeyMgr::GetInst()->GetMouseCursor()
 
 #define PI 3.1415926535f
 
 #define TILE_SIZE 32
 #define WALL_THICKNESS 12
+
+#define FADEOUT_TIME 1.f
+#define FADEIN_TIME 1.f
 
 enum class GROUP_TYPE
 {
@@ -48,7 +51,9 @@ enum class GROUP_TYPE
 	PROJ_PLAYER,
 	PROJ_MONSTER,
 
-	UI = 31,
+	SCENE_CHANGER = 29,
+	UI = 30,
+	MOUSE_POINTER = 31,
 	END = 32,
 };
 
@@ -58,6 +63,7 @@ enum class SCENE_TYPE
 	START,
 	STAGE_01,
 	STAGE_02,
+	BOSS,
 	MENU,
 	END,
 };

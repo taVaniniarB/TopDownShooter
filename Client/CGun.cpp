@@ -3,6 +3,7 @@
 #include "CKeyMgr.h"
 #include "CTimeMgr.h"
 #include "CMissile.h"
+#include "CCamera.h"
 
 CGun::CGun()
 	: m_iMaxMissile(0)
@@ -10,14 +11,6 @@ CGun::CGun()
 	, m_pEmptySound(nullptr)
 {
 }
-//
-//CGun::CGun(const CGun& _origin)
-//	: m_iMaxMissile(_origin.m_iMaxMissile)
-//	, m_iRemainMissile(_origin.m_iRemainMissile)
-//	, m_pEmptySound(_origin.m_pEmptySound)
-//{
-//
-//}
 
 CGun::~CGun()
 {

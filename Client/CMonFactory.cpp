@@ -8,6 +8,7 @@
 #include "CTraceState.h"
 
 #include "CRigidBody.h"
+#include "CResMgr.h"
 
 // 몬스터 팩토리 객체 안 만든다
 // 클래스로 선언했지만, 객체 있을 필요 X
@@ -26,7 +27,10 @@ CMonster* CMonFactory::CreateMonster(MON_TYPE _eType, Vec2 _vPos)
 
 		pMon = new CMonster;
 		pMon->SetPos(_vPos);
-
+		pMon->SetScale(Vec2(64.f, 64.f));
+		pMon->SetName(L"Monster");
+		pMon->SetTexture(CResMgr::GetInst()->LoadTexture(L"mosnter", L"texture\\ray.bmp"));
+		
 		tMonInfo info = {};
 		info.fRecogRange = 300.f;
 		info.fSpeed = 50.f;
@@ -44,6 +48,8 @@ CMonster* CMonFactory::CreateMonster(MON_TYPE _eType, Vec2 _vPos)
 		pAI->SetCurState(MON_STATE::IDLE);
 
 		pMon->SetAI(pAI);
+
+		
 	}
 		break;
 	case MON_TYPE::RANGE:

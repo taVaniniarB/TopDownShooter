@@ -6,6 +6,7 @@
 #include "CMonster.h"
 #include "CWall.h"
 #include "CWeapon.h"
+#include "CMousePtr.h"
 
 #include "CCore.h"
 
@@ -26,23 +27,25 @@
 #include "SelectGDI.h"
 
 #include "CTimeMgr.h"
+#include "CScoreMgr.h"
 
 
-CScene_Start::CScene_Start()
-	: m_bUseForce(false)
-	, m_fForceRadius(500.f)
-	, m_fCurRadius(0.f)
-	, m_fForce(500.f) // 거리에 따라 적게 전달시킬 것
+CScene_Combat::CScene_Combat(const wstring& _wSceneRelativePath)
+	: m_wSceneRelativePath( _wSceneRelativePath )
+	//: m_bUseForce(false)
+	//, m_fForceRadius(500.f)
+	//, m_fCurRadius(0.f)
+	//, m_fForce(500.f) // 거리에 따라 적게 전달시킬 것
 {
 }
 
-CScene_Start::~CScene_Start()
+CScene_Combat::~CScene_Combat()
 {
 }
 
-void CScene_Start::update()
+void CScene_Combat::update()
 {
-	//// 클릭 > 힘 생성
+	// 클릭 > 힘 생성
 	//if (KEY_HOLD(KEY::LBTN))
 	//{
 	//	m_bUseForce = true;
@@ -89,13 +92,19 @@ void CScene_Start::update()
 	}
 	*/
 
-
 	// Scene 교체
 	if (KEY_TAP(KEY::ENTER))
 	{
-		ChangeScene(SCENE_TYPE::TOOL); // 이벤트 만들음
+		CCamera::GetInst()->FadeOut(FADEOUT_TIME);
+
+		CScene::SetEnabled(false);
+
+		CSceneMgr::GetInst()->SetSceneChange(true, SCENE_TYPE::TOOL);
+
+		//ChangeScene(SCENE_TYPE::TOOL); // 이벤트 만들음
 	}
 
+	
 
 	//if (KEY_TAP(KEY::LBTN))
 	//{
@@ -106,37 +115,37 @@ void CScene_Start::update()
 	//}
 }
 
-void CScene_Start::render(HDC _dc)
+void CScene_Combat::render(HDC _dc)
 {
 	CScene::render(_dc);
 
-	if (m_bUseForce)
-	{
-		SelectGDI gdi1(_dc, BRUSH_TYPE::HOLLOW);
-		SelectGDI gdi2(_dc, PEN_TYPE::GREEN);
-
-		m_fCurRadius += m_fForceRadius * 3.f * fDT;
-		if (m_fCurRadius > m_fForceRadius)
-		{
-			m_fCurRadius = 0.f;
-		}
-
-		Vec2 vRenderPos = CCamera::GetInst()->GetRenderPos(m_vForcePos);
-
-		Ellipse(_dc
-			, int(vRenderPos.x - m_fCurRadius)
-			, int(vRenderPos.y - m_fCurRadius)
-			, int(vRenderPos.x + m_fCurRadius)
-			, int(vRenderPos.y + m_fCurRadius));
-	}
-	
+	//if (m_bUseForce)
+	//{
+	//	SelectGDI gdi1(_dc, BRUSH_TYPE::HOLLOW);
+	//	SelectGDI gdi2(_dc, PEN_TYPE::GREEN);
+	//	m_fCurRadius += m_fForceRadius * 3.f * fDT;
+	//	if (m_fCurRadius > m_fForceRadius)
+	//	{
+	//		m_fCurRadius = 0.f;
+	//	}
+	//	Vec2 vRenderPos = CCamera::GetInst()->GetRenderPos(m_vForcePos);
+	//	Ellipse(_dc
+	//		, int(vRenderPos.x - m_fCurRadius)
+	//		, int(vRenderPos.y - m_fCurRadius)
+	//		, int(vRenderPos.x + m_fCurRadius)
+	//		, int(vRenderPos.y + m_fCurRadius));
+	//}
+	//
 }
 
-void CScene_Start::Enter()
+void CScene_Combat::Enter()
 {
-	LoadScene(L"scene\\lab");
+	// Start 씬을 상속받는 씬의 Enter에서 자신의 파일을 Load하기
+	LoadScene(m_wSceneRelativePath);
 	//LoadScene(L"scene\\test");
-	 
+	
+	CMousePtr* mousePtr = new CMousePtr();
+	AddObject(mousePtr, GROUP_TYPE::MOUSE_POINTER);
 	 
 	// Object 추가
 	// 플레이어 오브젝트를 부모포인터로 저장
@@ -148,12 +157,6 @@ void CScene_Start::Enter()
 
 	RegisterPlayer(pObj);
 
-	//CObject* pOtherPlayer = new CPlayer(*(CPlayer*)pObj);
-	
-	/*CObject* pOtherPlayer = pObj->Clone();
-	pOtherPlayer->SetPos(Vec2(740.f, 360.f));
-	AddObject(pOtherPlayer, GROUP_TYPE::PLAYER);*/
-
 	// Follow Player
 	CCamera::GetInst()->SetTarget(pObj);
 
@@ -161,11 +164,11 @@ void CScene_Start::Enter()
 	Vec2 vResolution = CCore::GetInst()->GetResolution();
 	// 몬스터 배치
 
-	//CMonster* pMon = CMonFactory::CreateMonster(MON_TYPE::NORMAL, vResolution / 2.f - Vec2(0.f, 300));
+	CMonster* pMon = CMonFactory::CreateMonster(MON_TYPE::NORMAL, vResolution / 2.f - Vec2(0.f, 300));
 	// AddObject와 CreateObject는 지연처리 유무에 따라 판단
 	// 예: Scene이 한창 돌아가는 도중 생성이라면 Create 통한 이벤트처리로 해아함
 	//CreateObject(pMon, GROUP_TYPE::MONSTER);
-	//AddObject(pMon, GROUP_TYPE::MONSTER);
+	AddObject(pMon, GROUP_TYPE::MONSTER);
 
 	WEAPON_TYPE eWeaponType = WEAPON_TYPE::GUN;
 	CWeapon* pWeapon = CWeaponFactory::CreateWeapon(eWeaponType, MELEE_TYPE::NONE, GUN_TYPE::M16);
@@ -188,12 +191,12 @@ void CScene_Start::Enter()
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::PLAYER, GROUP_TYPE::TILE_WALL);
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::PLAYER, GROUP_TYPE::CORNER);
 	// Camera Start 지정
-	// 	   위에 해상도 받아다 몬스터 위치지정 하는 코드 있어서 일단 주석처리
+	// 위에 해상도 받아다 몬스터 위치지정 하는 코드 있어서 일단 주석처리
 	//Vec2 vResolution = CCore::GetInst()->GetResolution();
 	CCamera::GetInst()->SetLookAt(vResolution / 2.f);
 	
 	// Camera 효과 지정
-	CCamera::GetInst()->FadeIn(1.f);
+	CCamera::GetInst()->FadeIn(FADEIN_TIME);
 
 	// Scene Enter 말미에 꼭 Start를 넣어주자.
 	start();
@@ -201,21 +204,27 @@ void CScene_Start::Enter()
 
 // 충돌조합 체크박스를 해제하듯이 충돌 그룹 해제해주어야 함
 // 다음 씬에서는 다른 물체끼리의 충돌 검사할 수 있으니까
-void CScene_Start::Exit()
+void CScene_Combat::Exit()
 {
-	CCamera::GetInst()->FadeOut(1.f);
+	// invoke(함수, 시간)
+	// 시간 동안 함수를 실행?
+	// FadeOut 진행 시간 동안 다음 Scene Enter가 실행되지 않도록 하기?
+ 
 	// 씬의 객체 삭제
 	DeleteAll();
+
+	// 콤보 초기화
+	CScoreMgr::GetInst()->ResetCombo();
 
 	// 그룹 충돌 지정 해제
 	CCollisionMgr::GetInst()->Reset();
 }
-
-void CScene_Start::CreateForce()
-{
-	m_vForcePos = CCamera::GetInst()->GetRealPos(MOUSE_POS);
-
-	// 강체를 보유한 모든 물체에게 힘을 전달
-}
+//
+//void CScene_Start::CreateForce()
+//{
+//	m_vForcePos = CCamera::GetInst()->GetRealPos(MOUSE_POS);
+//
+//	// 강체를 보유한 모든 물체에게 힘을 전달
+//}
 
 

@@ -16,6 +16,7 @@ CCamera::CCamera()
 	, m_fSpeed(0.f)
 	, m_fAccTime(0.f)
 	, m_pVeilTex(nullptr)
+	, m_bIsShaking(false)
 {
 	
 }
@@ -24,6 +25,38 @@ CCamera::~CCamera()
 
 }
 
+
+
+void CCamera::Shake(float _fPower, Vec2 _vDir)
+{
+	if (m_bIsShaking)
+	{
+		if (m_pTargetObj)
+		{
+			if (m_pTargetObj->IsDead())
+			{
+				m_pTargetObj = nullptr; // 죽은 객체 사라져서 null참조되면 안 되니까 해제
+			}
+			else
+			{
+				m_tShakeInfo.vShakeDir = _vDir;
+				m_tShakeInfo.iCnt = 0;
+				m_tShakeInfo.vAccMove = Vec2(0.f, 0.f);
+				return;
+			}
+		}
+	}
+
+	m_bIsShaking = true;
+
+	m_tShakeInfo.fDuration = 0.2f;
+	m_tShakeInfo.fCurTime = 0.f;
+	m_tShakeInfo.fPower = _fPower;
+	m_tShakeInfo.iFrequency = 3;
+	m_tShakeInfo.iCnt = 1;
+	m_tShakeInfo.fPeriod = m_tShakeInfo.fDuration / m_tShakeInfo.iFrequency;
+	m_tShakeInfo.vShakeDir = _vDir;
+}
 
 // 카메라 객체 생성 시점 신경 쓸 필요 없이 init을 통해 호출하도록 한다
 void CCamera::init()
@@ -57,7 +90,36 @@ void CCamera::update()
 		if (KEY_HOLD(KEY::LEFT))
 			m_vLookAt.x -= 500.f * fDT;
 	}
-	
+
+	if (m_bIsShaking)
+	{
+		m_tShakeInfo.fCurTime += fDT;
+		
+		// 사인의 미분 결과인 코사인은 사인 그래프의 기울기를 의미한다.
+		// 코사인 그래프의 1주기가 2파이임을 고려해서, 함수의 인자로 넣을 수식을 작성하였다.
+		float x = 2 * PI * m_tShakeInfo.fCurTime / m_tShakeInfo.fPeriod;
+		float dirSign = cos(x);
+		(dirSign > 0) ? (dirSign = 1) : (dirSign = -1);
+		std::cout << dirSign << "\n";
+
+		// 주기가 끝나면 현재시간을 초기화하고, 카운트를 1 증가시킨다.
+		if (m_tShakeInfo.fCurTime >= m_tShakeInfo.fPeriod)
+		{
+			m_tShakeInfo.fCurTime = 0;
+			m_tShakeInfo.iCnt++;
+			if (m_tShakeInfo.iCnt > m_tShakeInfo.iFrequency)
+				m_bIsShaking = false;
+		}
+
+		// 세팅된 방향으로 움직임
+		// '한 프레임에서 증가시킬 거리' 만큼 m_vLookAt에 증가
+		Vec2 vMove = m_tShakeInfo.vShakeDir * dirSign * m_tShakeInfo.fPower * fDT;
+		m_tShakeInfo.vAccMove += vMove;
+		// 고정 > 이동 > 고정 > 이동 > 고정 > 이동 ...
+		// 그럼...
+		// 그래프의 y값만큼 증가시켜주어야 함
+		m_vLookAt += m_tShakeInfo.vAccMove;
+	}
 
 	// 화면 중앙좌표와 카메라 LookAt 차이 계산
 	CalDiff();
@@ -144,12 +206,6 @@ void CCamera::CalDiff()
 			// 이전 위치 + ( 방향 * (속력 * 가속도) * DT )
 			m_vCurLookAt = m_vPrevLookAt + vLookDir.Nomalize() * m_fSpeed * vel * fDT;
 		}
-
-
-		
-
-		// 이전 LookAt + (정규화한 방향벡터*속도)
-		//m_vCurLookAt = m_vPrevLookAt + vLookDir.Nomalize() * m_fSpeed * fDT;
 	}
 	
 	Vec2 vResolution = CCore::GetInst()->GetResolution();

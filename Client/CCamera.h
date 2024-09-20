@@ -14,8 +14,20 @@ enum class CAM_EFFECT
 struct tCamEffect
 {
 	CAM_EFFECT	eEffect;	//카메라 효과
-	float		fDuration; // 최대 지속시간
-	float		fCurTime; // 진행시간
+	float		fDuration;	// 최대 지속시간
+	float		fCurTime;	// 현재 진행시간
+};
+
+struct tCamShakeInfo
+{
+	float	fDuration;  // 지속시간
+	float	fCurTime;	// 현재 진행시간
+	float	fPower;		// 세기
+	int		iFrequency;	// 진동 수
+	int		iCnt;		// 현재 진동 횟수
+	float	fPeriod;	// 주기
+	Vec2	vShakeDir;	// 각도
+	Vec2	vAccMove; // 누적 이동량
 };
 
 
@@ -39,6 +51,11 @@ private:
 	list<tCamEffect> m_listCamEffect;
 	CTexture* m_pVeilTex;		// 카메라 가림막 텍스처 (검은색)
 
+	// shaking에 대한 멤버
+	bool m_bIsShaking;
+	tCamShakeInfo m_tShakeInfo;
+	
+
 public:
 	// 이동 목표 좌표, (초 당) 이동거리(speed), 누적시간을 세팅한다
 	void SetLookAt(Vec2 _vLook)
@@ -57,6 +74,9 @@ public:
 	Vec2 GetRenderPos(Vec2 _vObjPos) { return _vObjPos - m_vDiff; }
 	// 렌더링좌표 > 진짜좌표 변환
 	Vec2 GetRealPos(Vec2 _vRenderPos) { return _vRenderPos + m_vDiff; }
+
+	// Dir 방향으로 f만큼 흔들림
+	void Shake(float _fPower, Vec2 _vDir);
 
 	void FadeIn(float _fDuration) // 밝아짐
 	{

@@ -2,6 +2,7 @@
 #include "CMissile.h"
 #include "CTimeMgr.h"
 #include "CCollider.h"
+#include "CCamera.h"
 
 CMissile::CMissile()
 	: m_fTheta(PI / 2.f)
@@ -46,6 +47,8 @@ void CMissile::OnCollisionEnter(CCollider* _pOther)
 		|| L"Wall" == pObject->GetName()
 		|| L"Player" == pObject->GetName())
 	{
+		if (L"Monster" == pObject->GetName())
+			CCamera::GetInst()->Shake(300.f, m_vDir);
 		DeleteObject(this);
 	}
 }

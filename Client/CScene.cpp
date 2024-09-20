@@ -17,6 +17,8 @@ CScene::CScene()
 	, m_iTileY(0)
 	, m_pPlayer(nullptr)
 	, m_bUIClicked(false)
+	, m_pStage(nullptr)
+	, m_bEnabled(true)
 {
 }
 
@@ -257,18 +259,17 @@ void CScene::DeleteWall(Vec2 vMousePos, WALL_TYPE eType)
 	Vec2 WallPos = Vec2(iCol * TILE_SIZE, iRow * TILE_SIZE);
 
 	HDC dc = CCore::GetInst()->GetMainDC();
-
-
-	vector<CObject*> vWall;
+	
+	const vector<CObject*>& vWall = GetGroupObject(GROUP_TYPE((int(eType)+2)));
 
 	switch (eType)
 	{
 	case WALL_TYPE::WALL:
-		vWall = GetGroupObject(GROUP_TYPE::WALL);
+		//vWall = GetGroupObject(GROUP_TYPE::WALL);
 		break;
 	case WALL_TYPE::CORNER:
 	{
-		vWall = GetGroupObject(GROUP_TYPE::CORNER);
+		//vWall = GetGroupObject(GROUP_TYPE::CORNER);
 		for (int i = 0; i < vWall.size(); ++i)
 		{
 			Vec2 vCompare = vWall[i]->GetPos();
@@ -289,7 +290,7 @@ void CScene::DeleteWall(Vec2 vMousePos, WALL_TYPE eType)
 	}
 		break;
 	case WALL_TYPE::TILE:
-		vWall = GetGroupObject(GROUP_TYPE::TILE_WALL);
+		//vWall = GetGroupObject(GROUP_TYPE::TILE_WALL);
 		break;
 	default:
 		break;
@@ -329,16 +330,20 @@ void CScene::start()
 
 void CScene::update()
 {
-	for (UINT i = 0; i < (UINT)GROUP_TYPE::END; ++i)
+	if (m_bEnabled)
 	{
-		for (size_t j = 0; j < m_arrObj[i].size(); ++j)
+		for (UINT i = 0; i < (UINT)GROUP_TYPE::END; ++i)
 		{
-			if (!m_arrObj[i][j]->IsDead())
+			for (size_t j = 0; j < m_arrObj[i].size(); ++j)
 			{
-				m_arrObj[i][j]->update();
+				if (!m_arrObj[i][j]->IsDead())
+				{
+					m_arrObj[i][j]->update();
+				}
 			}
 		}
 	}
+	
 }
 
 void CScene::finalUpdate()

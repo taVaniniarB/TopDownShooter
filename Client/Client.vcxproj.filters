@@ -35,9 +35,6 @@
     <Filter Include="Engine\05. Scene">
       <UniqueIdentifier>{d5eb394d-d6b3-456f-9efd-bbc6c1cd187c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\05. Scene\Scene_Start">
-      <UniqueIdentifier>{114e2db6-dcfa-4a06-9fc2-37a258c61355}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\05. Scene\Scene_Tool">
       <UniqueIdentifier>{5cf51ea0-e253-457e-af1e-bc44e8c82bdc}</UniqueIdentifier>
     </Filter>
@@ -146,6 +143,33 @@
     <Filter Include="Engine\04. Object\Weapon\Melee">
       <UniqueIdentifier>{8dbecbec-f172-4244-8759-9c9c0ab5aed7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\04. Object\SceneChanger">
+      <UniqueIdentifier>{f1660919-eabf-4e5f-b68f-d0ce403db29d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Object\MousePointer">
+      <UniqueIdentifier>{ee121c0f-1d8e-42a7-a0c6-edc4c9e8d213}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Object\UI\StatUI">
+      <UniqueIdentifier>{f40816a5-18e8-43ce-8933-2d995b67d3b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\03. Manager\ScoreMgr">
+      <UniqueIdentifier>{1cb781f8-9b6d-496d-8062-93bd71837aa4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\05. Scene\ComabtScene">
+      <UniqueIdentifier>{5c833a21-65a7-4d92-be7e-6965ebf785dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\05. Scene\StoryScene">
+      <UniqueIdentifier>{fd4b3760-74e5-4131-9da6-7c10f10dbea8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\05. Scene\Stage">
+      <UniqueIdentifier>{f6aab05f-5584-4418-8f15-63d011a2dd99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\05. Scene\ComabtScene\Scene_Start">
+      <UniqueIdentifier>{114e2db6-dcfa-4a06-9fc2-37a258c61355}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\05. Scene\Scene_Main">
+      <UniqueIdentifier>{bda6eda4-737c-4391-b0ff-67023778add1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CCore.h">
@@ -186,7 +210,7 @@
       <Filter>Engine\03. Manager\SceneMgr</Filter>
     </ClInclude>
     <ClInclude Include="CScene_Start.h">
-      <Filter>Engine\05. Scene\Scene_Start</Filter>
+      <Filter>Engine\05. Scene\ComabtScene\Scene_Start</Filter>
     </ClInclude>
     <ClInclude Include="CPlayer.h">
       <Filter>Engine\04. Object\Player</Filter>
@@ -299,6 +323,27 @@
     <ClInclude Include="CWeaponFactory.h">
       <Filter>Engine\09. Factory</Filter>
     </ClInclude>
+    <ClInclude Include="CSceneChanger.h">
+      <Filter>Engine\04. Object\SceneChanger</Filter>
+    </ClInclude>
+    <ClInclude Include="CMousePtr.h">
+      <Filter>Engine\04. Object\MousePointer</Filter>
+    </ClInclude>
+    <ClInclude Include="CStatUI.h">
+      <Filter>Engine\04. Object\UI\StatUI</Filter>
+    </ClInclude>
+    <ClInclude Include="CScoreMgr.h">
+      <Filter>Engine\03. Manager\ScoreMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="CCombatScene.h">
+      <Filter>Engine\05. Scene\ComabtScene</Filter>
+    </ClInclude>
+    <ClInclude Include="CStage.h">
+      <Filter>Engine\05. Scene\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene_Main.h">
+      <Filter>Engine\05. Scene\Scene_Main</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
@@ -334,7 +379,7 @@
       <Filter>Engine\03. Manager\SceneMgr</Filter>
     </ClCompile>
     <ClCompile Include="CScene_Start.cpp">
-      <Filter>Engine\05. Scene\Scene_Start</Filter>
+      <Filter>Engine\05. Scene\ComabtScene\Scene_Start</Filter>
     </ClCompile>
     <ClCompile Include="CPlayer.cpp">
       <Filter>Engine\04. Object\Player</Filter>
@@ -443,6 +488,27 @@
     </ClCompile>
     <ClCompile Include="CWeaponFactory.cpp">
       <Filter>Engine\09. Factory</Filter>
+    </ClCompile>
+    <ClCompile Include="CSceneChanger.cpp">
+      <Filter>Engine\04. Object\SceneChanger</Filter>
+    </ClCompile>
+    <ClCompile Include="CMousePtr.cpp">
+      <Filter>Engine\04. Object\MousePointer</Filter>
+    </ClCompile>
+    <ClCompile Include="CStatUI.cpp">
+      <Filter>Engine\04. Object\UI\StatUI</Filter>
+    </ClCompile>
+    <ClCompile Include="CScoreMgr.cpp">
+      <Filter>Engine\03. Manager\ScoreMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="CCombatScene.cpp">
+      <Filter>Engine\05. Scene\ComabtScene</Filter>
+    </ClCompile>
+    <ClCompile Include="CStage.cpp">
+      <Filter>Engine\05. Scene\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_Main.cpp">
+      <Filter>Engine\05. Scene\Scene_Main</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

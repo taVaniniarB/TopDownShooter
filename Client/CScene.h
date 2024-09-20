@@ -9,6 +9,7 @@
 // 구체적으로는 모르고, 이런 애가 있다~ 정도만 알게되는거임
 // 타입에 대한 구체적 정보가 없기 때문에 포인터로밖에 사용이 안 됨
 class CObject;
+class CStage;
 
 class CScene
 {
@@ -24,7 +25,11 @@ private:
 
 	CObject*			m_pPlayer; // Player
 
-	bool m_bUIClicked; // 이번 프레임 클릭이 UI 클릭인가?
+	bool				m_bUIClicked; // 이번 프레임 클릭이 UI 클릭인가?
+
+	CStage*				m_pStage; // 본인 소속 Stage
+
+	bool				m_bEnabled; // 활성화 여부
 
 public:
 	void SetName(const wstring& _strName) { m_strName = _strName; }
@@ -37,6 +42,8 @@ public:
 	UINT GetTileY() { return m_iTileY; }
 
 	CObject* GetPlayer() { return m_pPlayer; }
+
+	CStage* GetStage() { return m_pStage; }
 
 	virtual void start();
 	virtual void update();
@@ -57,6 +64,8 @@ public:
 	virtual void Enter() = 0;
 	// 씬에서 빠질 때 호출
 	virtual void Exit() = 0;
+
+	void SetEnabled(bool _b) { m_bEnabled = _b; }
 
 public:
 

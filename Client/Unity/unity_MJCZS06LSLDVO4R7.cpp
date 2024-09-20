@@ -20,14 +20,11 @@
 #include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CCollisionMgr.cpp"
 
 
+#include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CCombatScene.cpp"
+
+
 #include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CCore.cpp"
 
 
 #include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CEventMgr.cpp"
-
-
-#include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CGravity.cpp"
-
-
-#include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CGun.cpp"
 

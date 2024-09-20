@@ -6,6 +6,8 @@
 #include "CTimeMgr.h"
 #include "CCollider.h"
 
+#include "CTexture.h"
+
 CMonster::CMonster()
 	: m_tInfo{}
 	, m_pAI(nullptr)
@@ -27,6 +29,25 @@ void CMonster::update()
 	{
 		m_pAI->update();
 	}
+}
+
+void CMonster::render(HDC _dc)
+{
+	Vec2 vPos = CCamera::GetInst()->GetRenderPos(GetPos());
+	Vec2 vScale = GetScale();
+	CTexture* pTex = GetTexture();
+
+	TransparentBlt(_dc
+		, (int)(vPos.x - vScale.x / 2.f)
+		, (int)(vPos.y - vScale.y / 2.f)
+		, (int)(vScale.x)
+		, (int)(vScale.y)
+		, pTex->GetDC()
+		, (int)(0) // 이미지 상 좌상단좌표 x,y
+		, (int)(0)
+		, (int)(vScale.x)
+		, (int)(vScale.y)
+		, RGB(255, 0, 255));
 }
 
 // AI - 몬스터가 서로를 알도록 함

@@ -192,26 +192,26 @@ void CPlayer::update_move()
 
 	if (KEY_HOLD(KEY::W))
 	{
-		vPlayerMoveVec += Vec2(0.f, -200.f);
+		vPlayerMoveVec += Vec2(0.f, -1.f);
 	}
 	if (KEY_HOLD(KEY::S))
 	{
-		vPlayerMoveVec += Vec2(0.f, 200.f);
+		vPlayerMoveVec += Vec2(0.f, 1.f);
 	}
 	if (KEY_HOLD(KEY::A))
 	{
-		vPlayerMoveVec += Vec2(-200.f, 0.f);
+		vPlayerMoveVec += Vec2(-1.f, 0.f);
 	}
 	if (KEY_HOLD(KEY::D))
 	{
-		vPlayerMoveVec += Vec2(200.f, 0.f);
+		vPlayerMoveVec += Vec2(1.f, 0.f);
 	}
 
 
 	if (!vPlayerMoveVec.isZero())
 	{
 		vPlayerMoveVec.Nomalize();
-		pRigid->SetVelocity(vPlayerMoveVec * 200.f);
+		pRigid->SetVelocity(vPlayerMoveVec * 250.f);
 	}
 
 

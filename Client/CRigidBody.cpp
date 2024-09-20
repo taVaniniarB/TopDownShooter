@@ -8,8 +8,9 @@ CRigidBody::CRigidBody()
 	: m_pOwner(nullptr)
 	, m_fMass(1.f)
 	, m_fFricCoeff(1000.f)
-	, m_fMaxVelocity(300.f)
+	, m_fMaxVelocity(400.f)
 	, m_bGround(false)
+	, m_eGroundWallDir(WALL_DIR::END)
 {
 }
 
