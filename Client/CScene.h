@@ -100,6 +100,8 @@ public:
 	void LoadWall(const wstring& _strRelativePath, FILE* pFile);
 	void LoadPlayer(const wstring& _strRelativePath, FILE* pFile);
 	void LoadMonster(const wstring& _strRelativePath, FILE* pFile);
+	void LoadSceneChanger(const wstring& _strRelativePath, FILE* pFile);
+
 	void LoadScene(const wstring& _strRelativePath);
 
 public:

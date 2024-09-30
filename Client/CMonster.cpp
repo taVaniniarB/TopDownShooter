@@ -25,7 +25,7 @@ CMonster::~CMonster()
 
 void CMonster::update()
 {
-	if (!GetEnabled())
+	if (CSceneMgr::GetInst()->GetCurScene()->GetName() == L"Tool Scene")
 		return;
 
 	if (nullptr != m_pAI)

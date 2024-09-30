@@ -27,7 +27,7 @@ CPlayer::CPlayer()
 	// 자식쪽에서 부모에구현된 컴포넌트 생성 함수(Create)를 호출하여 컴포넌트를 생성하고
 	// 컴포넌트의 기능을 이용할 땐 Getter 사용하여 해당 컴포넌트 주소를 받아온 다음
 	// 포인터 역참조로 함수를 실행한다
-
+	SetName(L"Player");
 	CreateCollider();
 	GetCollider()->SetOffsetPos(Vec2(0.f, 3.f));
 	GetCollider()->SetScale(Vec2(15.f, 15.f));
@@ -47,6 +47,9 @@ CPlayer::CPlayer()
 	GetAnimator()->LoadAnimation(L"animation\\player_idle_right.anim");
 	GetAnimator()->LoadAnimation(L"animation\\player_run.anim");
 	GetAnimator()->LoadAnimation(L"animation\\player_jump.anim");
+
+	if (CSceneMgr::GetInst()->GetCurScene()->GetName() == L"Tool Scene")
+		SetEnabled(false);
 	
 	//
 	//// Animator 안에 있는 IDLE이라는 Animation이 이 텍스처를 참조하고 이런 정보들을 참조했을 때
@@ -82,7 +85,6 @@ CPlayer::~CPlayer()
 
 void CPlayer::update()
 {
-
 	if (GetEnabled())
 		update_move();
 
@@ -314,24 +316,6 @@ void CPlayer::update_animation()
 		break;
 	}
 }
-//
-//void CPlayer::update_gravity()
-//{
-//	// 바닥에 붙어 있는 상태 = 이미 중력 '상쇄' 중이므로 가속도를 따로 붙이지 않음
-//	// 그러다가 허공에 뜬 상태가 됐을 때, 아래로 향하는 가속도를 붙여준다
-//	
-//	if (!GetGravity()->GetGround())
-//	{
-//		GetRigidBody()->SetAccelAlpha(Vec2(0.f, 500.f));
-//	}
-//
-//	// 점프를 해서 공중에 뜨는 그 '순간'부터 중력 적용됨
-//	// 점프란 공중을 향해 '힘'을 준 것...이지만
-//	// 게임적 허용으로, 점프 방향으로 바로 '속도'를 줌
-//
-//	// 중력은 고정 가속도를 부여한다
-//	// 즉 일정한 가속도를 적용시킨다
-//}
 
 void CPlayer::DropWeapon()
 {

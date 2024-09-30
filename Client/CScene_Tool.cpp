@@ -32,6 +32,14 @@
 void ChangeScene(DWORD_PTR, DWORD_PTR);
 
 
+
+
+// 할거: 씬 전환 시 플레이어 생기기 전에 몬스터의 업데이트가 도는 것 같으다??
+
+
+
+
+
 CScene_Tool::CScene_Tool()
 	: m_pUI(nullptr)
 	, m_iSelectedTileIdx(-1)
@@ -166,7 +174,7 @@ void CScene_Tool::Enter()
 		CBtnUI* pMonSelectUI = new CBtnUI;
 		pMonSelectUI->SetScale(Vec2(50.f, 50.f));
 		pMonSelectUI->SetPos(Vec2(50.f, 220.f));
-		pMonSelectUI->SetName(L"Monster");
+		pMonSelectUI->SetName(L"Mon");
 		((CBtnUI*)pMonSelectUI)->SetClickedCallBack(this, (SCENE_MEMFUNC)&CScene_Tool::SetSelectedMosnter);
 		pTilePanelUI->AddChild(pMonSelectUI);
 	}
@@ -176,7 +184,7 @@ void CScene_Tool::Enter()
 		CBtnUI* pSCSelectUI = new CBtnUI;
 		pSCSelectUI->SetScale(Vec2(50.f, 50.f));
 		pSCSelectUI->SetPos(Vec2(50.f, 280.f));
-		pSCSelectUI->SetName(L"Monster");
+		pSCSelectUI->SetName(L"SC");
 		((CBtnUI*)pSCSelectUI)->SetClickedCallBack(this, (SCENE_MEMFUNC)&CScene_Tool::SetSelectedSC);
 		pTilePanelUI->AddChild(pSCSelectUI);
 	}
@@ -267,7 +275,7 @@ void CScene_Tool::update()
 				break;
 			}
 			// 클릭: wsad + 클릭: 해당 위치의 벽 생성
-			if (KEY_HOLD(KEY::LBTN))
+			if (KEY_TAP(KEY::LBTN))
 			{
 				if (KEY_HOLD(KEY::W))
 				{
@@ -602,6 +610,10 @@ void CScene_Tool::SaveScene(const wstring& _strFilePath)
 	}
 
 	// Scene Changer 저장
+	// 타입 먼저 저장
+	const vector<CObject*>& vecSC = GetGroupObject(GROUP_TYPE::SCENE_CHANGER);
+	if (vecSC.size() >= 1)
+		((CSceneChanger*)vecSC[0])->Save(pFile);
 	
 	// 기타 오브젝트 저장
 

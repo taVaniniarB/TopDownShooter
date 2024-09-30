@@ -51,6 +51,8 @@ public:
         m_param1 = _param1;
     }
 
+    virtual void render(HDC _dc);
+
     CLONE(CBtnUI);
 
 public:

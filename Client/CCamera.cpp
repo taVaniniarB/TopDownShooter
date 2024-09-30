@@ -184,9 +184,20 @@ void CCamera::CalDiff()
 {
 	m_fAccTime += fDT;
 
-	// 시간 초과 시, 도착 지점으로 세팅
-	if (m_fAccTime >= m_fTime)
+	if (m_pTargetObj)
 	{
+		if (m_pTargetObj->IsDead())
+		{
+			m_pTargetObj = nullptr; // 죽은 객체 사라져서 null참조되면 안 되니까 해제
+		}
+		else
+		{
+			m_vCurLookAt = m_vLookAt;
+		}
+	}
+	else if (m_fAccTime >= m_fTime)
+	{
+		// 시간 초과 시, 도착 지점으로 세팅
 		m_vCurLookAt = m_vLookAt;
 	}
 	else
@@ -213,6 +224,4 @@ void CCamera::CalDiff()
 
 	m_vDiff = m_vCurLookAt - vCenter;
 	m_vPrevLookAt = m_vCurLookAt;
-
-	
 }

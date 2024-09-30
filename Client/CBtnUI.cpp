@@ -3,6 +3,7 @@
 #include "CScene.h"
 //#include "CObject.h"
 
+
 CBtnUI::CBtnUI()
 	: CUI(false)
 	, m_pFunc(nullptr)
@@ -58,3 +59,22 @@ void CBtnUI::MouseLbtnClicked()
 	}
 }
 
+
+void CBtnUI::render(HDC _dc)
+{
+	Vec2 vPos = GetFinalPos();
+	Vec2 vScale = GetScale();
+	Rectangle(_dc
+		, (int)(vPos.x)
+		, (int)(vPos.y)
+		, (int)(vPos.x + vScale.x)
+		, (int)(vPos.y + vScale.y));
+
+	wchar_t strName[50] = {};
+
+	wcscpy_s(strName, GetName().c_str());
+
+	SetTextColor(_dc, RGB(0, 0, 0));   // 텍스트 색상 (검정)
+	SetBkMode(_dc, TRANSPARENT);       // 배경 투명 설정
+	TextOut(_dc, (int)(vPos.x + 5), (int)(vPos.y + 5), strName, wcslen(strName)); // 텍스트 출력 위치 (사각형의 좌측 상단)
+}

@@ -75,14 +75,6 @@ void CScene_Combat::update()
 	}
 	*/
 
-	// Scene 교체
-	// 나중에 SceneChanger - OncollisionEnter로 옮겨주자
-	if (KEY_TAP(KEY::ENTER))
-	{
-		CCamera::GetInst()->FadeOut(FADEOUT_TIME);
-		CScene::SetEnabled(false);
-		CSceneMgr::GetInst()->SetSceneChange(true, SCENE_TYPE::TOOL);
-	}
 	//if (KEY_TAP(KEY::LBTN))
 	//{
 	//	// 마우스 좌표를 알아와서 거기를 Lookat으로 잡자
@@ -141,16 +133,23 @@ void CScene_Combat::Enter()
 	// 충돌 가능한 조합...을 만들어주는 개념 (마치 체크박스처럼)
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::MONSTER, GROUP_TYPE::PROJ_PLAYER); // 몬스터-pl총알
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::PLAYER, GROUP_TYPE::DROPPED_WEAPON); // 떨어진무기-플레이어
+	
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::PROJ_PLAYER, GROUP_TYPE::WALL); // 벽-플레이어 총알
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::PROJ_PLAYER, GROUP_TYPE::TILE_WALL); // 벽-플레이어 총알
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::PROJ_PLAYER, GROUP_TYPE::CORNER); // 벽-플레이어 총알
+	
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::PLAYER, GROUP_TYPE::WALL);
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::PLAYER, GROUP_TYPE::TILE_WALL);
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::PLAYER, GROUP_TYPE::CORNER);
+
+	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::MONSTER, GROUP_TYPE::WALL); // 몬스터-벽
+	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::MONSTER, GROUP_TYPE::TILE_WALL);
+	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::MONSTER, GROUP_TYPE::CORNER);
+
+	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::PLAYER, GROUP_TYPE::SCENE_CHANGER);
 	
 	
 	// Camera Start 지정
-	// 위에 해상도 받아다 몬스터 위치지정 하는 코드 있어서 일단 주석처리
 	//Vec2 vResolution = CCore::GetInst()->GetResolution();
 	//CCamera::GetInst()->SetLookAt(vResolution / 2.f);
 	

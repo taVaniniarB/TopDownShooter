@@ -36,6 +36,10 @@ void CCollisionMgr::update()
 
 void CCollisionMgr::CollisionUpdateGroup(GROUP_TYPE _eLeft, GROUP_TYPE _eRight)
 {
+	if (_eRight == GROUP_TYPE::PLAYER)
+		int a = 0;
+
+
 	CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
 	
 	// 레퍼런스란 별칭 / 동일시의 개념

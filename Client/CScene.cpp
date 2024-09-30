@@ -369,7 +369,6 @@ void CScene::update()
 			}
 		}
 	}
-	
 }
 
 void CScene::finalUpdate()
@@ -541,6 +540,15 @@ void CScene::LoadMonster(const wstring& _strRelativePath, FILE* _pFile)
 	}
 }
 
+void CScene::LoadSceneChanger(const wstring& _strRelativePath, FILE* _pFile)
+{
+	SCENE_TYPE eScene;
+	fread(&eScene, sizeof(SCENE_TYPE), 1, _pFile);
+	CSceneChanger* pSceneChanger = new CSceneChanger(eScene);
+	pSceneChanger->Load(_pFile);
+}
+
+
 void CScene::LoadScene(const wstring& _strRelativePath)
 {
 	wstring strFilePath = CPathMgr::GetInst()->GetContentPath();
@@ -557,8 +565,7 @@ void CScene::LoadScene(const wstring& _strRelativePath)
 	LoadWall(strFilePath, pFile);
 	LoadPlayer(strFilePath, pFile);
 	LoadMonster(strFilePath, pFile);
-
-	// LoadSceneChanger(strFilePath, pFile);
+	LoadSceneChanger(strFilePath, pFile);
 	// LoadObject(strFilePath, pFile);
 
 

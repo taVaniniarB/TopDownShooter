@@ -80,7 +80,7 @@ void CWall::render(HDC _dc)
 		, iCurRow * TILE_SIZE
 		, SRCCOPY);
 
-	//component_render(_dc);
+	component_render(_dc);
 }
 
 // 충돌체에서 충돌 이벤트 발생 시 실행될 함수
@@ -321,10 +321,30 @@ void CWall::Load(FILE* _pFile)
 	// 텍스쳐 인덱스 멤버 채우기
 	fread(&m_iImgIdx, sizeof(int), 1, _pFile);
 
-	GROUP_TYPE eType;
-	fread(&eType, sizeof(GROUP_TYPE), 1, _pFile);
 
+	WALL_TYPE eType;
 	CScene* pScene = CSceneMgr::GetInst()->GetCurScene();
-	int iType = (int)eType + 2;
-	pScene->AddObject(this, (GROUP_TYPE)iType);
+	GROUP_TYPE groupType = GROUP_TYPE::END;
+
+	fread(&eType, sizeof(WALL_TYPE), 1, _pFile);
+
+
+	switch (eType)
+	{
+	case WALL_TYPE::TILE:
+		groupType = GROUP_TYPE::TILE_WALL;
+		break;
+	case WALL_TYPE::WALL:
+		groupType = GROUP_TYPE::WALL;
+		break;
+	case WALL_TYPE::CORNER:
+		groupType = GROUP_TYPE::CORNER;
+		break;
+	default:
+		break;
+	}
+
+	pScene->AddObject(this, groupType);
+
+	
 }

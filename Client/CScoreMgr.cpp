@@ -34,8 +34,6 @@ void CScoreMgr::update()
 		}
 	}
 	
-
-
 	m_fCurTime += fDT;
 
 	if (m_fCurTime > m_fComboTime)

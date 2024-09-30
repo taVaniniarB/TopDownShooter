@@ -2,6 +2,8 @@
 #include "CCollider.h"
 
 #include "SelectGDI.h"
+#include "CSceneMgr.h"
+#include "CScene.h"
 
 CSceneChanger::CSceneChanger(SCENE_TYPE _eType)
 	: m_eScene(_eType)
@@ -15,13 +17,7 @@ CSceneChanger::~CSceneChanger()
 {
 }
 
-void CSceneChanger::OnCollisionEnter(CCollider* _pOther)
-{
-	if (m_bActive && _pOther->GetObj()->GetName() == L"Player")
-	{
-		ChangeScene(m_eScene);
-	}
-}
+
 
 void CSceneChanger::update()
 {
@@ -54,4 +50,44 @@ void CSceneChanger::render(HDC _dc)
 	TextOut(_dc, (int)(vRenderPos.x), (int)(vRenderPos.y), strName, wcslen(strName)); // 텍스트 출력 위치
 
 #endif
+}
+
+void CSceneChanger::OnCollisionEnter(CCollider* _pOther)
+{
+	CObject* pOtherObj = _pOther->GetObj();
+	if (/*m_bActive &&*/ pOtherObj->GetName() == L"Player")
+	{
+		m_bActive = false;
+		CCamera::GetInst()->FadeOut(FADEOUT_TIME);
+		CSceneMgr::GetInst()->GetCurScene()->SetEnabled(false);
+		CSceneMgr::GetInst()->SetSceneChange(true, m_eScene);
+	}
+}
+
+void CSceneChanger::start()
+{
+	Vec2 vScale = GetScale();
+	GetCollider()->SetScale(vScale);
+}
+
+void CSceneChanger::Save(FILE* _pFile)
+{
+	fwrite(&m_eScene, sizeof(SCENE_TYPE), 1, _pFile);
+
+	Vec2 vPos = GetPos();
+	fwrite(&vPos, sizeof(Vec2), 1, _pFile);
+	Vec2 vScale = GetScale();
+	fwrite(&vScale, sizeof(Vec2), 1, _pFile);
+}
+
+void CSceneChanger::Load(FILE* _pFile)
+{
+	Vec2 vPos, vScale = {};
+	fread(&vPos, sizeof(Vec2), 1, _pFile);
+	SetPos(vPos);
+	fread(&vScale, sizeof(Vec2), 1, _pFile);
+	SetScale(vScale);
+
+	CScene* pScene = CSceneMgr::GetInst()->GetCurScene();
+	pScene->AddObject(this, GROUP_TYPE::SCENE_CHANGER);
 }
