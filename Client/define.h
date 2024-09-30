@@ -80,6 +80,7 @@ enum class PEN_TYPE
 	RED,
 	GREEN,
 	BLUE,
+	YELLOW,
 	END,
 };
 
@@ -121,4 +122,10 @@ enum class WALL_TYPE
 	WALL,
 	CORNER,
 	NONE,
+};
+
+enum class MON_TYPE
+{
+	NORMAL,
+	RANGE,
 };

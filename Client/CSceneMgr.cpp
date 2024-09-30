@@ -30,7 +30,7 @@ CSceneMgr::~CSceneMgr()
 void CSceneMgr::init()
 {
 	// 모든 Scene들 생성해놓고 전환해줄 것
-	m_arrScene[(UINT)SCENE_TYPE::STAGE_01] = new CScene_Combat(L"scene\\lab");
+	m_arrScene[(UINT)SCENE_TYPE::STAGE_01] = new CScene_Combat(L"scene\\monsterandplayer");
 	m_arrScene[(UINT)SCENE_TYPE::STAGE_01]->SetName(L"Lab Scene");
 
 	m_arrScene[(UINT)SCENE_TYPE::STAGE_02] = new CScene_Combat(L"scene\\test");

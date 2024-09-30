@@ -18,12 +18,19 @@ private:
     tMonInfo m_tInfo;
     AI*    m_pAI;
     CWeapon* m_pWeapon;
+    MON_TYPE m_eType;
 
 public:
     float GetSpeed() { return m_tInfo.fSpeed; }
     void SetSpeed(float _f) { m_tInfo.fSpeed = _f; }
     void SetAI(AI* _AI);
+    void SetType(MON_TYPE _type) { m_eType = _type; }
+    MON_TYPE GetType() { return m_eType; }
     const tMonInfo& GetInfo() { return m_tInfo; } // 구조체 크기가 크므로 레퍼런스 사용
+
+public:
+    void Save(FILE* _pFile);
+    void Load(FILE* _pFile);
 
 private:
     // 아무나 몬스터 스탯을 바꾸면 안 되기 때문에 private

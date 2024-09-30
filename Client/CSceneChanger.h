@@ -14,7 +14,12 @@ public:
 	void OnCollisionEnter(CCollider* _pOther);
 
 public:
-	CSceneChanger();
+	virtual void update();
+	virtual void render(HDC _dc);
+	CLONE(CSceneChanger);
+
+public:
+	CSceneChanger(SCENE_TYPE _eScene);
 	~CSceneChanger();
 };
 

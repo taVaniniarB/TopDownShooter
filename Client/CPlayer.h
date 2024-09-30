@@ -65,6 +65,10 @@ public:
     virtual void OnCollision(CCollider* _pOther);
     virtual void OnCollisionEnter(CCollider* _pOther);
 
+public:
+    void Save(FILE* _pFile);
+    void Load(FILE* _pFile);
+
     CLONE(CPlayer);
 
 public:

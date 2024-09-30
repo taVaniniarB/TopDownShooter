@@ -9,7 +9,8 @@
 #include "CCamera.h"
 #include "CCore.h"
 #include "CPlayer.h"
-
+#include "CMonster.h"
+#include "CSceneChanger.h"
 
 
 
@@ -322,6 +323,7 @@ void CScene::SpawnPlayer(Vec2 vMousePos)
 	pObj->SetPos(vMousePos);
 	pObj->SetName(L"Player");
 	pObj->SetScale(Vec2(100.f, 100.f));
+	pObj->SetEnabled(false);
 	AddObject(pObj, GROUP_TYPE::PLAYER);
 }
 
@@ -331,6 +333,14 @@ void CScene::SpawnMonster(Vec2 vMousePos)
 	CObject* pObj = (CObject*)pMon;
 	pObj->SetEnabled(false);
 	AddObject(pObj, GROUP_TYPE::MONSTER);
+}
+
+void CScene::CreateSceneChanger(Vec2 vPos, Vec2 vScale, SCENE_TYPE _eScene)
+{
+	CObject* pObj = new CSceneChanger(_eScene);
+	pObj->SetPos(vPos);
+	pObj->SetScale(vScale);
+	AddObject(pObj, GROUP_TYPE::SCENE_CHANGER);
 }
 
 void CScene::start()
@@ -504,6 +514,33 @@ void CScene::LoadWall(const wstring& _strRelativePath, FILE* _pFile)
 
 }
 
+void CScene::LoadPlayer(const wstring& _strRelativePath, FILE* _pFile)
+{
+	CPlayer* pPlayer = new CPlayer;
+	pPlayer->Load(_pFile);
+}
+
+void CScene::LoadMonster(const wstring& _strRelativePath, FILE* _pFile)
+{
+	UINT size = 0;
+
+	fread(&size, sizeof(UINT), 1, _pFile);
+
+	// 수량에 맞는 Monster 생성
+	for (UINT i = 0; i < size; ++i)
+	{
+		MON_TYPE type;
+		fread(&type, sizeof(MON_TYPE), 1, _pFile);
+		
+		Vec2 vPos;
+		fread(&vPos, sizeof(vPos), 1, _pFile);
+
+		CMonster* pMon = CMonFactory::CreateMonster(type, vPos);
+
+		pMon->Load(_pFile);
+	}
+}
+
 void CScene::LoadScene(const wstring& _strRelativePath)
 {
 	wstring strFilePath = CPathMgr::GetInst()->GetContentPath();
@@ -518,11 +555,11 @@ void CScene::LoadScene(const wstring& _strRelativePath)
 
 	LoadTile(strFilePath, pFile);
 	LoadWall(strFilePath, pFile);
+	LoadPlayer(strFilePath, pFile);
+	LoadMonster(strFilePath, pFile);
 
-	// LoadEntity(strFilePath, pFile) //플레이어, 몬스터, NPC 등 상호작용체
-	// LoadSceneChanger(strFilePath, pFile)
-	// LoadObject(strFilePath, pFile)
-	// LoadNPC(strFilePath, pFile)
+	// LoadSceneChanger(strFilePath, pFile);
+	// LoadObject(strFilePath, pFile);
 
 
 	fclose(pFile);

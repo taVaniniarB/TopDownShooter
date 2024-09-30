@@ -1,16 +1,16 @@
 #include "pch.h"
 #include "CMonster.h"
-
 #include "AI.h"
-
 #include "CTimeMgr.h"
 #include "CCollider.h"
-
 #include "CTexture.h"
+#include "CSceneMgr.h"
+#include "CScene.h"
 
 CMonster::CMonster()
 	: m_tInfo{}
 	, m_pAI(nullptr)
+	, m_pWeapon(nullptr)
 {
 	CreateCollider();
 	GetCollider()->SetScale(Vec2(40.f, 40.f));
@@ -25,7 +25,10 @@ CMonster::~CMonster()
 
 void CMonster::update()
 {
-	if (nullptr != m_pAI && GetEnabled())
+	if (!GetEnabled())
+		return;
+
+	if (nullptr != m_pAI)
 	{
 		m_pAI->update();
 	}
@@ -55,6 +58,20 @@ void CMonster::SetAI(AI* _AI)
 {
 	m_pAI = _AI;
 	_AI->m_pOwner = this;
+}
+
+void CMonster::Save(FILE* _pFile)
+{
+	fwrite(&m_eType, sizeof(MON_TYPE), 1, _pFile);
+
+	Vec2 vPos = GetPos();
+	fwrite(&vPos, sizeof(Vec2), 1, _pFile);
+}
+
+void CMonster::Load(FILE* _pFile)
+{
+	CScene* pScene = CSceneMgr::GetInst()->GetCurScene();
+	pScene->AddObject(this, GROUP_TYPE::MONSTER);
 }
 
 void CMonster::OnCollisionEnter(CCollider* _pOther)

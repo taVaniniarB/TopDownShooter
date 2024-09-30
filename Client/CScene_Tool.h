@@ -8,7 +8,7 @@ enum class SELECT_OPTION
 	MONSTER,
 	WALL,
 	PLAYER,
-
+	SCENE_CHANGER,
 
 	NONE,
 };
@@ -36,8 +36,15 @@ private:
 	WALL_DIR m_eSelectedWallDir;
 	WALL_DIR m_eSelectedWallDir2;
 
+	// 드래그 기능 구현 위한 시작점과 끝점
+	Vec2 m_vStartPos;
+	Vec2 m_vEndPos;
+	Vec2 m_vSCScale;
+	Vec2 m_vSCPos;
+
 	// 그리드 표시
 	bool m_bGrid;
+	bool m_bDrawingSqare;
 
 public:
 	virtual void Enter();
@@ -67,6 +74,7 @@ public:
 	void SetSelectedTileWall(int _idx);
 	void SetSelectedPlayer();
 	void SetSelectedMosnter();
+	void SetSelectedSC();
 
 
 	// 벽

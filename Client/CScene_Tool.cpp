@@ -22,6 +22,10 @@
 #include "CTexture.h"
 #include "CWall.h"
 
+#include "CPlayer.h"
+#include "CMonster.h"
+#include "CSceneChanger.h"
+
 #include "SelectGDI.h"
 
 // 함수포인터 인자 전달해야 하는데 전역함수가 아래에 있어서 전방선언
@@ -149,22 +153,32 @@ void CScene_Tool::Enter()
 
 	// 플레이어 버튼
 	{
-		CBtnUI* pTileSelectUI = new CBtnUI;
-		pTileSelectUI->SetScale(Vec2(50.f, 50.f));
-		pTileSelectUI->SetPos(Vec2(0.f, 220.f));
-		pTileSelectUI->SetName(L"Player");
-		((CBtnUI*)pTileSelectUI)->SetClickedCallBack(this, (SCENE_MEMFUNC)&CScene_Tool::SetSelectedPlayer);
-		pTilePanelUI->AddChild(pTileSelectUI);
+		CBtnUI* pPlayerSelectUI = new CBtnUI;
+		pPlayerSelectUI->SetScale(Vec2(50.f, 50.f));
+		pPlayerSelectUI->SetPos(Vec2(0.f, 220.f));
+		pPlayerSelectUI->SetName(L"Player");
+		((CBtnUI*)pPlayerSelectUI)->SetClickedCallBack(this, (SCENE_MEMFUNC)&CScene_Tool::SetSelectedPlayer);
+		pTilePanelUI->AddChild(pPlayerSelectUI);
 	}
 
 	// 몬스터 버튼
 	{
-		CBtnUI* pTileSelectUI = new CBtnUI;
-		pTileSelectUI->SetScale(Vec2(50.f, 50.f));
-		pTileSelectUI->SetPos(Vec2(50.f, 220.f));
-		pTileSelectUI->SetName(L"Monster");
-		((CBtnUI*)pTileSelectUI)->SetClickedCallBack(this, (SCENE_MEMFUNC)&CScene_Tool::SetSelectedMosnter);
-		pTilePanelUI->AddChild(pTileSelectUI);
+		CBtnUI* pMonSelectUI = new CBtnUI;
+		pMonSelectUI->SetScale(Vec2(50.f, 50.f));
+		pMonSelectUI->SetPos(Vec2(50.f, 220.f));
+		pMonSelectUI->SetName(L"Monster");
+		((CBtnUI*)pMonSelectUI)->SetClickedCallBack(this, (SCENE_MEMFUNC)&CScene_Tool::SetSelectedMosnter);
+		pTilePanelUI->AddChild(pMonSelectUI);
+	}
+
+	// SceneChanger 버튼
+	{
+		CBtnUI* pSCSelectUI = new CBtnUI;
+		pSCSelectUI->SetScale(Vec2(50.f, 50.f));
+		pSCSelectUI->SetPos(Vec2(50.f, 280.f));
+		pSCSelectUI->SetName(L"Monster");
+		((CBtnUI*)pSCSelectUI)->SetClickedCallBack(this, (SCENE_MEMFUNC)&CScene_Tool::SetSelectedSC);
+		pTilePanelUI->AddChild(pSCSelectUI);
 	}
 
 
@@ -253,7 +267,7 @@ void CScene_Tool::update()
 				break;
 			}
 			// 클릭: wsad + 클릭: 해당 위치의 벽 생성
-			if (KEY_TAP(KEY::LBTN))
+			if (KEY_HOLD(KEY::LBTN))
 			{
 				if (KEY_HOLD(KEY::W))
 				{
@@ -309,6 +323,12 @@ void CScene_Tool::update()
 		{
 			if (KEY_TAP(KEY::LBTN))
 			{
+				const vector<CObject*>& playerVec = GetGroupObject(GROUP_TYPE::PLAYER);
+				if (playerVec.size() >= 1)
+				{
+					// 기존의 player를 삭제
+					DeleteObject(playerVec[0]);
+				}
 				CScene::SpawnPlayer(vMousePos);
 			}
 		}
@@ -317,7 +337,76 @@ void CScene_Tool::update()
 		{
 			if (KEY_TAP(KEY::LBTN))
 			{
+				// shift + 클릭: 삭제
+				if (KEY_HOLD(KEY::LSHIFT))
+				{
+					const vector<CObject*>& monsterVec = GetGroupObject(GROUP_TYPE::MONSTER);
+					
+					for (size_t i = 0; i < monsterVec.size(); ++i)
+					{
+						Vec2 vMonScale = monsterVec[i]->GetScale();
+						Vec2 vMonPos = monsterVec[i]->GetPos();
+						
+						if (vMousePos.x >= vMonPos.x - vMonScale.x / 2
+							&& vMousePos.x <= vMonPos.x + vMonScale.x / 2
+							&& vMousePos.y >= vMonPos.y - vMonScale.y / 2
+							&& vMousePos.y <= vMonPos.y + vMonScale.y / 2)
+						{
+							DeleteObject(monsterVec[i]);
+							return;
+						}
+					}
+				}
 				CScene::SpawnMonster(vMousePos);
+			}
+		}
+		break;
+		case SELECT_OPTION::SCENE_CHANGER:
+		{
+			SCENE_TYPE eScene = SCENE_TYPE::STAGE_02;
+			
+			if (KEY_TAP(KEY::LBTN))
+			{
+				const vector<CObject*>& sceneChangerVec = GetGroupObject(GROUP_TYPE::SCENE_CHANGER);
+				if (sceneChangerVec.size() >= 1)
+				{
+					// 기존의 scene changer 삭제
+					DeleteObject(sceneChangerVec[0]);
+				}
+
+				// 시작점 지정
+				m_vStartPos = vMousePos;
+			}
+			if (KEY_HOLD(KEY::LBTN))
+			{
+				m_bDrawingSqare = true;
+
+				// 마우스 드래그로 SceneChanger의 Position과 Scale을 정하자.
+				
+				Vec2 vLT, vRB;
+				
+				// 현재 마우스 위치 -> Start 위치 향하는 벡터
+				Vec2 vPosDiff = m_vStartPos - vMousePos;
+
+				m_vSCScale = Vec2(abs(vPosDiff.x), abs(vPosDiff.y));
+
+				// 우상단, 좌하단 좌표 구하기
+				// Start와 mousePos 중 작은 x, y의 조합이 우상단
+				vLT.x = min(m_vStartPos.x, vMousePos.x);
+				vLT.y = min(m_vStartPos.y, vMousePos.y);
+
+				vRB.x = max(m_vStartPos.x, vMousePos.x);
+				vRB.y = max(m_vStartPos.y, vMousePos.y);
+
+				m_vSCPos = Vec2(vLT.x + m_vSCScale.x / 2, vLT.y + m_vSCScale.y / 2);
+			}
+			if (KEY_AWAY(KEY::LBTN))
+			{
+				m_bDrawingSqare = false;
+				m_vEndPos = vMousePos;
+				// SceneChanger 생성 후에는 어떤 씬으로 이동하는 SceneChanger인지 결정하는 창이 뜬다.
+				// 결정이 되면 결과값을 SceneChanger의 멤버로 채운다 (생성자 이용)
+				CScene::CreateSceneChanger(m_vSCPos, m_vSCScale, eScene);
 			}
 		}
 		break;
@@ -325,11 +414,10 @@ void CScene_Tool::update()
 			break;
 		}
 	}
-
 	// Start씬으로 전환
 	if (KEY_HOLD(KEY::LSHIFT) && KEY_TAP(KEY::ENTER))
 	{
-		ChangeScene(SCENE_TYPE::START); // 이벤트 만들음
+		ChangeScene(SCENE_TYPE::STAGE_01); // 이벤트 만들음
 	}
 }
 
@@ -337,7 +425,7 @@ void CScene_Tool::render(HDC _dc)
 {
 	if (m_bGrid)
 	{
-		PEN_TYPE ePen = PEN_TYPE::GREEN;
+		PEN_TYPE ePen = PEN_TYPE::BLUE;
 		// 객체의 생성자를 이용하는 방식
 		SelectGDI p(_dc, ePen);
 		SelectGDI b(_dc, BRUSH_TYPE::HOLLOW);
@@ -367,6 +455,21 @@ void CScene_Tool::render(HDC _dc)
 		}
 	}
 
+	if (m_bDrawingSqare)
+	{
+		PEN_TYPE ePen = PEN_TYPE::GREEN;
+		// 객체의 생성자를 이용하는 방식
+		SelectGDI p(_dc, ePen);
+		SelectGDI b(_dc, BRUSH_TYPE::HOLLOW);
+
+		Vec2 vRenderPos = CCamera::GetInst()->GetRenderPos(m_vSCPos);
+
+		Rectangle(_dc
+			, (int)(vRenderPos.x - m_vSCScale.x / 2.f)
+			, (int)(vRenderPos.y - m_vSCScale.y / 2.f)
+			, (int)(vRenderPos.x + m_vSCScale.x / 2.f)
+			, (int)(vRenderPos.y + m_vSCScale.y / 2.f));
+	}
 
 
 	CScene::render(_dc);
@@ -387,7 +490,6 @@ void CScene_Tool::SaveSceneData()
 
 	// 완성된 경로가 채워질 주소(배열의 시작주소)를 가리킨다
 	ofn.lpstrFile = szName;
-
 	ofn.nMaxFile = sizeof(szName); // 버퍼 크기 (바이트)
 	// lpstrFilter: 확장자 필터 규칙
 	ofn.lpstrFilter = L"ALL\0*.*\0Scene\0*.scene\0";
@@ -404,7 +506,6 @@ void CScene_Tool::SaveSceneData()
 	ofn.lpstrInitialDir = strTileFolder.c_str();
 	// 패스가 존재하고 파일이 존재해야 한다 (비트연산 조합)
 	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
-
 
 	// 세팅한 정보 바탕으로 창 열기
 	if (GetSaveFileName(&ofn))
@@ -442,7 +543,6 @@ void CScene_Tool::SaveScene(const wstring& _strFilePath)
 	// 타일 각각의 정보는 각자 자기(타일) 쪽에 구현 (세이브가 아닌 타일의 역할)
 	const vector<CObject*>& vecTile = GetGroupObject(GROUP_TYPE::TILE);
 
-
 	// 모든 타일을 개별적으로, 저장할 데이터 저장하게 함
 	// 타일 전체를 순회하며 각자 타일에게 저장할거있음 저장해라, save 함수 호출
 	// 타일들은 각각 자신을 save 한다
@@ -470,9 +570,7 @@ void CScene_Tool::SaveScene(const wstring& _strFilePath)
 	fwrite(&size, sizeof(UINT), 1, pFile);
 
 
-	// 모든 타일을 개별적으로, 저장할 데이터 저장하게 함
-	// 타일 전체를 순회하며 각자 타일에게 저장할거있음 저장해라, save 함수 호출
-	// 타일들은 각각 자신을 save 한다
+	// 모든 Wall을 순회하며 자기 자신을 저장
 	for (size_t i = 0; i < wallSize; ++i)
 	{
 		((CWall*)vWall[i])->Save(pFile);
@@ -485,6 +583,29 @@ void CScene_Tool::SaveScene(const wstring& _strFilePath)
 	{
 		((CWall*)vTileWall[i])->Save(pFile);
 	}
+
+
+	// 플레이어 저장
+	const vector<CObject*>& vecPlayer = GetGroupObject(GROUP_TYPE::PLAYER);
+	if (vecPlayer.size() >= 1)
+		((CPlayer*)vecPlayer[0])->Save(pFile);
+
+	// 몬스터 저장
+	// 몬스터 개수 저장
+	const vector<CObject*>& vecMonster = GetGroupObject(GROUP_TYPE::MONSTER);
+	UINT monsterSize = vecMonster.size();
+	fwrite(&monsterSize, sizeof(UINT), 1, pFile);
+	// 개별 몬스터의 정보를 세이브
+	for (size_t i = 0; i < monsterSize; ++i)
+	{
+		((CMonster*)vecMonster[i])->Save(pFile);
+	}
+
+	// Scene Changer 저장
+	
+	// 기타 오브젝트 저장
+
+
 	// 이 파일에 대한 파일 입출력 닫기
 	fclose(pFile);
 
@@ -814,34 +935,33 @@ void CScene_Tool::SetSelectedTile(int _idx)
 	m_iSelectedTileIdx = _idx;
 	m_eSelctedObj = SELECT_OPTION::TILE;
 }
-
 void CScene_Tool::SetSelectedWall()
 {
 	m_eSelctedObj = SELECT_OPTION::WALL;
 	m_eSelectedWall = WALL_TYPE::WALL;
 }
-
 void CScene_Tool::SetSelectedCorner()
 {
 	m_eSelctedObj = SELECT_OPTION::WALL;
 	m_eSelectedWall = WALL_TYPE::CORNER;
 }
-
 void CScene_Tool::SetSelectedTileWall(int _idx)
 {
 	m_iSelectedTileIdx = _idx;
 	m_eSelctedObj = SELECT_OPTION::WALL;
 	m_eSelectedWall = WALL_TYPE::TILE;
 }
-
 void CScene_Tool::SetSelectedPlayer()
 {
 	m_eSelctedObj = SELECT_OPTION::PLAYER;
 }
-
 void CScene_Tool::SetSelectedMosnter()
 {
 	m_eSelctedObj = SELECT_OPTION::MONSTER;
+}
+void CScene_Tool::SetSelectedSC()
+{
+	m_eSelctedObj = SELECT_OPTION::SCENE_CHANGER;
 }
 
 // 전역 함수

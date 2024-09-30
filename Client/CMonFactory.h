@@ -2,12 +2,6 @@
 
 class CMonster;
 
-enum class MON_TYPE
-{
-	NORMAL,
-	RANGE,
-};
-
 class CMonFactory
 {
 public:

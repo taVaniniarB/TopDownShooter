@@ -90,16 +90,16 @@ public:
 	void GenerateTileWall(Vec2 vMousePos, int _idx);
 	void SpawnPlayer(Vec2 vMousePos);
 	void SpawnMonster(Vec2 vMousePos);
-	//void CreateWall(Vec2 vMousePos);
+	void CreateSceneChanger(Vec2 vPos, Vec2 vScale, SCENE_TYPE _eScene);
 	void CreateWall(Vec2 vMousePos, WALL_DIR _eSelectedWallDir, WALL_TYPE _eWallType, int _idx);
 	void CreateWall(Vec2 vMousePos, WALL_DIR _eSelectedWallDir1, WALL_DIR _eSelectedWallDir2);
 	void DeleteWall(Vec2 vMousePos, WALL_TYPE _eType);
 
 	// Tool Scene에서 파일을 세이브하고, 씬(을 상속받은 다른 씬들)은 그것을 load한다
 	void LoadTile(const wstring& _sttRelativePath, FILE* pFile);
-
 	void LoadWall(const wstring& _strRelativePath, FILE* pFile);
-
+	void LoadPlayer(const wstring& _strRelativePath, FILE* pFile);
+	void LoadMonster(const wstring& _strRelativePath, FILE* pFile);
 	void LoadScene(const wstring& _strRelativePath);
 
 public:

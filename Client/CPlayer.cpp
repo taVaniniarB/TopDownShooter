@@ -12,7 +12,6 @@
 #include "CAnimation.h"
 
 #include "CRigidBody.h"
-
 #include "CWeapon.h"
 
 CPlayer::CPlayer()
@@ -78,14 +77,14 @@ CPlayer::CPlayer()
 
 CPlayer::~CPlayer()
 {
-	
 }
-
 
 
 void CPlayer::update()
 {
-	update_move();
+
+	if (GetEnabled())
+		update_move();
 
 	// 상태 업데이트
 	update_state();
@@ -388,6 +387,21 @@ void CPlayer::OnCollisionEnter(CCollider* _pOther)
 	}
 }
 
+void CPlayer::Save(FILE* _pFile)
+{
+	Vec2 vPos = GetPos();
+	fwrite(&vPos, sizeof(Vec2), 1, _pFile);
+}
+
+void CPlayer::Load(FILE* _pFile)
+{
+	Vec2 vPos = {};
+	fread(&vPos, sizeof(Vec2), 1, _pFile);
+	SetPos(vPos);
+
+	CScene* pScene = CSceneMgr::GetInst()->GetCurScene();
+	pScene->AddObject(this, GROUP_TYPE::PLAYER);
+}
 
 void CPlayer::OnCollision(CCollider* _pOther)
 {

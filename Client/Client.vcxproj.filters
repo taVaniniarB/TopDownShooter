@@ -323,9 +323,6 @@
     <ClInclude Include="CWeaponFactory.h">
       <Filter>Engine\09. Factory</Filter>
     </ClInclude>
-    <ClInclude Include="CSceneChanger.h">
-      <Filter>Engine\04. Object\SceneChanger</Filter>
-    </ClInclude>
     <ClInclude Include="CMousePtr.h">
       <Filter>Engine\04. Object\MousePointer</Filter>
     </ClInclude>
@@ -346,6 +343,9 @@
     </ClInclude>
     <ClInclude Include="CScene_Story.h">
       <Filter>Engine\05. Scene\StoryScene</Filter>
+    </ClInclude>
+    <ClInclude Include="CSceneChanger.h">
+      <Filter>Engine\04. Object\SceneChanger</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

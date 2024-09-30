@@ -26,6 +26,7 @@ CMonster* CMonFactory::CreateMonster(MON_TYPE _eType, Vec2 _vPos)
 		// 몬스터의 현재상태를 IDLE로 지정
 
 		pMon = new CMonster;
+		pMon->SetType(_eType);
 		pMon->SetPos(_vPos);
 		pMon->SetScale(Vec2(64.f, 64.f));
 		pMon->SetName(L"Monster");
