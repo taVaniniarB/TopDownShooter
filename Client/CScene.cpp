@@ -8,6 +8,7 @@
 #include "CKeyMgr.h"
 #include "CCamera.h"
 #include "CCore.h"
+#include "CPlayer.h"
 
 
 
@@ -315,7 +316,22 @@ void CScene::DeleteWall(Vec2 vMousePos, WALL_TYPE eType)
 	}
 }
 
+void CScene::SpawnPlayer(Vec2 vMousePos)
+{
+	CObject* pObj = new CPlayer;
+	pObj->SetPos(vMousePos);
+	pObj->SetName(L"Player");
+	pObj->SetScale(Vec2(100.f, 100.f));
+	AddObject(pObj, GROUP_TYPE::PLAYER);
+}
 
+void CScene::SpawnMonster(Vec2 vMousePos)
+{
+	CMonster* pMon = CMonFactory::CreateMonster(MON_TYPE::NORMAL, vMousePos);
+	CObject* pObj = (CObject*)pMon;
+	pObj->SetEnabled(false);
+	AddObject(pObj, GROUP_TYPE::MONSTER);
+}
 
 void CScene::start()
 {
@@ -454,17 +470,6 @@ void CScene::DeleteAll()
 // 씬 enter()에서 절대경로로 파일 불러오는 방식은 좋지 않을 것
 void CScene::LoadTile(const wstring& _strRelativePath, FILE* _pFile)
 {
-	/*
-	wstring strFilePath = CPathMgr::GetInst()->GetContentPath();
-	strFilePath += _strRelativePath;
-
-	// 커널 오브젝트
-	FILE* pFile = nullptr;
-
-	_wfopen_s(&pFile, strFilePath.c_str(), L"rb");
-
-	assert(pFile);
-	*/
 	// 타일 가로세로 개수 불러오기
 	UINT xCount = 0;
 	UINT yCount = 0;
@@ -482,25 +487,10 @@ void CScene::LoadTile(const wstring& _strRelativePath, FILE* _pFile)
 	{
 		((CTile*)vecTile[i])->Load(_pFile);
 	}
-
-	// 이 파일에 대한 파일 입출력 닫기
-	//fclose(_pFile);
-
 }
 
 void CScene::LoadWall(const wstring& _strRelativePath, FILE* _pFile)
 {
-	/*
-	wstring strFilePath = CPathMgr::GetInst()->GetContentPath();
-	strFilePath += _strRelativePath;
-
-	// 커널 오브젝트
-	FILE* pFile = nullptr;
-
-	_wfopen_s(&pFile, strFilePath.c_str(), L"rb");
-
-	assert(pFile);
-	*/
 	UINT size = 0;
 
 	fread(&size, sizeof(UINT), 1, _pFile);
@@ -511,17 +501,6 @@ void CScene::LoadWall(const wstring& _strRelativePath, FILE* _pFile)
 		CWall* pWall = new CWall;
 		pWall->Load(_pFile);
 	}
-
-	//// 만들어진 파일 개별로 필요한 정보 불러오게 함
-	//const vector<CObject*>& vWall = GetGroupObject(GROUP_TYPE::WALL);
-
-	//for (size_t i = 0; i < vWall.size(); ++i)
-	//{
-	//	((CWall*)vWall[i])->Load(pFile);
-	//}
-
-	// 이 파일에 대한 파일 입출력 닫기
-	//fclose(_pFile);
 
 }
 
@@ -539,6 +518,11 @@ void CScene::LoadScene(const wstring& _strRelativePath)
 
 	LoadTile(strFilePath, pFile);
 	LoadWall(strFilePath, pFile);
+
+	// LoadEntity(strFilePath, pFile) //플레이어, 몬스터, NPC 등 상호작용체
+	// LoadSceneChanger(strFilePath, pFile)
+	// LoadObject(strFilePath, pFile)
+	// LoadNPC(strFilePath, pFile)
 
 
 	fclose(pFile);

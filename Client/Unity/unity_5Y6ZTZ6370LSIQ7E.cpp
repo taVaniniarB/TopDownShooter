@@ -1,4 +1,7 @@
 
+#include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CResMgr.cpp"
+
+
 #include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CRigidBody.cpp"
 
 
@@ -8,7 +11,7 @@
 #include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CSceneMgr.cpp"
 
 
-#include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CScene_Start.cpp"
+#include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CScene_Combat.cpp"
 
 
 #include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CScene_Tool.cpp"
@@ -24,7 +27,4 @@
 
 
 #include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CTexture.cpp"
-
-
-#include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CTile.cpp"
 

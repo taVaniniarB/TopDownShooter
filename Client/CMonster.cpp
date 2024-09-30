@@ -25,7 +25,7 @@ CMonster::~CMonster()
 
 void CMonster::update()
 {
-	if (nullptr != m_pAI)
+	if (nullptr != m_pAI && GetEnabled())
 	{
 		m_pAI->update();
 	}

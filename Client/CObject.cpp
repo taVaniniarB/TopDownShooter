@@ -9,12 +9,13 @@
 CObject::CObject()
 	: m_vPos{}
 	, m_vScale{}
-	, m_pTex{nullptr}
+	, m_pTex{ nullptr }
 	, m_pCollider(nullptr)
 	, m_pAnimator(nullptr)
 	, m_pRigidBody(nullptr)
 	, m_pGravity(nullptr)
 	, m_bAlive(true)
+	, m_bEnabled(true)
 {
 }
 
@@ -29,6 +30,7 @@ CObject::CObject(const CObject& _origin)
 	, m_pRigidBody(nullptr)
 	, m_pGravity(nullptr)
 	, m_bAlive(true)
+	, m_bEnabled(true)
 {
 	//컴포넌트의 깊은 복사 구현
 	if (_origin.m_pCollider)

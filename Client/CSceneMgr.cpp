@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "CSceneMgr.h"
 
-#include "Cscene_Start.h"
+#include "CScene_Combat.h"
 #include "Cscene_Tool.h"
 #include "CTimeMgr.h"
 
@@ -40,7 +40,7 @@ void CSceneMgr::init()
 	m_arrScene[(UINT)SCENE_TYPE::TOOL]->SetName(L"Tool Scene");
 
 	// ÇöÀç ¾À ÁöÁ¤
-	m_pCurScene = m_arrScene[(UINT)SCENE_TYPE::STAGE_01];
+	m_pCurScene = m_arrScene[(UINT)SCENE_TYPE::TOOL];
 	m_pCurScene->Enter();
 }
 

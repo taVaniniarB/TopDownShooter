@@ -14,6 +14,9 @@
 #include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CSceneChanger.cpp"
 
 
+#include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CScene_Story.cpp"
+
+
 #include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CScoreMgr.cpp"
 
 
@@ -24,7 +27,4 @@
 
 
 #include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CTileBtnUI.cpp"
-
-
-#include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CWall.cpp"
 

@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "CScene_Start.h"
+#include "CScene_Combat.h"
 
 #include "CObject.h"
 #include "CPlayer.h"
@@ -32,10 +32,6 @@
 
 CScene_Combat::CScene_Combat(const wstring& _wSceneRelativePath)
 	: m_wSceneRelativePath( _wSceneRelativePath )
-	//: m_bUseForce(false)
-	//, m_fForceRadius(500.f)
-	//, m_fCurRadius(0.f)
-	//, m_fForce(500.f) // 거리에 따라 적게 전달시킬 것
 {
 }
 
@@ -45,19 +41,6 @@ CScene_Combat::~CScene_Combat()
 
 void CScene_Combat::update()
 {
-	// 클릭 > 힘 생성
-	//if (KEY_HOLD(KEY::LBTN))
-	//{
-	//	m_bUseForce = true;
-	//	CreateForce();
-	//}
-	//else
-	//{
-	//	m_bUseForce = false;
-	//}
-
-	// Scene Update가 힘 생성의 영향을 받도록 함
-	// 부모 쪽의 update코드 재활용 하지 않고 자체 구현한다
 	CScene::update(); //부모 코드 재활용
 
 	/*for (UINT i = 0; i < (UINT)GROUP_TYPE::END; ++i)
@@ -93,18 +76,14 @@ void CScene_Combat::update()
 	*/
 
 	// Scene 교체
+	// 나중에 SceneChanger - OncollisionEnter로 옮겨주자
 	if (KEY_TAP(KEY::ENTER))
 	{
 		CCamera::GetInst()->FadeOut(FADEOUT_TIME);
-
 		CScene::SetEnabled(false);
-
 		CSceneMgr::GetInst()->SetSceneChange(true, SCENE_TYPE::TOOL);
-
-		//ChangeScene(SCENE_TYPE::TOOL); // 이벤트 만들음
 	}
 
-	
 
 	//if (KEY_TAP(KEY::LBTN))
 	//{
@@ -140,9 +119,7 @@ void CScene_Combat::render(HDC _dc)
 
 void CScene_Combat::Enter()
 {
-	// Start 씬을 상속받는 씬의 Enter에서 자신의 파일을 Load하기
 	LoadScene(m_wSceneRelativePath);
-	//LoadScene(L"scene\\test");
 	
 	CMousePtr* mousePtr = new CMousePtr();
 	AddObject(mousePtr, GROUP_TYPE::MOUSE_POINTER);

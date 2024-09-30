@@ -172,6 +172,7 @@
     <ClInclude Include="CMelee.h" />
     <ClInclude Include="CMousePtr.h" />
     <ClInclude Include="CSceneChanger.h" />
+    <ClInclude Include="CScene_Story.h" />
     <ClInclude Include="CScoreMgr.h" />
     <ClInclude Include="CStage.h" />
     <ClInclude Include="CStatUI.h" />
@@ -191,7 +192,7 @@
     <ClInclude Include="CRigidBody.h" />
     <ClInclude Include="CScene.h" />
     <ClInclude Include="CSceneMgr.h" />
-    <ClInclude Include="CScene_Start.h" />
+    <ClInclude Include="CScene_Combat.h" />
     <ClInclude Include="CScene_Tool.h" />
     <ClInclude Include="CSound.h" />
     <ClInclude Include="CSoundMgr.h" />
@@ -232,6 +233,7 @@
     <ClCompile Include="CMelee.cpp" />
     <ClCompile Include="CMousePtr.cpp" />
     <ClCompile Include="CSceneChanger.cpp" />
+    <ClCompile Include="CScene_Story.cpp" />
     <ClCompile Include="CScoreMgr.cpp" />
     <ClCompile Include="CStage.cpp" />
     <ClCompile Include="CStatUI.cpp" />
@@ -250,7 +252,7 @@
     <ClCompile Include="CRigidBody.cpp" />
     <ClCompile Include="CScene.cpp" />
     <ClCompile Include="CSceneMgr.cpp" />
-    <ClCompile Include="CScene_Start.cpp" />
+    <ClCompile Include="CScene_Combat.cpp" />
     <ClCompile Include="CScene_Tool.cpp" />
     <ClCompile Include="CSound.cpp" />
     <ClCompile Include="CSoundMgr.cpp" />

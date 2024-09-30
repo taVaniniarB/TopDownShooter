@@ -1,4 +1,4 @@
-#pragma once
+ #pragma once
 #include "CScene.h"
 
 
@@ -65,6 +65,8 @@ public:
 	void SetSelectedWall();
 	void SetSelectedCorner();
 	void SetSelectedTileWall(int _idx);
+	void SetSelectedPlayer();
+	void SetSelectedMosnter();
 
 
 	// º®

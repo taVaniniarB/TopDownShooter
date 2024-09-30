@@ -128,9 +128,6 @@
     <Filter Include="Engine\04. Object\Wall">
       <UniqueIdentifier>{d3cdc009-eec7-495d-9272-91c2a833edd5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\04. Object\UI\TileBtnUI">
-      <UniqueIdentifier>{a1de7bd5-7606-4463-825b-be5922601987}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\03. Manager\CollisionMgr">
       <UniqueIdentifier>{61b5ee21-9556-4e4a-ade6-3d68d3d54783}</UniqueIdentifier>
     </Filter>
@@ -164,11 +161,14 @@
     <Filter Include="Engine\05. Scene\Stage">
       <UniqueIdentifier>{f6aab05f-5584-4418-8f15-63d011a2dd99}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\05. Scene\ComabtScene\Scene_Start">
-      <UniqueIdentifier>{114e2db6-dcfa-4a06-9fc2-37a258c61355}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\05. Scene\Scene_Main">
       <UniqueIdentifier>{bda6eda4-737c-4391-b0ff-67023778add1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\05. Scene\Scene_Combat">
+      <UniqueIdentifier>{114e2db6-dcfa-4a06-9fc2-37a258c61355}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Object\UI\BtnUI\TileBtnUI">
+      <UniqueIdentifier>{a1de7bd5-7606-4463-825b-be5922601987}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -209,8 +209,8 @@
     <ClInclude Include="CSceneMgr.h">
       <Filter>Engine\03. Manager\SceneMgr</Filter>
     </ClInclude>
-    <ClInclude Include="CScene_Start.h">
-      <Filter>Engine\05. Scene\ComabtScene\Scene_Start</Filter>
+    <ClInclude Include="CScene_Combat.h">
+      <Filter>Engine\05. Scene\Scene_Combat</Filter>
     </ClInclude>
     <ClInclude Include="CPlayer.h">
       <Filter>Engine\04. Object\Player</Filter>
@@ -309,7 +309,7 @@
       <Filter>Engine\03. Manager\SoundMgr</Filter>
     </ClInclude>
     <ClInclude Include="CTileBtnUI.h">
-      <Filter>Engine\04. Object\UI\TileBtnUI</Filter>
+      <Filter>Engine\04. Object\UI\BtnUI\TileBtnUI</Filter>
     </ClInclude>
     <ClInclude Include="CWeapon.h">
       <Filter>Engine\04. Object\Weapon</Filter>
@@ -343,6 +343,9 @@
     </ClInclude>
     <ClInclude Include="Scene_Main.h">
       <Filter>Engine\05. Scene\Scene_Main</Filter>
+    </ClInclude>
+    <ClInclude Include="CScene_Story.h">
+      <Filter>Engine\05. Scene\StoryScene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -378,8 +381,8 @@
     <ClCompile Include="CSceneMgr.cpp">
       <Filter>Engine\03. Manager\SceneMgr</Filter>
     </ClCompile>
-    <ClCompile Include="CScene_Start.cpp">
-      <Filter>Engine\05. Scene\ComabtScene\Scene_Start</Filter>
+    <ClCompile Include="CScene_Combat.cpp">
+      <Filter>Engine\05. Scene\Scene_Combat</Filter>
     </ClCompile>
     <ClCompile Include="CPlayer.cpp">
       <Filter>Engine\04. Object\Player</Filter>
@@ -475,7 +478,7 @@
       <Filter>Engine\03. Manager\SoundMgr</Filter>
     </ClCompile>
     <ClCompile Include="CTileBtnUI.cpp">
-      <Filter>Engine\04. Object\UI\TileBtnUI</Filter>
+      <Filter>Engine\04. Object\UI\BtnUI\TileBtnUI</Filter>
     </ClCompile>
     <ClCompile Include="CWeapon.cpp">
       <Filter>Engine\04. Object\Weapon</Filter>
@@ -509,6 +512,9 @@
     </ClCompile>
     <ClCompile Include="Scene_Main.cpp">
       <Filter>Engine\05. Scene\Scene_Main</Filter>
+    </ClCompile>
+    <ClCompile Include="CScene_Story.cpp">
+      <Filter>Engine\05. Scene\StoryScene</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

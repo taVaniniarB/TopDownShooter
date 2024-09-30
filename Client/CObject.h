@@ -32,6 +32,7 @@ private:
 	CGravity*	m_pGravity;
 
 	bool		m_bAlive; // 오브젝트 활성화 체크
+	bool		m_bEnabled; // 오브젝트 업데이트 동작 여부
 
 public:
 	Vec2 GetPos() { return m_vPos; }
@@ -52,6 +53,9 @@ public:
 	CGravity* GetGravity() { return m_pGravity; }
 
 	bool IsDead() { return !m_bAlive; }
+
+	void SetEnabled(bool _b) { m_bEnabled = _b; }
+	bool GetEnabled() { return m_bEnabled; }
 
 	void CreateCollider();
 	void CreateAnimator();

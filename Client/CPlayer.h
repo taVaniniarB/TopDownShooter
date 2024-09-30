@@ -72,6 +72,12 @@ public:
 
     CPlayer(const CPlayer& _origin)
         : CObject(_origin)
+        , m_eCurState(PLAYER_STATE::IDLE)
+        , m_ePrevState(PLAYER_STATE::IDLE)
+        , m_iDir(0)
+        , m_iPrevDir(0)
+        , m_iHP(0)
+        , m_pWeapon(nullptr)
     {}
 
     ~CPlayer();

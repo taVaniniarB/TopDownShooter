@@ -57,27 +57,22 @@ void CScene_Tool::Enter()
 	// UI 생성
 	Vec2 vResolution = CCore::GetInst()->GetResolution();
 
-	CUI* pPanelUI = new CPanelUI;
-
-	pPanelUI->SetName(L"ParentUI");
-	pPanelUI->SetScale(Vec2(300.f, 200.f));
-	pPanelUI->SetPos(Vec2(vResolution.x - pPanelUI->GetScale().x, 0.f));
-
-	CBtnUI* pBtnUI = new CBtnUI;
-	pBtnUI->SetName(L"ChildUI");
-	pBtnUI->SetScale(Vec2(100.f, 40.f));
-	// 부모로부터 상대적 위치
-	pBtnUI->SetPos(Vec2(0.f, 0.f));
-
-	// 버튼 클릭시 세이브하도록 구현
-	// 멤버함수 포인터의 경우 함수명 앞에 & 붙여줘야만 주소로 인식
-	// BtnUI에서 부모 클래스의 함수를 받도록 해줬으므로 부모 오브젝트로 캐스팅 필요
-	((CBtnUI*)pBtnUI)->SetClickedCallBack(this, (SCENE_MEMFUNC)&CScene_Tool::SaveTileData);
-
-	pPanelUI->AddChild(pBtnUI);
-
-	// pUI 하나만 씬에 넣어두면, 계층적으로 자식을 호출
-	AddObject(pPanelUI, GROUP_TYPE::UI);
+	//CUI* pPanelUI = new CPanelUI;
+	//pPanelUI->SetName(L"ParentUI");
+	//pPanelUI->SetScale(Vec2(300.f, 200.f));
+	//pPanelUI->SetPos(Vec2(vResolution.x - pPanelUI->GetScale().x, 0.f));
+	//CBtnUI* pBtnUI = new CBtnUI;
+	//pBtnUI->SetName(L"ChildUI");
+	//pBtnUI->SetScale(Vec2(100.f, 40.f));
+	//// 부모로부터 상대적 위치
+	//pBtnUI->SetPos(Vec2(0.f, 0.f));
+	//// 버튼 클릭시 세이브하도록 구현
+	//// 멤버함수 포인터의 경우 함수명 앞에 & 붙여줘야만 주소로 인식
+	//// BtnUI에서 부모 클래스의 함수를 받도록 해줬으므로 부모 오브젝트로 캐스팅 필요
+	//((CBtnUI*)pBtnUI)->SetClickedCallBack(this, (SCENE_MEMFUNC)&CScene_Tool::SaveTileData);
+	//pPanelUI->AddChild(pBtnUI);
+	//// pUI 하나만 씬에 넣어두면, 계층적으로 자식을 호출
+	//AddObject(pPanelUI, GROUP_TYPE::UI);
 
 
 	// 타일 UI
@@ -151,7 +146,26 @@ void CScene_Tool::Enter()
 		((CTileBtnUI*)pTileSelectUI)->SetClickedCallBack(this, (SCENE_MEMFUNC)&CScene_Tool::SetSelectedCorner);
 		pTilePanelUI->AddChild(pTileSelectUI);
 	}
-	
+
+	// 플레이어 버튼
+	{
+		CBtnUI* pTileSelectUI = new CBtnUI;
+		pTileSelectUI->SetScale(Vec2(50.f, 50.f));
+		pTileSelectUI->SetPos(Vec2(0.f, 220.f));
+		pTileSelectUI->SetName(L"Player");
+		((CBtnUI*)pTileSelectUI)->SetClickedCallBack(this, (SCENE_MEMFUNC)&CScene_Tool::SetSelectedPlayer);
+		pTilePanelUI->AddChild(pTileSelectUI);
+	}
+
+	// 몬스터 버튼
+	{
+		CBtnUI* pTileSelectUI = new CBtnUI;
+		pTileSelectUI->SetScale(Vec2(50.f, 50.f));
+		pTileSelectUI->SetPos(Vec2(50.f, 220.f));
+		pTileSelectUI->SetName(L"Monster");
+		((CBtnUI*)pTileSelectUI)->SetClickedCallBack(this, (SCENE_MEMFUNC)&CScene_Tool::SetSelectedMosnter);
+		pTilePanelUI->AddChild(pTileSelectUI);
+	}
 
 
 	// 복사본 UI
@@ -230,14 +244,6 @@ void CScene_Tool::update()
 				ChangeTile(vMousePos, -1);
 		}
 		break;
-		case SELECT_OPTION::MONSTER:
-		{
-			if (KEY_TAP(KEY::LBTN))
-			{
-
-			}
-		}
-		break;
 		case SELECT_OPTION::WALL:
 		{
 			// shift + 클릭: 삭제
@@ -303,7 +309,15 @@ void CScene_Tool::update()
 		{
 			if (KEY_TAP(KEY::LBTN))
 			{
-
+				CScene::SpawnPlayer(vMousePos);
+			}
+		}
+		break;
+		case SELECT_OPTION::MONSTER:
+		{
+			if (KEY_TAP(KEY::LBTN))
+			{
+				CScene::SpawnMonster(vMousePos);
 			}
 		}
 		break;
@@ -361,7 +375,7 @@ void CScene_Tool::render(HDC _dc)
 void CScene_Tool::SaveSceneData()
 {
 	// 창을 띄워서 어디에 뭐라 저장할지 정하고
-// 그 경로 받아와서 SaveTile 함수를 호출하자.
+	// 그 경로 받아와서 SaveTile 함수를 호출하자.
 
 	OPENFILENAME ofn = {};
 
@@ -803,7 +817,6 @@ void CScene_Tool::SetSelectedTile(int _idx)
 
 void CScene_Tool::SetSelectedWall()
 {
-	//m_eSelectedWallDir = (WALL_DIR)_wallPos;
 	m_eSelctedObj = SELECT_OPTION::WALL;
 	m_eSelectedWall = WALL_TYPE::WALL;
 }
@@ -821,6 +834,15 @@ void CScene_Tool::SetSelectedTileWall(int _idx)
 	m_eSelectedWall = WALL_TYPE::TILE;
 }
 
+void CScene_Tool::SetSelectedPlayer()
+{
+	m_eSelctedObj = SELECT_OPTION::PLAYER;
+}
+
+void CScene_Tool::SetSelectedMosnter()
+{
+	m_eSelctedObj = SELECT_OPTION::MONSTER;
+}
 
 // 전역 함수
 void ChangeScene(DWORD_PTR, DWORD_PTR)
