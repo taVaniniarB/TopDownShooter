@@ -6,11 +6,15 @@
 #include "CTexture.h"
 #include "CSceneMgr.h"
 #include "CScene.h"
+#include "CWeapon.h"
+#include "CHitbox.h"
 
 CMonster::CMonster()
 	: m_tInfo{}
 	, m_pAI(nullptr)
 	, m_pWeapon(nullptr)
+	, m_pHitbox(nullptr)
+	, m_eType(MON_TYPE::NORMAL)
 {
 	CreateCollider();
 	GetCollider()->SetScale(Vec2(40.f, 40.f));
@@ -60,6 +64,44 @@ void CMonster::SetAI(AI* _AI)
 	_AI->m_pOwner = this;
 }
 
+void CMonster::SetWeapon(CWeapon* _pWeapon)
+{
+	m_pWeapon = _pWeapon;
+	_pWeapon->SetOwner(this);
+}
+
+void CMonster::SetHitbox(CHitbox* _pHitbox)
+{
+	m_pHitbox = _pHitbox;
+	_pHitbox->SetOwner(this);
+}
+
+void CMonster::DropWeapon()
+{
+	if (m_pWeapon)
+	{
+		CObject* pNewWeapon = m_pWeapon->Clone();
+		((CWeapon*)pNewWeapon)->Drop();
+		CreateObject(pNewWeapon, GROUP_TYPE::DROPPED_WEAPON);
+		DeleteObject(m_pWeapon);
+		m_pWeapon = nullptr;
+	}
+}
+
+void CMonster::SubHP()
+{
+	--m_tInfo.iHP;
+
+	if (m_tInfo.iHP <= 0)
+	{
+		// 피 튀는 파티클
+		DropWeapon();
+		DeleteObject(this);
+
+		// 시체 + 피 스프라이트
+	}
+}
+
 void CMonster::Save(FILE* _pFile)
 {
 	fwrite(&m_eType, sizeof(MON_TYPE), 1, _pFile);
@@ -72,6 +114,14 @@ void CMonster::Load(FILE* _pFile)
 {
 	CScene* pScene = CSceneMgr::GetInst()->GetCurScene();
 	pScene->AddObject(this, GROUP_TYPE::MONSTER);
+	if (nullptr != m_pWeapon)
+	{
+		pScene->AddObject(m_pWeapon, GROUP_TYPE::WEAPON);
+	}
+	if (nullptr != m_pHitbox)
+	{
+		pScene->AddObject(m_pHitbox, GROUP_TYPE::HITBOX_MONSTER);
+	}
 }
 
 void CMonster::OnCollisionEnter(CCollider* _pOther)
@@ -80,11 +130,17 @@ void CMonster::OnCollisionEnter(CCollider* _pOther)
 	CObject* pOtherObj = _pOther->GetObj();
 	// obj 종류 알아내는 방법: 오브젝트에 아이디나 태그명 부여
 
-	if (pOtherObj->GetName() == L"Player_Missile")
-	{/*
-		--m_iHP;
+	if (pOtherObj->GetName() == L"Missile")
+	{
+		//--m_tInfo.iHP;
 
-		if(m_iHP <= 0)
-			DeleteObject(this);*/
+		//if (m_tInfo.iHP <= 0)
+		//{
+		//	// 피 튀는 파티클
+		//	DropWeapon();
+		//	DeleteObject(this);
+
+		//	// 시체 + 피 스프라이트
+		//}
 	}
 }

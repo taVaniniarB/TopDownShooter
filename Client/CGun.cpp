@@ -4,6 +4,8 @@
 #include "CTimeMgr.h"
 #include "CMissile.h"
 #include "CCamera.h"
+#include "CResMgr.h"
+#include "CSound.h"
 
 CGun::CGun()
 	: m_iMaxMissile(0)
@@ -24,9 +26,22 @@ void CGun::Attack()
 	{
 		if (m_iRemainMissile > 0)
 		{
-			//vPos = GetPos();
 			CreateMissile();
 			// 사운드 재생
+			CSound* pNewSound = nullptr;
+			switch (m_eGunType)
+			{
+			case GUN_TYPE::M16:
+				pNewSound = CResMgr::GetInst()->FindSound(L"M16");
+				break;
+			case GUN_TYPE::SHOTGUN:
+				pNewSound = CResMgr::GetInst()->FindSound(L"Shotgun");
+				break;
+			default:
+				break;
+			}
+			pNewSound->Play();
+			pNewSound->SetVolume(10.f);
 
 			m_iRemainMissile--;
 			SetCurDelay(0.f);
@@ -39,17 +54,6 @@ void CGun::Attack()
 		SetCurDelay(fCurDelay + fDT);
 	}
 }
-
-
-void CGun::update()
-{
-	CWeapon::update();
-	if (GetOwner() && KEY_HOLD(KEY::LBTN))
-	{
-		Attack();
-	}
-}
-
 
 void CGun::CreateMissile()
 {

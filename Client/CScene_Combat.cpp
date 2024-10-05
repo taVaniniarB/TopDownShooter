@@ -29,6 +29,8 @@
 #include "CTimeMgr.h"
 #include "CScoreMgr.h"
 
+#include "CHitbox.h"
+
 
 CScene_Combat::CScene_Combat(const wstring& _wSceneRelativePath)
 	: m_wSceneRelativePath( _wSceneRelativePath )
@@ -117,35 +119,44 @@ void CScene_Combat::Enter()
 	CObject* pPlayer = GetGroupObject(GROUP_TYPE::PLAYER)[0];
 	RegisterPlayer(pPlayer);
 
-	WEAPON_TYPE eWeaponType = WEAPON_TYPE::GUN;
-	CWeapon* pWeapon = CWeaponFactory::CreateWeapon(eWeaponType, MELEE_TYPE::NONE, GUN_TYPE::M16);
-	pWeapon->SetScale(Vec2(10.f, 20.f));
+	CWeapon* pWeapon = CWeaponFactory::CreateWeapon(WEAPON_TYPE::GUN, MELEE_TYPE::NONE, GUN_TYPE::M16);
 	AddObject(pWeapon, GROUP_TYPE::WEAPON);
 	((CPlayer*)pPlayer)->SetWeapon(pWeapon);
+
+	CHitbox* pHitbox = new CHitbox();
+	pHitbox->SetName(L"Hitbox_Player");
+	AddObject(pHitbox, GROUP_TYPE::HITBOX_PLAYER);
+	((CPlayer*)pPlayer)->SetHitbox(pHitbox);
 
 	// Follow Player
 	CCamera::GetInst()->SetTarget(pPlayer);
 
 	
-	// 충돌 지정
-	// Player 그룹과 Monster 그룹 간의 충돌체크
-	// scene은 마지막에 두 그룹 간의 충돌 여부를 검사
+	// 충돌 그룹 지정
+	// scene은 마지막에 두 그룹 간의 충돌 여부를 검사한다.
 	// 충돌 가능한 조합...을 만들어주는 개념 (마치 체크박스처럼)
-	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::MONSTER, GROUP_TYPE::PROJ_PLAYER); // 몬스터-pl총알
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::PLAYER, GROUP_TYPE::DROPPED_WEAPON); // 떨어진무기-플레이어
 	
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::PROJ_PLAYER, GROUP_TYPE::WALL); // 벽-플레이어 총알
-	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::PROJ_PLAYER, GROUP_TYPE::TILE_WALL); // 벽-플레이어 총알
-	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::PROJ_PLAYER, GROUP_TYPE::CORNER); // 벽-플레이어 총알
+	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::PROJ_PLAYER, GROUP_TYPE::TILE_WALL);
+	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::PROJ_PLAYER, GROUP_TYPE::CORNER);
+	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::PROJ_MONSTER, GROUP_TYPE::WALL); // 벽-몬스터 총알
+	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::PROJ_MONSTER, GROUP_TYPE::TILE_WALL);
+	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::PROJ_MONSTER, GROUP_TYPE::CORNER);
 	
-	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::PLAYER, GROUP_TYPE::WALL);
+	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::PLAYER, GROUP_TYPE::WALL); // 플레이어-벽
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::PLAYER, GROUP_TYPE::TILE_WALL);
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::PLAYER, GROUP_TYPE::CORNER);
 
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::MONSTER, GROUP_TYPE::WALL); // 몬스터-벽
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::MONSTER, GROUP_TYPE::TILE_WALL);
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::MONSTER, GROUP_TYPE::CORNER);
+	
+	// 히트박스 - 총알
+	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::HITBOX_PLAYER, GROUP_TYPE::PROJ_MONSTER);
+	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::HITBOX_MONSTER, GROUP_TYPE::PROJ_PLAYER);
 
+	// 플레이어 - SC
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::PLAYER, GROUP_TYPE::SCENE_CHANGER);
 	
 	
@@ -168,7 +179,7 @@ void CScene_Combat::Exit()
 	DeleteAll();
 
 	// 콤보 초기화
-	CScoreMgr::GetInst()->ResetCombo();
+	//CScoreMgr::GetInst()->ResetCombo();
 
 	// 그룹 충돌 지정 해제
 	CCollisionMgr::GetInst()->Reset();

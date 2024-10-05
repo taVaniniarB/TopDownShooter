@@ -169,6 +169,7 @@
     <ClInclude Include="CEventMgr.h" />
     <ClInclude Include="CGravity.h" />
     <ClInclude Include="CGun.h" />
+    <ClInclude Include="CHitbox.h" />
     <ClInclude Include="CMelee.h" />
     <ClInclude Include="CMousePtr.h" />
     <ClInclude Include="CSceneChanger.h" />
@@ -230,6 +231,7 @@
     <ClCompile Include="CEventMgr.cpp" />
     <ClCompile Include="CGravity.cpp" />
     <ClCompile Include="CGun.cpp" />
+    <ClCompile Include="CHitbox.cpp" />
     <ClCompile Include="CMelee.cpp" />
     <ClCompile Include="CMousePtr.cpp" />
     <ClCompile Include="CSceneChanger.cpp" />

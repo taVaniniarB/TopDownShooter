@@ -24,11 +24,9 @@ enum class PLAYER_ATTACK
     // ...
 };
 
-
-
-
 class CTexture;
 class CWeapon;
+class CHitbox;
 
 class CPlayer :
     public CObject
@@ -42,6 +40,7 @@ private:
     int m_iHP;
 
     CWeapon* m_pWeapon;
+    CHitbox* m_pHitbox;
 
 public:
     virtual void update();
@@ -49,6 +48,8 @@ public:
 
 public:
     void SetWeapon(CWeapon* _pWeapon);
+    void SetHitbox(CHitbox* _pHitbox);
+    void SubHP() { --m_iHP; }
     
 private:
     void DropWeapon();
@@ -81,6 +82,7 @@ public:
         , m_iDir(0)
         , m_iPrevDir(0)
         , m_iHP(0)
+        , m_pHitbox(nullptr)
         , m_pWeapon(nullptr)
     {}
 

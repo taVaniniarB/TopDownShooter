@@ -28,3 +28,6 @@
 
 #include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CEventMgr.cpp"
 
+
+#include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CGravity.cpp"
+

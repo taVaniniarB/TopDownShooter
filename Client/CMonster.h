@@ -10,6 +10,7 @@ struct tMonInfo
 
 class AI;
 class CWeapon;
+class CHitbox;
 
 class CMonster :
     public CObject
@@ -19,6 +20,7 @@ private:
     AI*    m_pAI;
     CWeapon* m_pWeapon;
     MON_TYPE m_eType;
+    CHitbox* m_pHitbox;
 
 public:
     float GetSpeed() { return m_tInfo.fSpeed; }
@@ -27,6 +29,12 @@ public:
     void SetType(MON_TYPE _type) { m_eType = _type; }
     MON_TYPE GetType() { return m_eType; }
     const tMonInfo& GetInfo() { return m_tInfo; } // 구조체 크기가 크므로 레퍼런스 사용
+
+public:
+    void SetWeapon(CWeapon* _pWeapon);
+    void SetHitbox(CHitbox* _pHitbox);
+    void DropWeapon();
+    void SubHP();
 
 public:
     void Save(FILE* _pFile);

@@ -51,6 +51,9 @@ enum class GROUP_TYPE
 	PROJ_PLAYER,
 	PROJ_MONSTER,
 
+	HITBOX_PLAYER,     // 플레이어 히트박스
+	HITBOX_MONSTER,    // 몬스터 히트박스
+
 	SCENE_CHANGER = 29,
 	UI = 30,
 	MOUSE_POINTER = 31,
@@ -128,4 +131,27 @@ enum class MON_TYPE
 {
 	NORMAL,
 	RANGE,
+	FRIENDLY,
+};
+
+
+enum class GUN_TYPE
+{
+	M16,
+	SHOTGUN,
+};
+
+enum class MELEE_TYPE
+{
+	KNIFE,
+	PIPE,
+	FIST,
+	NONE,
+};
+
+enum class COLLIDER_TYPE
+{
+	DEFAULT,
+	HITBOX,
+	END,
 };

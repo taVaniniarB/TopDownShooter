@@ -13,12 +13,14 @@
 
 #include "CRigidBody.h"
 #include "CWeapon.h"
+#include "CHitbox.h"
 
 CPlayer::CPlayer()
 	: m_eCurState(PLAYER_STATE::IDLE)
 	, m_ePrevState(PLAYER_STATE::WALK)
 	, m_iDir(1)
 	, m_iPrevDir(1)
+	, m_pHitbox(nullptr)
 	, m_pWeapon(nullptr)
 	, m_iHP(1)
 {
@@ -31,6 +33,7 @@ CPlayer::CPlayer()
 	CreateCollider();
 	GetCollider()->SetOffsetPos(Vec2(0.f, 3.f));
 	GetCollider()->SetScale(Vec2(15.f, 15.f));
+	
 	
 
 	CreateRigidBody();
@@ -96,12 +99,6 @@ void CPlayer::update()
 	// 업데이트된 상태에 따라 애니메이션 업데이트
 	update_animation();
 
-
-	/*if (KEY_TAP(KEY::ENTER))
-	{
-		SetPos(Vec2(640.f, 320.f));
-	}*/
-
 	if (KEY_TAP(KEY::RBTN))
 	{
 		DropWeapon();
@@ -144,7 +141,6 @@ void CPlayer::render(HDC _dc)
 	//	, int(width), int(height)
 	//	, pTex->GetDC()
 	//	, 0, 0, (int)width, (int)height, bf);
-
 }
 
 
@@ -157,7 +153,7 @@ void CPlayer::update_state()
 		m_eCurState = PLAYER_STATE::RUN;
 			
 	}
-	if (KEY_HOLD(KEY::D) /*&& GetGravity()->GetGround()*/)
+	if (KEY_HOLD(KEY::D))
 	{
 		m_iDir = 1;
 		m_eCurState = PLAYER_STATE::RUN;
@@ -167,8 +163,7 @@ void CPlayer::update_state()
 	{
 		m_eCurState = PLAYER_STATE::ATTACK;
 	}*/
-	// 키를 누르지 않아도 속도가 남아 있을 때를 고려한 조건수정
-	if (0.f == GetRigidBody()->GetSpeed() /*&& PLAYER_STATE::JUMP != m_eCurState*/)
+	if (0.f == GetRigidBody()->GetSpeed())
 	{
 		m_eCurState = PLAYER_STATE::IDLE;
 	}
@@ -217,53 +212,11 @@ void CPlayer::update_move()
 
 
 	Vec2 CurVelocity = pRigid->GetVelocity();
-
-	/*if (pRigid->GetGround())
-	{
-		WALL_DIR groundType = pRigid->GetGroundType();
-		switch (groundType)
-		{
-		case WALL_DIR::TOP:
-			GetRigidBody()->SetVelocity(Vec2(CurVelocity.x, 0.f));
-			break;
-		case WALL_DIR::BOTTOM:
-			GetRigidBody()->SetVelocity(Vec2(CurVelocity.x, 0.f));
-			break;
-		case WALL_DIR::LEFT:
-			GetRigidBody()->SetVelocity(Vec2(0.f, CurVelocity.y));
-			break;
-		case WALL_DIR::RIGHT:
-			GetRigidBody()->SetVelocity(Vec2(0.f, CurVelocity.y));
-			break;
-		case WALL_DIR::END:
-			break;
-		default:
-			break;
-		}
-		
-	}*/
-
-	//if (KEY_TAP(KEY::W))
-	//{
-	//}
-	///*if (KEY_TAP(KEY::S))
-	//{
-	//	pRigid->AddVelocity(Vec2(0.f, 100.f));
-	//}*/
-	//if (KEY_TAP(KEY::A))
-	//{// 전 프레임과 같은 방향에서 눌렸을 때 또 가속도가 적용되면 안 됨
-	//	pRigid->SetVelocity(Vec2(-150.f, pRigid->GetVelocity().y));
-	//}
-	//if (KEY_TAP(KEY::D))
-	//{
-	//	pRigid->SetVelocity(Vec2(150.f, pRigid->GetVelocity().y));
-	//}
-
-	//SetPos(vPos);
 }
 
 void CPlayer::update_attack()
 {
+	
 	if (KEY_HOLD(KEY::LBTN))
 	{
 		if (m_pWeapon)
@@ -302,12 +255,6 @@ void CPlayer::update_animation()
 		else
 			GetAnimator()->Play(L"RUN", true);
 		break;
-	//case PLAYER_STATE::JUMP:
-	//	if (m_iDir == -1)
-	//		GetAnimator()->Play(L"JUMP", true);
-	//	else
-	//		GetAnimator()->Play(L"JUMP", true);
-	//	break;
 	case PLAYER_STATE::ATTACK:
 		break;
 	case PLAYER_STATE::DEAD:
@@ -321,8 +268,6 @@ void CPlayer::DropWeapon()
 {
 	if (m_pWeapon)
 	{
-		//m_pWeapon->Drop();
-
 		CObject* pNewWeapon = m_pWeapon->Clone();
 		((CWeapon*)pNewWeapon)->Drop();
 		CreateObject(pNewWeapon, GROUP_TYPE::DROPPED_WEAPON);
@@ -338,6 +283,12 @@ void CPlayer::SetWeapon(CWeapon* _pWeapon)
 {
 	m_pWeapon = _pWeapon;
 	_pWeapon->SetOwner(this);
+}
+
+void CPlayer::SetHitbox(CHitbox* _pHitbox)
+{
+	m_pHitbox = _pHitbox;
+	_pHitbox->SetOwner(this);
 }
 
 // 설정된 무기가 없는 상태에서만 실행
@@ -364,11 +315,11 @@ void CPlayer::ExchangeWeapon(CWeapon* _pWeapon)
 
 void CPlayer::OnCollisionEnter(CCollider* _pOther)
 {
-	CObject* pOtherObj = _pOther->GetObj();
+	/*CObject* pOtherObj = _pOther->GetObj();
 	if (pOtherObj->GetName() == L"Missile")
 	{
 		--m_iHP;
-	}
+	}*/
 }
 
 void CPlayer::Save(FILE* _pFile)

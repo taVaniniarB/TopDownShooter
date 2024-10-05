@@ -170,6 +170,9 @@
     <Filter Include="Engine\04. Object\UI\BtnUI\TileBtnUI">
       <UniqueIdentifier>{a1de7bd5-7606-4463-825b-be5922601987}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\04. Object\Hitbox">
+      <UniqueIdentifier>{58603af1-9273-43a7-88a9-48867bf1bf72}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CCore.h">
@@ -347,6 +350,9 @@
     <ClInclude Include="CSceneChanger.h">
       <Filter>Engine\04. Object\SceneChanger</Filter>
     </ClInclude>
+    <ClInclude Include="CHitbox.h">
+      <Filter>Engine\04. Object\Hitbox</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
@@ -515,6 +521,9 @@
     </ClCompile>
     <ClCompile Include="CScene_Story.cpp">
       <Filter>Engine\05. Scene\StoryScene</Filter>
+    </ClCompile>
+    <ClCompile Include="CHitbox.cpp">
+      <Filter>Engine\04. Object\Hitbox</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

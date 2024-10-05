@@ -21,6 +21,9 @@ CSceneChanger::~CSceneChanger()
 
 void CSceneChanger::update()
 {
+	vector<CObject*> vMonster = CSceneMgr::GetInst()->GetCurScene()->GetGroupObject(GROUP_TYPE::MONSTER);
+	if (0 >= vMonster.size())
+		m_bActive = true;
 }
 
 void CSceneChanger::render(HDC _dc)
@@ -55,7 +58,7 @@ void CSceneChanger::render(HDC _dc)
 void CSceneChanger::OnCollisionEnter(CCollider* _pOther)
 {
 	CObject* pOtherObj = _pOther->GetObj();
-	if (/*m_bActive &&*/ pOtherObj->GetName() == L"Player")
+	if (m_bActive && pOtherObj->GetName() == L"Player")
 	{
 		m_bActive = false;
 		CCamera::GetInst()->FadeOut(FADEOUT_TIME);

@@ -93,6 +93,9 @@ CObject::~CObject()
 
 void CObject::finalUpdate()
 {
+	if (!m_bEnabled)
+		return;
+
 	if (m_pAnimator)
 		m_pAnimator->finalUpdate();
 

@@ -21,11 +21,17 @@ CWeapon* CWeaponFactory::CreateWeapon(WEAPON_TYPE _eWeaponType, MELEE_TYPE _eMel
 		{
 		case MELEE_TYPE::KNIFE:
 		{
+			((CMelee*)pWeapon)->SetType(MELEE_TYPE::KNIFE);
+			((CObject*)pWeapon)->SetImgIdx(0);
+			pWeapon->SetScale(Vec2(15.f, 7.f));
 			pWeapon->SetDelay(0.2f);
 		}
 			break;
 		case MELEE_TYPE::PIPE:
 		{
+			((CMelee*)pWeapon)->SetType(MELEE_TYPE::KNIFE);
+			((CObject*)pWeapon)->SetImgIdx(0);
+			pWeapon->SetScale(Vec2(20.f, 7.f));
 			pWeapon->SetDelay(0.4f);
 		}
 			break;
@@ -47,17 +53,19 @@ CWeapon* CWeaponFactory::CreateWeapon(WEAPON_TYPE _eWeaponType, MELEE_TYPE _eMel
 		{
 		case GUN_TYPE::M16:
 		{
+			((CGun*)pWeapon)->SetType(GUN_TYPE::M16);
 			((CGun*)pWeapon)->SetMaxMissile(100);
-			pWeapon->SetDelay(0.2f);
-
+			pWeapon->SetDelay(0.1f);
+			pWeapon->SetScale(Vec2(20.f, 10.f));
 			((CObject*)pWeapon)->SetImgIdx(0);
 		}
 			break;
 		case GUN_TYPE::SHOTGUN:
 		{
+			((CGun*)pWeapon)->SetType(GUN_TYPE::SHOTGUN);
 			((CGun*)pWeapon)->SetMaxMissile(6);
-			((CGun*)pWeapon)->SetDelay(0.5f);
-
+			pWeapon->SetDelay(0.3f);
+			pWeapon->SetScale(Vec2(30.f, 10.f));
 			((CObject*)pWeapon)->SetImgIdx(1);
 		}
 			break;

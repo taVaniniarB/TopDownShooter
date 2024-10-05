@@ -8,19 +8,8 @@ enum class WEAPON_TYPE
 	GUN,
 };
 
-enum class MELEE_TYPE
-{
-	KNIFE,
-	PIPE,
-	FIST,
-	NONE,
-};
 
-enum class GUN_TYPE
-{
-	M16,
-	SHOTGUN,
-};
+
 
 class CWeaponFactory
 {

@@ -16,17 +16,6 @@ CWeapon::CWeapon()
 	CreateCollider();
 	SetName(L"Weapon");
 }
-//
-//CWeapon::CWeapon(const CWeapon& _origin)
-//	: m_fDelay(_origin.m_fDelay)
-//	, m_fCurDelay(m_fDelay)
-//	, m_pOwner(_origin.m_pOwner)
-//	, m_pGetSound(_origin.m_pGetSound)
-//	, m_pAttackSound(_origin.m_pAttackSound)
-//	, m_eWeaponStatus(_origin.m_eWeaponStatus)
-//{
-//
-//}
 
 CWeapon::~CWeapon()
 {

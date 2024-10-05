@@ -51,7 +51,7 @@ public:
 	Vec2 GetAimDir() { return m_vAimDir; }
 	void SetOwner(CObject* _pOwner) { m_pOwner = _pOwner; }
 
-	void OncollisionEnter(CCollider* _pOther);
+	//void OncollisionEnter(CCollider* _pOther);
 
 private:
 	void SetAimDir();

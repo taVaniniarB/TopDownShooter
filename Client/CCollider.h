@@ -8,6 +8,7 @@ private:
 	// 정적 멤버 (특: 객체에 포함 안되고 항상 데이터 영역에 살아있음)
 	static UINT g_iNextID;
 
+	COLLIDER_TYPE m_eColliderType;
 	CObject*	m_pOwner;		// Collider 소유하는 오브젝트
 	Vec2		m_vOffsetPos;	// 오브젝트로부터 상대적 위치
 	Vec2		m_vFinalPos;	// final update에서 매 프레임마다 계산하는 최종값
@@ -32,6 +33,8 @@ public:
 	CObject* GetObj() { return m_pOwner; }
 
 	UINT GetID() { return m_iID; }
+
+	COLLIDER_TYPE GetType() { return m_eColliderType; }
 
 public:
 	void finalUpdate();

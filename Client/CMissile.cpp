@@ -11,6 +11,7 @@ CMissile::CMissile()
 	m_vDir.Nomalize();
 	CreateCollider();
 	GetCollider()->SetScale(Vec2(10.f, 10.f));
+	SetName(L"Missile");
 }
 
 CMissile::~CMissile()
@@ -43,11 +44,11 @@ void CMissile::render(HDC _dc)
 void CMissile::OnCollisionEnter(CCollider* _pOther)
 {
 	CObject* pObject = _pOther->GetObj();
-	if (L"Monster" == pObject->GetName()
+	if (L"Hitbox_Monster" == pObject->GetName()
 		|| L"Wall" == pObject->GetName()
-		|| L"Player" == pObject->GetName())
+		|| L"Hitbox_Player" == pObject->GetName())
 	{
-		if (L"Monster" == pObject->GetName())
+		if (L"Hitbox_Monster" == pObject->GetName())
 			CCamera::GetInst()->Shake(300.f, m_vDir);
 		DeleteObject(this);
 	}

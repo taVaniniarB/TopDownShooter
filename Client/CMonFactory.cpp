@@ -9,6 +9,9 @@
 
 #include "CRigidBody.h"
 #include "CResMgr.h"
+#include "CWeapon.h"
+#include "CWeaponFactory.h"
+#include "CHitbox.h"
 
 // 몬스터 팩토리 객체 안 만든다
 // 클래스로 선언했지만, 객체 있을 필요 X
@@ -32,6 +35,13 @@ CMonster* CMonFactory::CreateMonster(MON_TYPE _eType, Vec2 _vPos)
 		pMon->SetName(L"Monster");
 		pMon->SetTexture(CResMgr::GetInst()->LoadTexture(L"mosnter", L"texture\\ray.bmp"));
 		
+		CWeapon* pNewWeapon = CWeaponFactory::CreateWeapon(WEAPON_TYPE::GUN, MELEE_TYPE::NONE, GUN_TYPE::SHOTGUN);
+		pMon->SetWeapon(pNewWeapon);
+
+		CHitbox* pNewHitbox = new CHitbox;
+		pNewHitbox->SetName(L"Hitbox_Monster");
+		pMon->SetHitbox(pNewHitbox);
+
 		tMonInfo info = {};
 		info.fRecogRange = 300.f;
 		info.fSpeed = 50.f;
@@ -54,6 +64,15 @@ CMonster* CMonFactory::CreateMonster(MON_TYPE _eType, Vec2 _vPos)
 	}
 		break;
 	case MON_TYPE::RANGE:
+		break;
+	case MON_TYPE::FRIENDLY:
+		pMon = new CMonster;
+		pMon->SetType(_eType);
+		pMon->SetPos(_vPos);
+		pMon->SetScale(Vec2(64.f, 64.f));
+		pMon->SetName(L"NPC");
+		pMon->SetTexture(CResMgr::GetInst()->LoadTexture(L"mosnter", L"texture\\ray.bmp"));
+
 		break;
 	}
 	

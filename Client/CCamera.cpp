@@ -100,7 +100,6 @@ void CCamera::update()
 		float x = 2 * PI * m_tShakeInfo.fCurTime / m_tShakeInfo.fPeriod;
 		float dirSign = cos(x);
 		(dirSign > 0) ? (dirSign = 1) : (dirSign = -1);
-		std::cout << dirSign << "\n";
 
 		// 주기가 끝나면 현재시간을 초기화하고, 카운트를 1 증가시킨다.
 		if (m_tShakeInfo.fCurTime >= m_tShakeInfo.fPeriod)

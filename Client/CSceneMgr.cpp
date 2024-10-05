@@ -34,7 +34,7 @@ void CSceneMgr::init()
 	m_arrScene[(UINT)SCENE_TYPE::STAGE_01] = new CScene_Combat(L"scene\\lab");
 	m_arrScene[(UINT)SCENE_TYPE::STAGE_01]->SetName(L"Lab Scene");
 
-	m_arrScene[(UINT)SCENE_TYPE::STAGE_02] = new CScene_Combat(L"scene\\monsterandplayer");
+	m_arrScene[(UINT)SCENE_TYPE::STAGE_02] = new CScene_Combat(L"scene\\test");
 	m_arrScene[(UINT)SCENE_TYPE::STAGE_02]->SetName(L"test Scene");
 	
 	m_arrScene[(UINT)SCENE_TYPE::TOOL] = new CScene_Tool;
