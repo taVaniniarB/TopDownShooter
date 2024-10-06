@@ -10,7 +10,7 @@
 #include "CCollisionMgr.h"
 #include "CEventMgr.h"
 #include "CCamera.h"
-#include "CUIMgr.h "
+#include "CUIMgr.h"
 
 #include "CResMgr.h"
 #include "CTexture.h"

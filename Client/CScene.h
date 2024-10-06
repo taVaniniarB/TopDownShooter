@@ -43,7 +43,10 @@ public:
 
 	CObject* GetPlayer() { return m_pPlayer; }
 
-	CStage* GetStage() { return m_pStage; }
+	// 본인 소속 stage를 반환한다.
+	// 이 프로젝트에서는 하나의 stage만 존재할 것이기 때문에 편의상 싱글턴 패턴을 사용해서
+	// 이 함수는 사용하지 않는다.
+	//CStage* GetStage() { return m_pStage; }
 
 	virtual void start();
 	virtual void update();

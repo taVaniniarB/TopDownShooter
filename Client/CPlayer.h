@@ -46,6 +46,8 @@ public:
     virtual void update();
     virtual void render(HDC _dc);
 
+    CWeapon* GetWeapon() { return m_pWeapon; }
+
 public:
     void SetWeapon(CWeapon* _pWeapon);
     void SetHitbox(CHitbox* _pHitbox);
@@ -54,7 +56,7 @@ public:
 private:
     void DropWeapon();
     void ExchangeWeapon(CWeapon* _pWeapon);
-    void GetWeapon(CWeapon* _pWeapon);
+    void PickupWeapon(CWeapon* _pWeapon);
 
 private:
     void update_state();

@@ -26,7 +26,7 @@ void CCombatScene::update()
 	for (size_t i = 0; vecMonster.size() > i; ++i)
 	{
 		// 몬스터 죽음 > DeleteObject 당하기 전에 실행
-		if (0 == vecMonster[i]->IsDead())
+		if (vecMonster[i]->IsDead())
 		{
 			AddScore();
 		}
@@ -48,7 +48,7 @@ void CCombatScene::AddScore()
 
 	// 적 처지 시 점수
 	// 기본 100점 + 쌓은 콤보의 50배수만큼 증가한다.
-	GetStage()->AddScore(100 + (m_iCombo * 50));
+	CStage::GetInst()->AddScore(100 + (m_iCombo * 50));
 }
 
 void CCombatScene::AddCombo()

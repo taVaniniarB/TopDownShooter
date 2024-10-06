@@ -292,7 +292,7 @@ void CPlayer::SetHitbox(CHitbox* _pHitbox)
 }
 
 // 설정된 무기가 없는 상태에서만 실행
-void CPlayer::GetWeapon(CWeapon* _pWeapon)
+void CPlayer::PickupWeapon(CWeapon* _pWeapon)
 {
 	// 떨어진 무기를 주운 상황일 경우
 	if (_pWeapon->GetStatus() == WEAPON_STATUS::DROPPED)
@@ -309,7 +309,7 @@ void CPlayer::GetWeapon(CWeapon* _pWeapon)
 void CPlayer::ExchangeWeapon(CWeapon* _pWeapon)
 {
 	DropWeapon();
-	GetWeapon(_pWeapon);
+	PickupWeapon(_pWeapon);
 }
 
 
@@ -351,7 +351,7 @@ void CPlayer::OnCollision(CCollider* _pOther)
 			if (m_pWeapon)
 				ExchangeWeapon(pWeapon);
 			else
-				GetWeapon(pWeapon);
+				PickupWeapon(pWeapon);
 		}
 	}
 }

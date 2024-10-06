@@ -59,4 +59,3 @@ public:
 
     friend class CMonFactory;
 };
-

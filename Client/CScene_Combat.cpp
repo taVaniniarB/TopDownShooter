@@ -9,6 +9,7 @@
 #include "CMousePtr.h"
 
 #include "CCore.h"
+#include "CStage.h"
 
 #include "CPathMgr.h"
 #include "CTexture.h"
@@ -34,6 +35,9 @@
 
 CScene_Combat::CScene_Combat(const wstring& _wSceneRelativePath)
 	: m_wSceneRelativePath( _wSceneRelativePath )
+	, m_iCombo(0)
+	, m_fCurTime(0)
+	, m_fComboTime(1.f)
 {
 }
 
@@ -45,6 +49,22 @@ void CScene_Combat::update()
 {
 	CScene::update(); //부모 코드 재활용
 
+	const vector<CObject*>& vecMonster = CSceneMgr::GetInst()->GetCurScene()->GetGroupObject(GROUP_TYPE::MONSTER);
+	for (size_t i = 0; vecMonster.size() > i; ++i)
+	{
+		// 몬스터 죽음 > DeleteObject 당하기 전에 실행
+		if (vecMonster[i]->IsDead())
+		{
+			AddScore();
+		}
+	}
+
+	m_fCurTime += fDT;
+
+	if (m_fCurTime > m_fComboTime)
+	{
+		ResetCombo();
+	}
 	/*for (UINT i = 0; i < (UINT)GROUP_TYPE::END; ++i)
 	{
 		const vector<CObject*>& vecObj = GetGroupObject((GROUP_TYPE)i);
@@ -86,6 +106,27 @@ void CScene_Combat::update()
 	//}
 }
 
+
+// 몬스터의 HP가 0이 됐을 때 호출
+void CScene_Combat::AddScore()
+{
+	AddCombo();
+
+	// 적 처지 시 점수
+	// 기본 100점 + 쌓은 콤보의 50배수만큼 증가한다.
+	CStage::GetInst()->AddScore(100 + (m_iCombo * 50));
+}
+
+void CScene_Combat::AddCombo()
+{
+	++m_iCombo;
+	m_fCurTime = 0;
+	std::cout << "콤보: " << m_iCombo << "\n";
+}
+
+// 모든 몬스터의 정보 관리하고 있기
+//	몬스터 벡터 순회하며 HP가 0이 될 때마다 AddCombo와 AddScore 호출
+
 void CScene_Combat::render(HDC _dc)
 {
 	CScene::render(_dc);
@@ -119,10 +160,20 @@ void CScene_Combat::Enter()
 	CObject* pPlayer = GetGroupObject(GROUP_TYPE::PLAYER)[0];
 	RegisterPlayer(pPlayer);
 
-	CWeapon* pWeapon = CWeaponFactory::CreateWeapon(WEAPON_TYPE::GUN, MELEE_TYPE::NONE, GUN_TYPE::M16);
-	AddObject(pWeapon, GROUP_TYPE::WEAPON);
-	((CPlayer*)pPlayer)->SetWeapon(pWeapon);
+	// 바닥에 떨군 임시 무기
+	CWeapon* ptestWeapon = CWeaponFactory::CreateWeapon(WEAPON_TYPE::GUN, MELEE_TYPE::NONE, GUN_TYPE::M16);
+	ptestWeapon->Drop();
+	AddObject(ptestWeapon, GROUP_TYPE::DROPPED_WEAPON);
+	ptestWeapon->SetPos(pPlayer->GetPos());
 
+	CWeapon* pWeapon = CStage::GetInst()->GetPlayerWeapon();
+	if (nullptr != pWeapon)
+	{
+		CObject* pNewWeapon = pWeapon->Clone();
+		AddObject(pNewWeapon, GROUP_TYPE::WEAPON);
+		((CPlayer*)pPlayer)->SetWeapon((CWeapon*)pNewWeapon);
+	}
+		
 	CHitbox* pHitbox = new CHitbox();
 	pHitbox->SetName(L"Hitbox_Player");
 	AddObject(pHitbox, GROUP_TYPE::HITBOX_PLAYER);
@@ -175,6 +226,11 @@ void CScene_Combat::Enter()
 // 다음 씬에서는 다른 물체끼리의 충돌 검사할 수 있으니까
 void CScene_Combat::Exit()
 {
+	CObject* pPlayer = GetGroupObject(GROUP_TYPE::PLAYER)[0];
+	
+	// 플레이어 무기 저장
+	CStage::GetInst()->SavePlayerWeapon(((CPlayer*)pPlayer)->GetWeapon());
+
 	// 씬의 객체 삭제
 	DeleteAll();
 
