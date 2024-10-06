@@ -34,9 +34,9 @@ public:
 private:
     void AddScore();
     void AddCombo();
-
-    
     void ResetCombo() { m_iCombo = 0; }
+
+    void CreateCombatSceneUI();
 
 public:
     CScene_Combat(const wstring& _wSceneRelativePath);

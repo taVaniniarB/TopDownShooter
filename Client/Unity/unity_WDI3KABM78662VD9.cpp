@@ -2,6 +2,12 @@
 #include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\AI.cpp"
 
 
+#include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CAmmoImgUI.cpp"
+
+
+#include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CAmmoUI.cpp"
+
+
 #include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CAnimation.cpp"
 
 
@@ -23,11 +29,8 @@
 #include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CCombatScene.cpp"
 
 
+#include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CComboUI.cpp"
+
+
 #include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CCore.cpp"
-
-
-#include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CEventMgr.cpp"
-
-
-#include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CGravity.cpp"
 

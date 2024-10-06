@@ -194,12 +194,12 @@ void CScene::GenerateCorner(Vec2 vMousePos, WALL_DIR _eSelectedWallDir)
 	{
 	case WALL_DIR::TOP:
 	{
-		vPos = Vec2((iCol * TILE_SIZE), (iRow * TILE_SIZE));
+		vPos = Vec2((float)(iCol * TILE_SIZE), (float)(iRow * TILE_SIZE));
 	}
 	break;
 	case WALL_DIR::BOTTOM:
 	{
-		vPos = Vec2((iCol * (float)TILE_SIZE) + (float)(TILE_SIZE - WALL_THICKNESS), (iRow * TILE_SIZE + (TILE_SIZE - WALL_THICKNESS)));
+		vPos = Vec2((float)(iCol * TILE_SIZE) + (float)(TILE_SIZE - WALL_THICKNESS), (float)(iRow * TILE_SIZE + (TILE_SIZE - WALL_THICKNESS)));
 	}
 	break;
 	case WALL_DIR::LEFT:

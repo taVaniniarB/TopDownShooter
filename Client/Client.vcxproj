@@ -158,6 +158,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AI.h" />
+    <ClInclude Include="CAmmoImgUI.h" />
+    <ClInclude Include="CAmmoUI.h" />
     <ClInclude Include="CAnimation.h" />
     <ClInclude Include="CAnimator.h" />
     <ClInclude Include="CBtnUI.h" />
@@ -165,18 +167,21 @@
     <ClInclude Include="CCollider.h" />
     <ClInclude Include="CCollisionMgr.h" />
     <ClInclude Include="CCombatScene.h" />
+    <ClInclude Include="CComboUI.h" />
     <ClInclude Include="CCore.h" />
     <ClInclude Include="CEventMgr.h" />
     <ClInclude Include="CGravity.h" />
     <ClInclude Include="CGun.h" />
     <ClInclude Include="CHitbox.h" />
+    <ClInclude Include="CImgUI.h" />
     <ClInclude Include="CMelee.h" />
     <ClInclude Include="CMousePtr.h" />
     <ClInclude Include="CSceneChanger.h" />
     <ClInclude Include="CScene_Story.h" />
     <ClInclude Include="CScoreMgr.h" />
+    <ClInclude Include="CScoreUI.h" />
     <ClInclude Include="CStage.h" />
-    <ClInclude Include="CStatUI.h" />
+    <ClInclude Include="CTextUI.h" />
     <ClInclude Include="CTileBtnUI.h" />
     <ClInclude Include="CWall.h" />
     <ClInclude Include="CIdleState.h" />
@@ -220,6 +225,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AI.cpp" />
+    <ClCompile Include="CAmmoImgUI.cpp" />
+    <ClCompile Include="CAmmoUI.cpp" />
     <ClCompile Include="CAnimation.cpp" />
     <ClCompile Include="CAnimator.cpp" />
     <ClCompile Include="CBtnUI.cpp" />
@@ -227,18 +234,21 @@
     <ClCompile Include="CCollider.cpp" />
     <ClCompile Include="CCollisionMgr.cpp" />
     <ClCompile Include="CCombatScene.cpp" />
+    <ClCompile Include="CComboUI.cpp" />
     <ClCompile Include="CCore.cpp" />
     <ClCompile Include="CEventMgr.cpp" />
     <ClCompile Include="CGravity.cpp" />
     <ClCompile Include="CGun.cpp" />
     <ClCompile Include="CHitbox.cpp" />
+    <ClCompile Include="CImgUI.cpp" />
     <ClCompile Include="CMelee.cpp" />
     <ClCompile Include="CMousePtr.cpp" />
     <ClCompile Include="CSceneChanger.cpp" />
     <ClCompile Include="CScene_Story.cpp" />
     <ClCompile Include="CScoreMgr.cpp" />
+    <ClCompile Include="CScoreUI.cpp" />
     <ClCompile Include="CStage.cpp" />
-    <ClCompile Include="CStatUI.cpp" />
+    <ClCompile Include="CTextUI.cpp" />
     <ClCompile Include="CTileBtnUI.cpp" />
     <ClCompile Include="CWall.cpp" />
     <ClCompile Include="CIdleState.cpp" />

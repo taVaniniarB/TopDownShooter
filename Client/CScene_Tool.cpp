@@ -564,10 +564,10 @@ void CScene_Tool::SaveScene(const wstring& _strFilePath)
 	UINT wallSize = vWall.size();
 
 	const vector<CObject*>& vCornerWall = GetGroupObject(GROUP_TYPE::CORNER);
-	UINT CornerSize = vCornerWall.size();
+	UINT CornerSize = (UINT)(vCornerWall.size());
 
 	const vector<CObject*>& vTileWall = GetGroupObject(GROUP_TYPE::TILE_WALL);
-	UINT TileWallSize = vTileWall.size();
+	UINT TileWallSize = (UINT)(vTileWall.size());
 
 	UINT size = wallSize + CornerSize + TileWallSize;
 
@@ -601,7 +601,7 @@ void CScene_Tool::SaveScene(const wstring& _strFilePath)
 	// 몬스터 저장
 	// 몬스터 개수 저장
 	const vector<CObject*>& vecMonster = GetGroupObject(GROUP_TYPE::MONSTER);
-	UINT monsterSize = vecMonster.size();
+	UINT monsterSize = (UINT)(vecMonster.size());
 	fwrite(&monsterSize, sizeof(UINT), 1, pFile);
 	// 개별 몬스터의 정보를 세이브
 	for (size_t i = 0; i < monsterSize; ++i)
@@ -858,7 +858,7 @@ void CScene_Tool::SaveWall(const wstring& _strFilePath)
 
 	// 벽 개수 저장
 	const vector<CObject*>& vWall = GetGroupObject(GROUP_TYPE::WALL);
-	UINT wallSize = vWall.size();
+	UINT wallSize = (UINT)(vWall.size());
 	
 	const vector<CObject*>& vCornerWall = GetGroupObject(GROUP_TYPE::CORNER);
 	UINT CornerSize = vCornerWall.size();

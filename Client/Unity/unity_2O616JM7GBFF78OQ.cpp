@@ -1,4 +1,10 @@
 
+#include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CResMgr.cpp"
+
+
+#include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CRigidBody.cpp"
+
+
 #include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CScene.cpp"
 
 
@@ -27,7 +33,4 @@
 
 
 #include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CTimeMgr.cpp"
-
-
-#include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CTraceState.cpp"
 

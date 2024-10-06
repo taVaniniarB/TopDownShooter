@@ -8,8 +8,8 @@
 #include "CSound.h"
 
 CGun::CGun()
-	: m_iMaxMissile(0)
-	, m_iRemainMissile(0)
+	: m_iMaxAmmo(0)
+	, m_iRemainAmmo(0)
 	, m_pEmptySound(nullptr)
 {
 }
@@ -24,7 +24,7 @@ void CGun::Attack()
 	float fCurDelay = GetCurDelay();
 	if (fCurDelay > fDelay)
 	{
-		if (m_iRemainMissile > 0)
+		if (m_iRemainAmmo > 0)
 		{
 			CreateMissile();
 			// 사운드 재생
@@ -43,10 +43,10 @@ void CGun::Attack()
 			pNewSound->Play();
 			pNewSound->SetVolume(10.f);
 
-			m_iRemainMissile--;
+			m_iRemainAmmo--;
 			SetCurDelay(0.f);
 			
-			std::cout << "장탄 수: " << m_iRemainMissile << "\n";
+			std::cout << "장탄 수: " << m_iRemainAmmo << "\n";
 		}
 	}
 	else

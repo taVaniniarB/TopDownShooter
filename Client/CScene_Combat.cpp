@@ -10,34 +10,32 @@
 
 #include "CCore.h"
 #include "CStage.h"
-
 #include "CPathMgr.h"
 #include "CTexture.h"
-
 #include "CCollisionMgr.h"
-
 #include "CKeyMgr.h"
 #include "CSceneMgr.h"
 #include "CCamera.h"
-
 #include "AI.h"
 #include "CIdleState.h"
 #include "CTraceState.h"
-
 #include "CRigidBody.h"
 #include "SelectGDI.h"
-
 #include "CTimeMgr.h"
 #include "CScoreMgr.h"
-
 #include "CHitbox.h"
+#include "CUI.h"
+#include "CAmmoImgUI.h"
+#include "CAmmoUI.h"
+#include "CScoreUI.h"
+#include "CComboUI.h"
 
 
 CScene_Combat::CScene_Combat(const wstring& _wSceneRelativePath)
 	: m_wSceneRelativePath( _wSceneRelativePath )
 	, m_iCombo(0)
 	, m_fCurTime(0)
-	, m_fComboTime(1.f)
+	, m_fComboTime(2.f)
 {
 }
 
@@ -124,6 +122,24 @@ void CScene_Combat::AddCombo()
 	std::cout << "콤보: " << m_iCombo << "\n";
 }
 
+void CScene_Combat::CreateCombatSceneUI()
+{
+	// 점수, 총 정보(들고 있는 무기에 따라/무기 drop과 pickup 시 교체/현재 무기가 총일 때만 표시)
+	// 플레이어 HP, 콤보(콤보타임 내에만 표시)
+	CUI* pScoreUI = new CScoreUI;
+	AddObject(pScoreUI, GROUP_TYPE::UI);
+	CUI* pComboUI = new CComboUI;
+	AddObject(pComboUI, GROUP_TYPE::UI);
+	CUI* pRemainAmmoUI = new CAmmoUI;
+	AddObject(pRemainAmmoUI, GROUP_TYPE::UI);
+	CUI* pAmmoImgUI = new CAmmoImgUI;
+	AddObject(pAmmoImgUI, GROUP_TYPE::UI);
+
+	// TextUI를 상속하는 Score/Combo/Ammo UI
+	// 이미지를 띄우는 ImageUI (총알, 목숨 등)
+
+}
+
 // 모든 몬스터의 정보 관리하고 있기
 //	몬스터 벡터 순회하며 HP가 0이 될 때마다 AddCombo와 AddScore 호출
 
@@ -153,6 +169,8 @@ void CScene_Combat::render(HDC _dc)
 void CScene_Combat::Enter()
 {
 	LoadScene(m_wSceneRelativePath);
+
+	CreateCombatSceneUI();
 	
 	CMousePtr* mousePtr = new CMousePtr();
 	AddObject(mousePtr, GROUP_TYPE::MOUSE_POINTER);

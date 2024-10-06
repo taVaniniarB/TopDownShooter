@@ -146,9 +146,6 @@
     <Filter Include="Engine\04. Object\MousePointer">
       <UniqueIdentifier>{ee121c0f-1d8e-42a7-a0c6-edc4c9e8d213}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\04. Object\UI\StatUI">
-      <UniqueIdentifier>{f40816a5-18e8-43ce-8933-2d995b67d3b7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\03. Manager\ScoreMgr">
       <UniqueIdentifier>{1cb781f8-9b6d-496d-8062-93bd71837aa4}</UniqueIdentifier>
     </Filter>
@@ -172,6 +169,27 @@
     </Filter>
     <Filter Include="Engine\04. Object\Hitbox">
       <UniqueIdentifier>{58603af1-9273-43a7-88a9-48867bf1bf72}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Object\UI\TextUI">
+      <UniqueIdentifier>{19ee0fd5-b9e5-4d13-9b9a-cfc82f030fd7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Object\UI\ImgUI">
+      <UniqueIdentifier>{0e31db94-f378-44b9-8dfb-0fa7d3b110d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Object\UI\TextUI\ScoreUI">
+      <UniqueIdentifier>{62af3fd9-557e-4e6d-a1b5-bdcf0b96f9de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Object\UI\TextUI\ComboUI">
+      <UniqueIdentifier>{bfeb431b-2f0a-4c85-8e10-a0cc2d563ac4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Object\UI\TextUI\AmmoUI">
+      <UniqueIdentifier>{a17ee334-b6fa-4b22-b78f-45c037203a78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Object\UI\ImgUI\AmmoImg">
+      <UniqueIdentifier>{6f0f56b6-1863-4ef1-8d29-16e26ec764c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Object\UI\ImgUI\ArrowImg">
+      <UniqueIdentifier>{e6d0b8ae-7cbc-4a75-86f7-d2dbda43f37e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -329,9 +347,6 @@
     <ClInclude Include="CMousePtr.h">
       <Filter>Engine\04. Object\MousePointer</Filter>
     </ClInclude>
-    <ClInclude Include="CStatUI.h">
-      <Filter>Engine\04. Object\UI\StatUI</Filter>
-    </ClInclude>
     <ClInclude Include="CScoreMgr.h">
       <Filter>Engine\03. Manager\ScoreMgr</Filter>
     </ClInclude>
@@ -352,6 +367,24 @@
     </ClInclude>
     <ClInclude Include="CHitbox.h">
       <Filter>Engine\04. Object\Hitbox</Filter>
+    </ClInclude>
+    <ClInclude Include="CTextUI.h">
+      <Filter>Engine\04. Object\UI\TextUI</Filter>
+    </ClInclude>
+    <ClInclude Include="CScoreUI.h">
+      <Filter>Engine\04. Object\UI\TextUI\ScoreUI</Filter>
+    </ClInclude>
+    <ClInclude Include="CComboUI.h">
+      <Filter>Engine\04. Object\UI\TextUI\ComboUI</Filter>
+    </ClInclude>
+    <ClInclude Include="CAmmoUI.h">
+      <Filter>Engine\04. Object\UI\TextUI\AmmoUI</Filter>
+    </ClInclude>
+    <ClInclude Include="CImgUI.h">
+      <Filter>Engine\04. Object\UI\ImgUI</Filter>
+    </ClInclude>
+    <ClInclude Include="CAmmoImgUI.h">
+      <Filter>Engine\04. Object\UI\ImgUI\AmmoImg</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -504,9 +537,6 @@
     <ClCompile Include="CMousePtr.cpp">
       <Filter>Engine\04. Object\MousePointer</Filter>
     </ClCompile>
-    <ClCompile Include="CStatUI.cpp">
-      <Filter>Engine\04. Object\UI\StatUI</Filter>
-    </ClCompile>
     <ClCompile Include="CScoreMgr.cpp">
       <Filter>Engine\03. Manager\ScoreMgr</Filter>
     </ClCompile>
@@ -524,6 +554,24 @@
     </ClCompile>
     <ClCompile Include="CHitbox.cpp">
       <Filter>Engine\04. Object\Hitbox</Filter>
+    </ClCompile>
+    <ClCompile Include="CTextUI.cpp">
+      <Filter>Engine\04. Object\UI\TextUI</Filter>
+    </ClCompile>
+    <ClCompile Include="CScoreUI.cpp">
+      <Filter>Engine\04. Object\UI\TextUI\ScoreUI</Filter>
+    </ClCompile>
+    <ClCompile Include="CComboUI.cpp">
+      <Filter>Engine\04. Object\UI\TextUI\ComboUI</Filter>
+    </ClCompile>
+    <ClCompile Include="CAmmoUI.cpp">
+      <Filter>Engine\04. Object\UI\TextUI\AmmoUI</Filter>
+    </ClCompile>
+    <ClCompile Include="CImgUI.cpp">
+      <Filter>Engine\04. Object\UI\ImgUI</Filter>
+    </ClCompile>
+    <ClCompile Include="CAmmoImgUI.cpp">
+      <Filter>Engine\04. Object\UI\ImgUI\AmmoImg</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
