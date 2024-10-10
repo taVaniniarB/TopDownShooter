@@ -33,6 +33,9 @@ public: //코어 클래스의 초기화 함수를 만들자
 	//실패 체크 위해 정수 값 반환하자
 	int init(HWND _hWnd, POINT _ptResolution);
 	void progress(); //메시지가 없는 동안의 코어 클래스의 작업
+
+private:
+	void InitGDIPlus();
 	
 public:
 	void DockMenu();

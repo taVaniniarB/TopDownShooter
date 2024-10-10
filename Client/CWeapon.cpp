@@ -40,27 +40,55 @@ void CWeapon::update()
 
 void CWeapon::render(HDC _dc)
 {
-	// 각도(AimDir)에 따라 회전
-	//m_vFinalPos;
-	m_vAimDir;
+	// 벡터에서 회전 각도 계산 (단위 벡터이므로 ArcTan2 사용)
+	//float angle = VectorToAngle(m_vAimDir);
+	float angle = atan2(m_vAimDir.y, m_vAimDir.x) * (180.0f / 3.141592f);
 
 	Vec2 vPos = GetPos();
 	vPos = CCamera::GetInst()->GetRenderPos(vPos);
 	CTexture* pTex = GetTexture();
 	Vec2 vScale = GetScale();
 
-	// dc, 출력될 위치(오브젝트가 출력될 좌상단 위치), 가로세로길이, 텍스처의 DC, 텍스처 내에서 자를 위치, 가로세로길이
-	TransparentBlt(_dc
-		, (int)(vPos.x - vScale.x / 2.f)
-		, (int)(vPos.y - vScale.y / 2.f)
-		, (int)(vScale.x)
-		, (int)(vScale.y)
-		, pTex->GetDC()
-		, (int)(0) // 이미지 상 좌상단좌표 x,y
-		, (int)(0)
-		, (int)(vScale.x)
-		, (int)(vScale.y)
-		, RGB(0, 255, 0));
+	// GDI+의 Graphics 객체 생성
+	Gdiplus::Graphics graphics(_dc);
+
+	// 회전의 기준점을 이미지 중심으로 설정
+	int centerX = (int)(vPos.x);
+	int centerY = (int)(vPos.y);
+
+	// GDI+ 변환 적용: 중심으로 이동 -> 회전 -> 원래 위치로 돌아옴
+	graphics.TranslateTransform(centerX, centerY);
+	graphics.RotateTransform(angle);
+	graphics.TranslateTransform(-centerX, -centerY);
+
+
+	Image image(L"C:\\Users\\hayeon\\Source\\Repos\\taVaniniarB\\WinApiLecture\\Output\\bin\\content\\texture\\weapon\\gun.bmp"); // 텍스처 경로는 실제 경로로 변경
+	graphics.DrawImage(&image,
+		(int)(vPos.x - vScale.x / 2.f),
+		(int)(vPos.y - vScale.y / 2.f),
+		(int)(vScale.x),
+		(int)(vScale.y));
+
+
+// ---------------------------------------
+
+	//Vec2 vPos = GetPos();
+	//vPos = CCamera::GetInst()->GetRenderPos(vPos);
+	//CTexture* pTex = GetTexture();
+	//Vec2 vScale = GetScale();
+
+	//// dc, 출력될 위치(오브젝트가 출력될 좌상단 위치), 가로세로길이, 텍스처의 DC, 텍스처 내에서 자를 위치, 가로세로길이
+	//TransparentBlt(_dc
+	//	, (int)(vPos.x - vScale.x / 2.f)
+	//	, (int)(vPos.y - vScale.y / 2.f)
+	//	, (int)(vScale.x)
+	//	, (int)(vScale.y)
+	//	, pTex->GetDC()
+	//	, (int)(0) // 이미지 상 좌상단좌표 x,y
+	//	, (int)(0)
+	//	, (int)(vScale.x)
+	//	, (int)(vScale.y)
+	//	, RGB(0, 255, 0));
 
 	component_render(_dc);
 }

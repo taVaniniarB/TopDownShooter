@@ -70,6 +70,7 @@ int CCore::init(HWND _hWnd, POINT _ptResolution)
 	// 이중 버퍼링 용도의 텍스처 한 장을 만든다.
 	m_pMemTex = CResMgr::GetInst()->CreateTexture(L"BackBuffer", (UINT)m_ptResolution.x, (UINT)m_ptResolution.y);
 
+	InitGDIPlus();
 
 	// 이중 버퍼링 용도의 비트맵과 DC를 만든다 (멤버가 텍스처와 겹치므로 위의 방식으로 변경)
 	//m_hBit = CreateCompatibleBitmap(m_hDC, m_ptResolution.x, m_ptResolution.y);
@@ -155,6 +156,13 @@ void CCore::progress()
 	CEventMgr::GetInst()->update();
 }
 
+void CCore::InitGDIPlus()
+{
+	ULONG_PTR gdiplusToken = 0;
+	Gdiplus::GdiplusStartupInput gdistartupinput;
+	Gdiplus::GdiplusStartup(&gdiplusToken, &gdistartupinput, nullptr);
+}
+
 void CCore::Clear()
 {
 	SelectGDI gdi(m_pMemTex->GetDC(), BRUSH_TYPE::BLACK);
@@ -198,5 +206,5 @@ void CCore::ChangeWindowSize(Vec2 _vResolution, bool _bMenu)
 	RECT rt = { 0, 0, (long)_vResolution.x, (long)_vResolution.y };
 	// 사각형 사이즈, 가장 기본적인 옵션, 메뉴바 유무
 	AdjustWindowRect(&rt, WS_OVERLAPPEDWINDOW, _bMenu);
-	SetWindowPos(m_hWnd, nullptr, 100, 100, rt.right - rt.left, rt.bottom - rt.top, 0);
+	SetWindowPos(m_hWnd, nullptr, 10, 10, rt.right - rt.left, rt.bottom - rt.top, 0);
 }

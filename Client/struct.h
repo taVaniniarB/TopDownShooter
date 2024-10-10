@@ -112,3 +112,10 @@ public:
 		, y((float)_pt.y)
 	{}
 };
+
+//
+//
+//float VectorToAngle(Vec2 _vec)
+//{
+//	return atan2(_vec.y, _vec.x) * (180.0f / 3.141592f); // 라디안을 도 단위로 변환
+//}

@@ -22,6 +22,10 @@ using std::wstring;
 
 #include <algorithm>
 
+#include <gdiplus.h>
+using namespace Gdiplus;
+#pragma comment(lib, "Gdiplus.lib")
+
 
 //vs 안에 있는 라이브러리 파일 절대경로로 입력할 필요 없이 자동으로 찾아줌
 #pragma comment(lib, "Msimg32.lib")
