@@ -13,6 +13,7 @@ CResMgr::~CResMgr()
 {
 	Safe_Delete_Map(m_mapTex);
 	Safe_Delete_Map(m_mapSound);
+	Safe_Delete_Map(m_mapImage);
 	// 전역함수를 통해 priviate인 자식(텍스쳐)의 소멸자를 호출하는법
 	// 맵의 데이터 타입을 부모(리소스)로 해서, 지우기 함수를 호출한다
 	// 그럼 오버라이딩 된 자식 소멸자가 호출됨
@@ -74,6 +75,38 @@ CTexture* CResMgr::FindTexture(const wstring& _strKey)
 	}
 
 	return (CTexture*)iter->second;
+}
+
+Image* CResMgr::LoadGdiImage(const wstring& _strKey, const wstring& _strRelativePath)
+{
+	Image* pImage = FindImage(_strKey);
+	if (nullptr != pImage)
+	{
+		return pImage;
+	}
+
+	// content 폴더까지의 절대경로
+	wstring strFilePath = CPathMgr::GetInst()->GetContentPath();
+	strFilePath += _strRelativePath;
+
+	pImage = new Image(strFilePath.c_str()); // 리소스 매니저 내에서 new로 할당했기 때문에, 리소스 매니저 소멸자에서 메모리 해제 필요
+
+	m_mapImage.insert(make_pair(_strKey, pImage));
+
+	return pImage;
+}
+
+
+Image* CResMgr::FindImage(const wstring& _strKey)
+{
+	map<wstring, Image*>::iterator iter = m_mapImage.find(_strKey);
+
+	if (iter == m_mapImage.end())
+	{
+		return nullptr;
+	}
+
+	return (Image*)iter->second;
 }
 
 CSound* CResMgr::LoadSound(const wstring& _strKey, const wstring& _strRelativePath)

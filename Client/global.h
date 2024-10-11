@@ -2,7 +2,8 @@
 
 #include <Windows.h>
 #include <iostream>
-
+#include <fstream>
+#include <tchar.h>
 #include <vector>
 using std::vector;
 

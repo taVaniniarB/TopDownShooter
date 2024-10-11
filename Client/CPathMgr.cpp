@@ -5,6 +5,7 @@
 
 CPathMgr::CPathMgr()
 	: m_szContentPath{}
+	, m_szRelativePath{}
 {
 }
 

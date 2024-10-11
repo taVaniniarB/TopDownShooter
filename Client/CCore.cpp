@@ -30,25 +30,28 @@ CCore::CCore()
 	//, m_memDC(0)
 	, m_arrBrush{}
 	, m_arrPen{}
+	, m_arrFont{}
 	, m_pMemTex(nullptr)
 	, m_hMenu(0)
 {
 }
 
-CCore::~CCore() 
+CCore::~CCore()
 {// 프로그램 종료 시점>데이터 영역의 싱글턴 객체 삭제>소멸자 호출
 	ReleaseDC(m_hWnd, m_hDC);
-
-	//DeleteDC(m_memDC);
-	//DeleteObject(m_hBit);
 
 	for (int i = 0; i < (UINT)PEN_TYPE::END; ++i)
 	{
 		DeleteObject(m_arrPen[i]);
 	}
-	
+
 	// 참고: DeleteMenu: 메뉴의 항목 지우기
 	DestroyMenu(m_hMenu);
+
+	for (int i = 0; i < (UINT)FONT_TYPE::END; ++i)
+	{
+		RemoveFontMemResourceEx(m_arrFont[i]);
+	}
 }
 
 
@@ -57,7 +60,7 @@ int CCore::init(HWND _hWnd, POINT _ptResolution)
 {
 	m_hWnd = _hWnd;
 	m_ptResolution = _ptResolution;
-	
+
 
 	// 입력받은 해상도에 맞게 윈도우 크기 조절
 	ChangeWindowSize(Vec2((float)_ptResolution.x, (float)_ptResolution.y), false);
@@ -71,7 +74,6 @@ int CCore::init(HWND _hWnd, POINT _ptResolution)
 	m_pMemTex = CResMgr::GetInst()->CreateTexture(L"BackBuffer", (UINT)m_ptResolution.x, (UINT)m_ptResolution.y);
 
 	InitGDIPlus();
-
 	// 이중 버퍼링 용도의 비트맵과 DC를 만든다 (멤버가 텍스처와 겹치므로 위의 방식으로 변경)
 	//m_hBit = CreateCompatibleBitmap(m_hDC, m_ptResolution.x, m_ptResolution.y);
 	//m_memDC = CreateCompatibleDC(m_hDC);
@@ -81,6 +83,9 @@ int CCore::init(HWND _hWnd, POINT _ptResolution)
 	// 자주 사용할 펜, 브러쉬 생성
 	CreateBrushPen();
 
+
+	CreateFonts();
+	
 	//Manager 초기화
 	CPathMgr::GetInst()->init();
 	CTimeMgr::GetInst()->init();
@@ -177,13 +182,31 @@ void CCore::CreateBrushPen()
 	m_arrBrush[(UINT)BRUSH_TYPE::HOLLOW] = (HBRUSH)GetStockObject(HOLLOW_BRUSH);
 	m_arrBrush[(UINT)BRUSH_TYPE::BLACK] = (HBRUSH)GetStockObject(BLACK_BRUSH);
 
-
 	// red, green, blue pen
 	// 직접 만든 거라 지워줘야 함
 	m_arrPen[(UINT)PEN_TYPE::RED] = CreatePen(PS_SOLID, 1, RGB(255, 0, 0));
 	m_arrPen[(UINT)PEN_TYPE::GREEN] = CreatePen(PS_SOLID, 1, RGB(0, 255, 0));
 	m_arrPen[(UINT)PEN_TYPE::BLUE] = CreatePen(PS_SOLID, 1, RGB(0, 0, 255));
 	m_arrPen[(UINT)PEN_TYPE::YELLOW] = CreatePen(PS_SOLID, 1, RGB(255, 255, 0));
+}
+
+void CCore::CreateFonts()
+{
+	m_arrFont[(UINT)FONT_TYPE::IMPACT] = CreateFont(
+		100, 10, 0, 0, FW_BOLD, FALSE, FALSE, FALSE,
+		DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+		ANTIALIASED_QUALITY, DEFAULT_PITCH | FF_SWISS, _T("Impact"));
+
+	m_arrFont[(UINT)FONT_TYPE::SYSTEM] = CreateFont(
+		70, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE,
+		DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+		ANTIALIASED_QUALITY, DEFAULT_PITCH | FF_SWISS, _T("System"));
+
+	m_arrFont[(UINT)FONT_TYPE::GULIM] = CreateFont(
+		25, 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE,
+		DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+		ANTIALIASED_QUALITY, DEFAULT_PITCH | FF_SWISS, _T("굴림"));
+
 }
 
 

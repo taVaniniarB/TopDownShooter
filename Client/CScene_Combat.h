@@ -37,6 +37,10 @@ private:
     void ResetCombo() { m_iCombo = 0; }
 
     void CreateCombatSceneUI();
+    void CreateCollisionGroup();
+
+    void PlayerSetting(CObject* pPlayer);
+    void CameraSetting(CObject* pPlayer);
 
 public:
     CScene_Combat(const wstring& _wSceneRelativePath);

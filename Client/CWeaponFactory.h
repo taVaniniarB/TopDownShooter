@@ -2,15 +2,6 @@
 
 class CWeapon;
 
-enum class WEAPON_TYPE
-{
-	MELEE,
-	GUN,
-};
-
-
-
-
 class CWeaponFactory
 {
 public:

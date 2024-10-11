@@ -13,6 +13,8 @@ class CWeapon :
 	public CObject
 {
 private:
+	WEAPON_TYPE m_eWeaponType;
+
 	float m_fDelay;
 	float m_fCurDelay;
 	// 공격 시 효과음 리소스
@@ -28,6 +30,8 @@ private:
 	Vec2 m_vPos;
 	Vec2 m_vOffsetPos;
 
+	Image* m_pImage;
+
 
 public:
 	virtual void start();
@@ -38,6 +42,8 @@ public:
 	void SetDelay(float _f) { m_fDelay = _f; m_fCurDelay = _f; }
 	CObject* GetOwner() { return m_pOwner; }
 	void SetOnwer(CObject* _pOwner) { m_pOwner = _pOwner; }
+	void SetWeaponType(WEAPON_TYPE _eType) { m_eWeaponType = _eType; }
+	WEAPON_TYPE GetWeaponType() { return m_eWeaponType; }
 	
 	void Drop();
 
@@ -52,6 +58,7 @@ public:
 	void SetOwner(CObject* _pOwner) { m_pOwner = _pOwner; }
 
 	//void OncollisionEnter(CCollider* _pOther);
+	void SetImage(Image* _pImage);
 
 private:
 	void SetAimDir();

@@ -87,6 +87,24 @@ enum class PEN_TYPE
 	END,
 };
 
+enum class UI_TYPE
+{
+	TEXT,
+	AMMO,
+	AMMO_IMAGE,
+	COMBO,
+	SCORE,
+	END,
+};
+
+enum class FONT_TYPE
+{
+	IMPACT,
+	SYSTEM,
+	GULIM,
+	END,
+};
+
 enum class EVENT_TYPE
 {
 	CREATE_OBJECT,
@@ -134,6 +152,11 @@ enum class MON_TYPE
 	FRIENDLY,
 };
 
+enum class WEAPON_TYPE
+{
+	MELEE,
+	GUN,
+};
 
 enum class GUN_TYPE
 {

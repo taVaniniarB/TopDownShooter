@@ -1,4 +1,5 @@
 #pragma once
+#include <wingdi.h>
 
 class CTexture;
 
@@ -20,7 +21,8 @@ private:
 	// 자주 사용하는 GDI Object
 	// 필요할 때마다 생성은 비효율적이니까
 	HBRUSH	m_arrBrush[(UINT)BRUSH_TYPE::END];
-	HPEN	m_arrPen[(UINT)PEN_TYPE::END];;
+	HPEN	m_arrPen[(UINT)PEN_TYPE::END];
+	HFONT	m_arrFont[(UINT)FONT_TYPE::END];
 
 	// 메뉴
 	HMENU m_hMenu; // Tool Scene 에서만 사용하기 위한 메뉴
@@ -28,6 +30,7 @@ private:
 private:
 	void Clear();
 	void CreateBrushPen();
+	void CreateFonts();
 
 public: //코어 클래스의 초기화 함수를 만들자
 	//실패 체크 위해 정수 값 반환하자
@@ -36,6 +39,7 @@ public: //코어 클래스의 초기화 함수를 만들자
 
 private:
 	void InitGDIPlus();
+	bool LoadFontFromFile(const wchar_t* fontFilePath);
 	
 public:
 	void DockMenu();
@@ -47,8 +51,11 @@ public:
 	HDC GetMainDC() { return m_hDC; }
 
 	POINT GetResolution() { return m_ptResolution; }
+	float GetWidth() { return (float)m_ptResolution.x; }
+	float GetHeight() { return (float)m_ptResolution.y; }
 	HBRUSH GetBrush(BRUSH_TYPE _eType) { return m_arrBrush[(UINT)_eType]; }
 	HPEN GetPen(PEN_TYPE _eType) { return m_arrPen[(UINT)_eType]; }
+	HFONT GetFont(FONT_TYPE _eType) { return m_arrFont[(UINT)_eType]; }
 };
 
 

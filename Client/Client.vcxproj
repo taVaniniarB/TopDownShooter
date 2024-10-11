@@ -166,7 +166,6 @@
     <ClInclude Include="CCamera.h" />
     <ClInclude Include="CCollider.h" />
     <ClInclude Include="CCollisionMgr.h" />
-    <ClInclude Include="CCombatScene.h" />
     <ClInclude Include="CComboUI.h" />
     <ClInclude Include="CCore.h" />
     <ClInclude Include="CEventMgr.h" />
@@ -233,7 +232,6 @@
     <ClCompile Include="CCamera.cpp" />
     <ClCompile Include="CCollider.cpp" />
     <ClCompile Include="CCollisionMgr.cpp" />
-    <ClCompile Include="CCombatScene.cpp" />
     <ClCompile Include="CComboUI.cpp" />
     <ClCompile Include="CCore.cpp" />
     <ClCompile Include="CEventMgr.cpp" />
@@ -289,6 +287,9 @@
   <ItemGroup>
     <Image Include="Client.ico" />
     <Image Include="small.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="font1.bin" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

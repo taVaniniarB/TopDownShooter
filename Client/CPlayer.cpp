@@ -14,6 +14,8 @@
 #include "CRigidBody.h"
 #include "CWeapon.h"
 #include "CHitbox.h"
+#include "CUI.h"
+#include "CGun.h"
 
 CPlayer::CPlayer()
 	: m_eCurState(PLAYER_STATE::IDLE)
@@ -268,6 +270,12 @@ void CPlayer::DropWeapon()
 {
 	if (m_pWeapon)
 	{
+		if (m_pWeapon->GetWeaponType() == WEAPON_TYPE::GUN)
+		{
+			CSceneMgr::GetInst()->GetCurScene()->SetUIVisable(L"ammoImage", false);
+			CSceneMgr::GetInst()->GetCurScene()->SetUIVisable(L"ammoUI", false);
+		}
+
 		CObject* pNewWeapon = m_pWeapon->Clone();
 		((CWeapon*)pNewWeapon)->Drop();
 		CreateObject(pNewWeapon, GROUP_TYPE::DROPPED_WEAPON);
@@ -275,9 +283,6 @@ void CPlayer::DropWeapon()
 		m_pWeapon = nullptr;
 	}
 }
-
-
-
 
 void CPlayer::SetWeapon(CWeapon* _pWeapon)
 {
@@ -291,7 +296,6 @@ void CPlayer::SetHitbox(CHitbox* _pHitbox)
 	_pHitbox->SetOwner(this);
 }
 
-// 설정된 무기가 없는 상태에서만 실행
 void CPlayer::PickupWeapon(CWeapon* _pWeapon)
 {
 	// 떨어진 무기를 주운 상황일 경우
@@ -302,6 +306,19 @@ void CPlayer::PickupWeapon(CWeapon* _pWeapon)
 		CreateObject(pNewWeapon, GROUP_TYPE::WEAPON);
 		((CWeapon*)pNewWeapon)->SetStatus(WEAPON_STATUS::HOLD);
 		SetWeapon((CWeapon*)pNewWeapon);
+
+		if (((CWeapon*)pNewWeapon)->GetWeaponType() == WEAPON_TYPE::GUN)
+		{
+			CSceneMgr::GetInst()->GetCurScene()->SetUIVisable(L"ammoImage", true);
+			CSceneMgr::GetInst()->GetCurScene()->SetUIVisable(L"ammoUI", true);
+			CSceneMgr::GetInst()->GetCurScene()->SetUIText(L"ammoUI", ((CGun*)pNewWeapon)->GetAmmoNum());
+			
+		}
+		else
+		{
+			CSceneMgr::GetInst()->GetCurScene()->SetUIVisable(L"ammoUI", false);
+			CSceneMgr::GetInst()->GetCurScene()->SetUIVisable(L"ammoImage", false);
+		}
 	}
 }
 

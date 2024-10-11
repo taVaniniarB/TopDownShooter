@@ -149,9 +149,6 @@
     <Filter Include="Engine\03. Manager\ScoreMgr">
       <UniqueIdentifier>{1cb781f8-9b6d-496d-8062-93bd71837aa4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\05. Scene\ComabtScene">
-      <UniqueIdentifier>{5c833a21-65a7-4d92-be7e-6965ebf785dd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\05. Scene\StoryScene">
       <UniqueIdentifier>{fd4b3760-74e5-4131-9da6-7c10f10dbea8}</UniqueIdentifier>
     </Filter>
@@ -350,9 +347,6 @@
     <ClInclude Include="CScoreMgr.h">
       <Filter>Engine\03. Manager\ScoreMgr</Filter>
     </ClInclude>
-    <ClInclude Include="CCombatScene.h">
-      <Filter>Engine\05. Scene\ComabtScene</Filter>
-    </ClInclude>
     <ClInclude Include="CStage.h">
       <Filter>Engine\05. Scene\Stage</Filter>
     </ClInclude>
@@ -540,9 +534,6 @@
     <ClCompile Include="CScoreMgr.cpp">
       <Filter>Engine\03. Manager\ScoreMgr</Filter>
     </ClCompile>
-    <ClCompile Include="CCombatScene.cpp">
-      <Filter>Engine\05. Scene\ComabtScene</Filter>
-    </ClCompile>
     <ClCompile Include="CStage.cpp">
       <Filter>Engine\05. Scene\Stage</Filter>
     </ClCompile>
@@ -573,5 +564,10 @@
     <ClCompile Include="CAmmoImgUI.cpp">
       <Filter>Engine\04. Object\UI\ImgUI\AmmoImg</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="font1.bin">
+      <Filter>Default\리소스 파일</Filter>
+    </None>
   </ItemGroup>
 </Project>

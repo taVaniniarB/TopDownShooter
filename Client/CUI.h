@@ -18,6 +18,8 @@ private:
     bool            m_bMouseOn;     // UI 위에 마우스 있다
     bool            m_bLbtnDown;    // UI에 왼쪽 버튼 눌린 적 있다
 
+    bool m_bVisable;
+
 
 public:
     Vec2 GetFinalPos() { return m_vFinalPos; }
@@ -25,6 +27,8 @@ public:
     bool IsMouseOn() { return m_bMouseOn; }
     bool IsLbtnDown() { return m_bLbtnDown; }
 
+    void SetVisable(bool _b) { m_bVisable = _b; }
+    bool GetIsVisable() { return m_bVisable; }
     
 
     // 자식 UI 들어오면 벡터에 넣고, 부모 연결

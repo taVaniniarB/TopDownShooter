@@ -11,6 +11,8 @@
 #include "CPlayer.h"
 #include "CMonster.h"
 #include "CSceneChanger.h"
+#include "CUI.h"
+#include "CTextUI.h"
 
 
 
@@ -148,13 +150,13 @@ void CScene::GenerateWall(Vec2 vMousePos, WALL_DIR _eSelectedWallDir)
 	break;
 	case WALL_DIR::LEFT:
 	{
-		vPos = Vec2((iCol * TILE_SIZE), (iRow * TILE_SIZE));
+		vPos = Vec2((float)(iCol * TILE_SIZE), (float)(iRow * TILE_SIZE));
 		vScale = Vec2(WALL_THICKNESS, TILE_SIZE);
 	}
 	break;
 	case WALL_DIR::RIGHT:
 	{
-		vPos = Vec2((iCol * TILE_SIZE) + (TILE_SIZE - WALL_THICKNESS), (iRow * TILE_SIZE));
+		vPos = Vec2((float)(iCol * TILE_SIZE) + (float)(TILE_SIZE - WALL_THICKNESS), (float)(iRow * TILE_SIZE));
 		vScale = Vec2(WALL_THICKNESS, TILE_SIZE);
 	}
 	break;
@@ -239,7 +241,7 @@ void CScene::GenerateTileWall(Vec2 vMousePos, int _idx)
 	int iCol = (int)vMousePos.x / TILE_SIZE;
 	int iRow = (int)vMousePos.y / TILE_SIZE;
 
-	vPos = Vec2((iCol * TILE_SIZE), (iRow * TILE_SIZE));
+	vPos = Vec2((float)(iCol * TILE_SIZE), (float)(iRow * TILE_SIZE));
 	vScale = Vec2(TILE_SIZE, TILE_SIZE);
 
 	CTexture* pWallTex = CResMgr::GetInst()->LoadTexture(L"Tile", L"texture\\tile\\tile.bmp");
@@ -341,6 +343,34 @@ void CScene::CreateSceneChanger(Vec2 vPos, Vec2 vScale, SCENE_TYPE _eScene)
 	pObj->SetPos(vPos);
 	pObj->SetScale(vScale);
 	AddObject(pObj, GROUP_TYPE::SCENE_CHANGER);
+}
+
+void CScene::SetUIVisable(wstring _strUIName, bool _b)
+{
+	FindUI(_strUIName)->SetVisable(_b);
+}
+
+void CScene::SetUIText(wstring _strUIName, wstring _strText)
+{
+	((CTextUI*)FindUI(_strUIName))->SetText(_strText);
+}
+
+void CScene::SetUIText(wstring _strUIName, int _iNum)
+{
+	((CTextUI*)FindUI(_strUIName))->SetText(_iNum);
+}
+
+CUI* CScene::FindUI(std::wstring& _strUIName)
+{
+	vector<CObject*> UIVec = GetGroupObject(GROUP_TYPE::UI);
+	for (size_t i = 0; i < UIVec.size(); ++i)
+	{
+		if (UIVec[i]->GetName() == _strUIName)
+		{
+			return ((CUI*)UIVec[i]);
+		}
+	}
+	return nullptr;
 }
 
 void CScene::start()

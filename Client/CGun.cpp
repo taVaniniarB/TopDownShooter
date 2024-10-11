@@ -6,6 +6,8 @@
 #include "CCamera.h"
 #include "CResMgr.h"
 #include "CSound.h"
+#include "CSceneMgr.h"
+#include "CScene.h"
 
 CGun::CGun()
 	: m_iMaxAmmo(0)
@@ -46,7 +48,11 @@ void CGun::Attack()
 			m_iRemainAmmo--;
 			SetCurDelay(0.f);
 			
-			std::cout << "ÀåÅº ¼ö: " << m_iRemainAmmo << "\n";
+			if (GetOwner()->GetName() == L"Player")
+			{
+				std::cout << "ÀåÅº ¼ö: " << m_iRemainAmmo << "\n";
+				CSceneMgr::GetInst()->GetCurScene()->SetUIText(L"ammoUI", m_iRemainAmmo);
+			}
 		}
 	}
 	else

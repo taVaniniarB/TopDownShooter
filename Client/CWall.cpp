@@ -80,7 +80,7 @@ void CWall::render(HDC _dc)
 		, iCurRow * TILE_SIZE
 		, SRCCOPY);
 
-	component_render(_dc);
+	//component_render(_dc);
 }
 
 // 충돌체에서 충돌 이벤트 발생 시 실행될 함수

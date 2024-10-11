@@ -10,6 +10,7 @@
 // 타입에 대한 구체적 정보가 없기 때문에 포인터로밖에 사용이 안 됨
 class CObject;
 class CStage;
+class CUI;
 
 class CScene
 {
@@ -42,6 +43,11 @@ public:
 	UINT GetTileY() { return m_iTileY; }
 
 	CObject* GetPlayer() { return m_pPlayer; }
+
+	void SetUIVisable(wstring _strUIName, bool _b);
+	CUI* FindUI(wstring& _strName);
+	void SetUIText(wstring _strUIName, wstring _strText);
+	void SetUIText(wstring _strUIName, int _iNum);
 
 	// 본인 소속 stage를 반환한다.
 	// 이 프로젝트에서는 하나의 stage만 존재할 것이기 때문에 편의상 싱글턴 패턴을 사용해서

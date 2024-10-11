@@ -24,7 +24,6 @@
 #include "CTimeMgr.h"
 #include "CScoreMgr.h"
 #include "CHitbox.h"
-#include "CUI.h"
 #include "CAmmoImgUI.h"
 #include "CAmmoUI.h"
 #include "CScoreUI.h"
@@ -62,6 +61,7 @@ void CScene_Combat::update()
 	if (m_fCurTime > m_fComboTime)
 	{
 		ResetCombo();
+		SetUIVisable(L"ComboUI", false);
 	}
 	/*for (UINT i = 0; i < (UINT)GROUP_TYPE::END; ++i)
 	{
@@ -113,6 +113,7 @@ void CScene_Combat::AddScore()
 	// 적 처지 시 점수
 	// 기본 100점 + 쌓은 콤보의 50배수만큼 증가한다.
 	CStage::GetInst()->AddScore(100 + (m_iCombo * 50));
+
 }
 
 void CScene_Combat::AddCombo()
@@ -120,24 +121,31 @@ void CScene_Combat::AddCombo()
 	++m_iCombo;
 	m_fCurTime = 0;
 	std::cout << "콤보: " << m_iCombo << "\n";
-}
 
+	SetUIVisable(L"ComboUI", true);
+	SetUIText(L"ComboUI", m_iCombo);
+}
 void CScene_Combat::CreateCombatSceneUI()
 {
 	// 점수, 총 정보(들고 있는 무기에 따라/무기 drop과 pickup 시 교체/현재 무기가 총일 때만 표시)
 	// 플레이어 HP, 콤보(콤보타임 내에만 표시)
 	CUI* pScoreUI = new CScoreUI;
+	pScoreUI->SetName(L"ScoreUI");
 	AddObject(pScoreUI, GROUP_TYPE::UI);
+	
 	CUI* pComboUI = new CComboUI;
+	pComboUI->SetName(L"ComboUI");
 	AddObject(pComboUI, GROUP_TYPE::UI);
+
 	CUI* pRemainAmmoUI = new CAmmoUI;
+	pRemainAmmoUI->SetName(L"ammoUI");
+	pRemainAmmoUI->SetVisable(false);
 	AddObject(pRemainAmmoUI, GROUP_TYPE::UI);
+	
 	CUI* pAmmoImgUI = new CAmmoImgUI;
+	pAmmoImgUI->SetName(L"ammoImage");
+	pAmmoImgUI->SetVisable(false);
 	AddObject(pAmmoImgUI, GROUP_TYPE::UI);
-
-	// TextUI를 상속하는 Score/Combo/Ammo UI
-	// 이미지를 띄우는 ImageUI (총알, 목숨 등)
-
 }
 
 // 모든 몬스터의 정보 관리하고 있기
@@ -171,18 +179,39 @@ void CScene_Combat::Enter()
 	LoadScene(m_wSceneRelativePath);
 
 	CreateCombatSceneUI();
-	
+
 	CMousePtr* mousePtr = new CMousePtr();
 	AddObject(mousePtr, GROUP_TYPE::MOUSE_POINTER);
 
 	CObject* pPlayer = GetGroupObject(GROUP_TYPE::PLAYER)[0];
-	RegisterPlayer(pPlayer);
 
-	// 바닥에 떨군 임시 무기
+	PlayerSetting(pPlayer);
+
+	// 바닥에 떨굴 임시 무기
 	CWeapon* ptestWeapon = CWeaponFactory::CreateWeapon(WEAPON_TYPE::GUN, MELEE_TYPE::NONE, GUN_TYPE::M16);
 	ptestWeapon->Drop();
 	AddObject(ptestWeapon, GROUP_TYPE::DROPPED_WEAPON);
 	ptestWeapon->SetPos(pPlayer->GetPos());
+
+	
+	
+	// 충돌 그룹 지정
+	CreateCollisionGroup();
+	
+	CameraSetting(pPlayer);
+
+	// Scene Enter 말미에 꼭 Start를 넣어주자.
+	start();
+}
+
+void CScene_Combat::PlayerSetting(CObject* pPlayer)
+{
+	RegisterPlayer(pPlayer);
+
+	CHitbox* pHitbox = new CHitbox();
+	pHitbox->SetName(L"Hitbox_Player");
+	AddObject(pHitbox, GROUP_TYPE::HITBOX_PLAYER);
+	((CPlayer*)pPlayer)->SetHitbox(pHitbox);
 
 	CWeapon* pWeapon = CStage::GetInst()->GetPlayerWeapon();
 	if (nullptr != pWeapon)
@@ -190,29 +219,40 @@ void CScene_Combat::Enter()
 		CObject* pNewWeapon = pWeapon->Clone();
 		AddObject(pNewWeapon, GROUP_TYPE::WEAPON);
 		((CPlayer*)pPlayer)->SetWeapon((CWeapon*)pNewWeapon);
-	}
-		
-	CHitbox* pHitbox = new CHitbox();
-	pHitbox->SetName(L"Hitbox_Player");
-	AddObject(pHitbox, GROUP_TYPE::HITBOX_PLAYER);
-	((CPlayer*)pPlayer)->SetHitbox(pHitbox);
 
+		if (pWeapon->GetWeaponType() == WEAPON_TYPE::GUN)
+		{
+			SetUIVisable(L"ammoImage", true);
+			SetUIVisable(L"ammoUI", true);
+		}
+	}
+}
+
+void CScene_Combat::CameraSetting(CObject* pPlayer)
+{
+	// Camera Start 지정
+	//Vec2 vResolution = CCore::GetInst()->GetResolution();
+	//CCamera::GetInst()->SetLookAt(vResolution / 2.f);
 	// Follow Player
 	CCamera::GetInst()->SetTarget(pPlayer);
+	// Camera 효과 지정
+	CCamera::GetInst()->FadeIn(FADEIN_TIME);
+}
 
-	
-	// 충돌 그룹 지정
+void CScene_Combat::CreateCollisionGroup()
+{
 	// scene은 마지막에 두 그룹 간의 충돌 여부를 검사한다.
-	// 충돌 가능한 조합...을 만들어주는 개념 (마치 체크박스처럼)
+	// 충돌 가능한 조합을 만들어주는 개념 (체크박스처럼)
+
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::PLAYER, GROUP_TYPE::DROPPED_WEAPON); // 떨어진무기-플레이어
-	
+
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::PROJ_PLAYER, GROUP_TYPE::WALL); // 벽-플레이어 총알
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::PROJ_PLAYER, GROUP_TYPE::TILE_WALL);
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::PROJ_PLAYER, GROUP_TYPE::CORNER);
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::PROJ_MONSTER, GROUP_TYPE::WALL); // 벽-몬스터 총알
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::PROJ_MONSTER, GROUP_TYPE::TILE_WALL);
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::PROJ_MONSTER, GROUP_TYPE::CORNER);
-	
+
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::PLAYER, GROUP_TYPE::WALL); // 플레이어-벽
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::PLAYER, GROUP_TYPE::TILE_WALL);
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::PLAYER, GROUP_TYPE::CORNER);
@@ -220,24 +260,13 @@ void CScene_Combat::Enter()
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::MONSTER, GROUP_TYPE::WALL); // 몬스터-벽
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::MONSTER, GROUP_TYPE::TILE_WALL);
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::MONSTER, GROUP_TYPE::CORNER);
-	
+
 	// 히트박스 - 총알
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::HITBOX_PLAYER, GROUP_TYPE::PROJ_MONSTER);
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::HITBOX_MONSTER, GROUP_TYPE::PROJ_PLAYER);
 
 	// 플레이어 - SC
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::PLAYER, GROUP_TYPE::SCENE_CHANGER);
-	
-	
-	// Camera Start 지정
-	//Vec2 vResolution = CCore::GetInst()->GetResolution();
-	//CCamera::GetInst()->SetLookAt(vResolution / 2.f);
-	
-	// Camera 효과 지정
-	CCamera::GetInst()->FadeIn(FADEIN_TIME);
-
-	// Scene Enter 말미에 꼭 Start를 넣어주자.
-	start();
 }
 
 // 충돌조합 체크박스를 해제하듯이 충돌 그룹 해제해주어야 함
@@ -251,10 +280,6 @@ void CScene_Combat::Exit()
 
 	// 씬의 객체 삭제
 	DeleteAll();
-
-	// 콤보 초기화
-	//CScoreMgr::GetInst()->ResetCombo();
-
 	// 그룹 충돌 지정 해제
 	CCollisionMgr::GetInst()->Reset();
 }

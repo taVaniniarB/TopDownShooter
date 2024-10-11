@@ -21,6 +21,7 @@ private:
 
 public:
 	void SetType(GUN_TYPE _eType) { m_eGunType = _eType; }
+	int GetAmmoNum() { return m_iRemainAmmo; }
 
 public:
 	void Attack();

@@ -4,6 +4,7 @@
 #include "CMelee.h"
 #include "CGun.h"
 
+#include "CPathMgr.h"
 #include "CObject.h"
 #include "CResMgr.h"
 
@@ -22,7 +23,7 @@ CWeapon* CWeaponFactory::CreateWeapon(WEAPON_TYPE _eWeaponType, MELEE_TYPE _eMel
 		case MELEE_TYPE::KNIFE:
 		{
 			((CMelee*)pWeapon)->SetType(MELEE_TYPE::KNIFE);
-			((CObject*)pWeapon)->SetImgIdx(0);
+			//((CObject*)pWeapon)->SetImgIdx(0);
 			pWeapon->SetScale(Vec2(15.f, 7.f));
 			pWeapon->SetDelay(0.2f);
 		}
@@ -30,7 +31,7 @@ CWeapon* CWeaponFactory::CreateWeapon(WEAPON_TYPE _eWeaponType, MELEE_TYPE _eMel
 		case MELEE_TYPE::PIPE:
 		{
 			((CMelee*)pWeapon)->SetType(MELEE_TYPE::KNIFE);
-			((CObject*)pWeapon)->SetImgIdx(0);
+			//((CObject*)pWeapon)->SetImgIdx(0);
 			pWeapon->SetScale(Vec2(20.f, 7.f));
 			pWeapon->SetDelay(0.4f);
 		}
@@ -45,9 +46,8 @@ CWeapon* CWeaponFactory::CreateWeapon(WEAPON_TYPE _eWeaponType, MELEE_TYPE _eMel
 	{
 		pWeapon = new CGun;
 
-		CTexture* pTex = CResMgr::GetInst()->LoadTexture(L"gun", L"texture\\weapon\\gun.bmp");
-		((CObject*)pWeapon)->SetTexture(pTex);
-
+		Image* pImage = CResMgr::GetInst()->LoadGdiImage(L"gun", L"texture\\weapon\\gun.bmp");
+		pWeapon->SetImage(pImage);
 
 		switch (_eGunType)
 		{
@@ -58,6 +58,8 @@ CWeapon* CWeaponFactory::CreateWeapon(WEAPON_TYPE _eWeaponType, MELEE_TYPE _eMel
 			pWeapon->SetDelay(0.1f);
 			pWeapon->SetScale(Vec2(20.f, 10.f));
 			((CObject*)pWeapon)->SetImgIdx(0);
+			//Image* pImage = CResMgr::GetInst()->LoadGdiImage(L"gun", L"texture\\weapon\\M16.png");
+			//pWeapon->SetImage(pImage);
 		}
 			break;
 		case GUN_TYPE::SHOTGUN:
@@ -67,6 +69,8 @@ CWeapon* CWeaponFactory::CreateWeapon(WEAPON_TYPE _eWeaponType, MELEE_TYPE _eMel
 			pWeapon->SetDelay(0.3f);
 			pWeapon->SetScale(Vec2(30.f, 10.f));
 			((CObject*)pWeapon)->SetImgIdx(1);
+			//Image* pImage = CResMgr::GetInst()->LoadGdiImage(L"gun", L"texture\\weapon\\shotgun.png");
+			//pWeapon->SetImage(pImage);
 		}
 			break;
 		default:
@@ -77,5 +81,8 @@ CWeapon* CWeaponFactory::CreateWeapon(WEAPON_TYPE _eWeaponType, MELEE_TYPE _eMel
 	default:
 		break;
 	}
+
+
+	pWeapon->SetWeaponType(_eWeaponType);
 	return pWeapon;
 }
