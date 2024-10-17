@@ -40,6 +40,7 @@ CScene::~CScene()
 			delete m_arrObj[i][j];
 		}
 	}
+
 }
 
 void CScene::CreateTile(UINT _iXCount, UINT _iYCount)
@@ -526,6 +527,9 @@ void CScene::LoadTile(const wstring& _strRelativePath, FILE* _pFile)
 	{
 		((CTile*)vecTile[i])->Load(_pFile);
 	}
+
+	// map 생성
+	m_WallMap = vector<vector<int>>((int)xCount, vector<int>(yCount, 0));
 }
 
 void CScene::LoadWall(const wstring& _strRelativePath, FILE* _pFile)
@@ -539,6 +543,12 @@ void CScene::LoadWall(const wstring& _strRelativePath, FILE* _pFile)
 	{
 		CWall* pWall = new CWall;
 		pWall->Load(_pFile);
+
+		// 그리드 내에 벽이 있는지 여부를 나타내는 map 채우기
+		int iCol = (pWall->GetPos() / TILE_SIZE).x;
+		int iRow = (pWall->GetPos() / TILE_SIZE).y;
+
+		m_WallMap[iRow][iCol] = 1;
 	}
 
 }

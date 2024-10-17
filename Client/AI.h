@@ -23,6 +23,7 @@ public:
 	void ChangeState(MON_STATE _eNextState);
 
 	CMonster* GetOwner() { return m_pOwner; }
+	MON_STATE GetCurState();
 
 public:
 	AI();

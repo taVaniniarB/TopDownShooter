@@ -9,6 +9,8 @@
 #include "CWeapon.h"
 #include "CHitbox.h"
 
+#include "SelectGDI.h"
+
 CMonster::CMonster()
 	: m_tInfo{}
 	, m_pAI(nullptr)
@@ -55,6 +57,27 @@ void CMonster::render(HDC _dc)
 		, (int)(vScale.x)
 		, (int)(vScale.y)
 		, RGB(255, 0, 255));
+
+#ifdef _DEBUG
+	renderRay(_dc);
+#endif
+}
+
+
+void CMonster::renderRay(HDC _dc)
+{
+	PEN_TYPE ePen = PEN_TYPE::GREEN;
+	if (m_pAI->GetCurState() == MON_STATE::TRACE)
+		ePen = PEN_TYPE::RED;
+
+	SelectGDI p(_dc, ePen);
+
+	Vec2 vPos = CCamera::GetInst()->GetRenderPos(GetPos());
+	Vec2 vPlayerPos = CSceneMgr::GetInst()->GetCurScene()->GetPlayer()->GetPos();
+	vPlayerPos = CCamera::GetInst()->GetRenderPos(vPlayerPos);
+
+	MoveToEx(_dc, vPos.x, vPos.y, NULL);
+	LineTo(_dc, vPlayerPos.x, vPlayerPos.y);
 }
 
 // AI - 몬스터가 서로를 알도록 함
@@ -123,6 +146,7 @@ void CMonster::Load(FILE* _pFile)
 		pScene->AddObject(m_pHitbox, GROUP_TYPE::HITBOX_MONSTER);
 	}
 }
+
 
 void CMonster::OnCollisionEnter(CCollider* _pOther)
 {

@@ -39,6 +39,7 @@ void CTraceState::update()
 	GetMonster()->SetPos(vMonPos);
 }
 
+
 void CTraceState::Enter()
 {
 }
@@ -46,4 +47,3 @@ void CTraceState::Enter()
 void CTraceState::Exit()
 {
 }
-

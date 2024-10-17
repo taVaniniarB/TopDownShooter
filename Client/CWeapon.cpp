@@ -13,6 +13,7 @@ CWeapon::CWeapon()
 	, m_pAttackSound(nullptr)
 	, m_eWeaponStatus(WEAPON_STATUS::HOLD)
 	, m_pImage(nullptr)
+	, m_eWeaponType(WEAPON_TYPE::MELEE)
 {
 	m_vOffsetPos = Vec2(0.f, 3.f);
 	CreateCollider();

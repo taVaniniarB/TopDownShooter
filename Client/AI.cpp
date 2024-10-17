@@ -19,6 +19,8 @@ void AI::update()
 {
 	// 현재 상태에 맞는 업데이트 코드를 돌린다
 	m_pCurState->update();
+
+	
 }
 
 
@@ -64,4 +66,9 @@ void AI::ChangeState(MON_STATE _eNextState)
 	m_pCurState = GetState(_eNextState);
 	
 	m_pCurState->Enter();
+}
+
+MON_STATE AI::GetCurState()
+{
+	return m_pCurState->GetType();
 }

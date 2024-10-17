@@ -31,6 +31,8 @@ private:
 	CStage*				m_pStage; // 본인 소속 Stage
 
 	bool				m_bEnabled; // 활성화 여부
+	
+	vector<vector<int>>	m_WallMap; // 그래드 내 벽 정보 벡터
 
 public:
 	void SetName(const wstring& _strName) { m_strName = _strName; }

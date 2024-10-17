@@ -45,6 +45,8 @@ private:
     // 대신 몬스터팩토리와 friend 클래스
     void SetMonInfo(const tMonInfo& _info) { m_tInfo = _info; }
 
+    void renderRay(HDC _dc);
+
 public:
     virtual void OnCollisionEnter(CCollider* _pOther);
     
