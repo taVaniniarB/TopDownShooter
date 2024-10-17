@@ -76,5 +76,5 @@ void CBtnUI::render(HDC _dc)
 
 	SetTextColor(_dc, RGB(0, 0, 0));   // 텍스트 색상 (검정)
 	SetBkMode(_dc, TRANSPARENT);       // 배경 투명 설정
-	TextOut(_dc, (int)(vPos.x + 5), (int)(vPos.y + 5), strName, wcslen(strName)); // 텍스트 출력 위치 (사각형의 좌측 상단)
+	TextOut(_dc, (int)(vPos.x + 5), (int)(vPos.y + 5), strName, (int)(wcslen(strName))); // 텍스트 출력 위치 (사각형의 좌측 상단)
 }

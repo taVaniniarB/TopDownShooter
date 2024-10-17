@@ -47,7 +47,7 @@ void CRigidBody::finalUpdate()
 	if (!m_vVelocity.isZero())
 	{
 		Vec2 vDir = m_vVelocity;
-		vDir.Nomalize();
+		vDir.Normalize();
 
 		Vec2 vFriction = -vDir * m_fFricCoeff * fDT;
 
@@ -69,7 +69,7 @@ void CRigidBody::finalUpdate()
 		Vec2 vDir = m_vVelocity;
 		if (!m_vVelocity.isZero())
 		{
-			vDir.Nomalize();
+			vDir.Normalize();
 		}
 		m_vVelocity = vDir * m_fMaxVelocity;
 	}

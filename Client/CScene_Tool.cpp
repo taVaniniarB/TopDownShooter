@@ -48,6 +48,7 @@ CScene_Tool::CScene_Tool()
 	, m_eSelectedWallDir(WALL_DIR::TOP)
 	, m_eSelectedWallDir2(WALL_DIR::END)
 	, m_bGrid(true)
+	, m_bDrawingSquare(false)
 {
 }
 
@@ -387,7 +388,7 @@ void CScene_Tool::update()
 			}
 			if (KEY_HOLD(KEY::LBTN))
 			{
-				m_bDrawingSqare = true;
+				m_bDrawingSquare = true;
 
 				// 마우스 드래그로 SceneChanger의 Position과 Scale을 정하자.
 				
@@ -410,7 +411,7 @@ void CScene_Tool::update()
 			}
 			if (KEY_AWAY(KEY::LBTN))
 			{
-				m_bDrawingSqare = false;
+				m_bDrawingSquare = false;
 				m_vEndPos = vMousePos;
 				// SceneChanger 생성 후에는 어떤 씬으로 이동하는 SceneChanger인지 결정하는 창이 뜬다.
 				// 결정이 되면 결과값을 SceneChanger의 멤버로 채운다 (생성자 이용)
@@ -463,7 +464,7 @@ void CScene_Tool::render(HDC _dc)
 		}
 	}
 
-	if (m_bDrawingSqare)
+	if (m_bDrawingSquare)
 	{
 		PEN_TYPE ePen = PEN_TYPE::GREEN;
 		// 객체의 생성자를 이용하는 방식
@@ -561,7 +562,7 @@ void CScene_Tool::SaveScene(const wstring& _strFilePath)
 
 	// 벽 개수 저장
 	const vector<CObject*>& vWall = GetGroupObject(GROUP_TYPE::WALL);
-	UINT wallSize = vWall.size();
+	UINT wallSize = (UINT)(vWall.size());
 
 	const vector<CObject*>& vCornerWall = GetGroupObject(GROUP_TYPE::CORNER);
 	UINT CornerSize = (UINT)(vCornerWall.size());
@@ -861,10 +862,10 @@ void CScene_Tool::SaveWall(const wstring& _strFilePath)
 	UINT wallSize = (UINT)(vWall.size());
 	
 	const vector<CObject*>& vCornerWall = GetGroupObject(GROUP_TYPE::CORNER);
-	UINT CornerSize = vCornerWall.size();
+	UINT CornerSize = (UINT)(vCornerWall.size());
 	
 	const vector<CObject*>& vTileWall = GetGroupObject(GROUP_TYPE::TILE_WALL);
-	UINT TileWallSize = vTileWall.size();
+	UINT TileWallSize = (UINT)(vTileWall.size());
 
 	UINT size = wallSize + CornerSize + TileWallSize;
 

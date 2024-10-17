@@ -24,7 +24,7 @@ void CHitbox::update()
 
 void CHitbox::render(HDC _dc)
 {
-	component_render(_dc);
+	//component_render(_dc);
 }
 
 void CHitbox::OnCollision(CCollider* _pOther)

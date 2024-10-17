@@ -36,6 +36,7 @@ private:
     PLAYER_STATE m_ePrevState;
     int m_iDir; // 움직이는 방향
     int m_iPrevDir;
+    float m_fSpeed;
 
     int m_iHP;
 

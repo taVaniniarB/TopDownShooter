@@ -6,13 +6,14 @@ class CMissile :
 private:
     float   m_fTheta; // 이동 방향 각
     Vec2    m_vDir;   // 벡터로 나타내는 각
+    Image* m_pImage;
 
 public:
     void SetDir(float _fTheta) { m_fTheta = _fTheta; }
     void SetDir(Vec2 _vDir)
     {
         m_vDir = _vDir;
-        m_vDir.Nomalize();
+        m_vDir.Normalize();
     }
 public:
     virtual void update();

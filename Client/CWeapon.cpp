@@ -108,5 +108,5 @@ void CWeapon::SetAimDir()
 		return;
 	}
 
-	m_vAimDir = vAimVec.Nomalize();
+	m_vAimDir = vAimVec.Normalize();
 }

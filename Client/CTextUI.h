@@ -23,4 +23,3 @@ public:
     wstring GetText() { return m_strText; }
     FONT_TYPE GetFont() { return m_eFont; }
 };
-

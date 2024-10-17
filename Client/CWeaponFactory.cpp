@@ -46,8 +46,7 @@ CWeapon* CWeaponFactory::CreateWeapon(WEAPON_TYPE _eWeaponType, MELEE_TYPE _eMel
 	{
 		pWeapon = new CGun;
 
-		Image* pImage = CResMgr::GetInst()->LoadGdiImage(L"gun", L"texture\\weapon\\gun.bmp");
-		pWeapon->SetImage(pImage);
+		Image* pImage = nullptr;
 
 		switch (_eGunType)
 		{
@@ -56,10 +55,9 @@ CWeapon* CWeaponFactory::CreateWeapon(WEAPON_TYPE _eWeaponType, MELEE_TYPE _eMel
 			((CGun*)pWeapon)->SetType(GUN_TYPE::M16);
 			((CGun*)pWeapon)->SetMaxMissile(100);
 			pWeapon->SetDelay(0.1f);
-			pWeapon->SetScale(Vec2(20.f, 10.f));
-			((CObject*)pWeapon)->SetImgIdx(0);
-			//Image* pImage = CResMgr::GetInst()->LoadGdiImage(L"gun", L"texture\\weapon\\M16.png");
-			//pWeapon->SetImage(pImage);
+			pWeapon->SetScale(Vec2(48.f, 14.f));
+			pImage = CResMgr::GetInst()->LoadGdiImage(L"M16", L"texture\\weapon\\M16.png");
+			pWeapon->SetImage(pImage);
 		}
 			break;
 		case GUN_TYPE::SHOTGUN:
@@ -67,15 +65,15 @@ CWeapon* CWeaponFactory::CreateWeapon(WEAPON_TYPE _eWeaponType, MELEE_TYPE _eMel
 			((CGun*)pWeapon)->SetType(GUN_TYPE::SHOTGUN);
 			((CGun*)pWeapon)->SetMaxMissile(6);
 			pWeapon->SetDelay(0.3f);
-			pWeapon->SetScale(Vec2(30.f, 10.f));
-			((CObject*)pWeapon)->SetImgIdx(1);
-			//Image* pImage = CResMgr::GetInst()->LoadGdiImage(L"gun", L"texture\\weapon\\shotgun.png");
-			//pWeapon->SetImage(pImage);
+			pWeapon->SetScale(Vec2(50.f, 10.f));
+			pImage = CResMgr::GetInst()->LoadGdiImage(L"shotgun", L"texture\\weapon\\shotgun.png");
+			pWeapon->SetImage(pImage);
 		}
 			break;
 		default:
 			break;
 		}
+
 	}
 		break;
 	default:

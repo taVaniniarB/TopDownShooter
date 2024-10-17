@@ -30,7 +30,7 @@ void CTraceState::update()
 	if (vMonDir.Length() < 20)
 		return;
 
-	vMonDir.Nomalize();
+	vMonDir.Normalize();
 	
 	// 이번 프레임의 이동량을 더해준다
 	// 단위벡터에 스칼라 곱 --> 단위벡터의 길이가 스칼라 값만큼 늘어남

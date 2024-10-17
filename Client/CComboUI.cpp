@@ -4,7 +4,7 @@
 
 CComboUI::CComboUI()
 {
-	int pdding = 20;
+	float pdding = 20.f;
 	POINT res = CCore::GetInst()->GetResolution();
 	SetPos(Vec2(pdding, pdding));
 	SetText(L"0");

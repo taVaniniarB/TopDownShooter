@@ -44,7 +44,7 @@ private:
 
 	// 그리드 표시
 	bool m_bGrid;
-	bool m_bDrawingSqare;
+	bool m_bDrawingSquare;
 
 public:
 	virtual void Enter();

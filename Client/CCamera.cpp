@@ -214,7 +214,7 @@ void CCamera::CalDiff()
 			float vel = 4.f * (m_fTime - m_fAccTime);
 
 			// 이전 위치 + ( 방향 * (속력 * 가속도) * DT )
-			m_vCurLookAt = m_vPrevLookAt + vLookDir.Nomalize() * m_fSpeed * vel * fDT;
+			m_vCurLookAt = m_vPrevLookAt + vLookDir.Normalize() * m_fSpeed * vel * fDT;
 		}
 	}
 	

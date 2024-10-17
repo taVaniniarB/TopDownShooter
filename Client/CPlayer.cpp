@@ -21,6 +21,7 @@ CPlayer::CPlayer()
 	: m_eCurState(PLAYER_STATE::IDLE)
 	, m_ePrevState(PLAYER_STATE::WALK)
 	, m_iDir(1)
+	, m_fSpeed(250.f)
 	, m_iPrevDir(1)
 	, m_pHitbox(nullptr)
 	, m_pWeapon(nullptr)
@@ -165,10 +166,10 @@ void CPlayer::update_state()
 	{
 		m_eCurState = PLAYER_STATE::ATTACK;
 	}*/
-	if (0.f == GetRigidBody()->GetSpeed())
+	/*if (0.f == GetRigidBody()->GetSpeed())
 	{
 		m_eCurState = PLAYER_STATE::IDLE;
-	}
+	}*/
 	if (KEY_TAP(KEY::W))
 	{
 		m_eCurState = PLAYER_STATE::RUN;
@@ -182,7 +183,36 @@ void CPlayer::update_state()
 
 void CPlayer::update_move()
 {
-	CRigidBody* pRigid = GetRigidBody();
+	Vec2 vPlayerMoveVec(0.f, 0.f);
+
+	Vec2 vPos = GetPos();
+
+	if (KEY_HOLD(KEY::W))
+	{
+		vPlayerMoveVec += Vec2(0.f, -1.f);
+	}
+	if (KEY_HOLD(KEY::S))
+	{
+		vPlayerMoveVec += Vec2(0.f, 1.f);
+	}
+	if (KEY_HOLD(KEY::A))
+	{
+		vPlayerMoveVec += Vec2(-1.f, 0.f);
+	}
+	if (KEY_HOLD(KEY::D))
+	{
+		vPlayerMoveVec += Vec2(1.f, 0.f);
+	}
+
+
+	if (!vPlayerMoveVec.isZero())
+	{
+		vPlayerMoveVec.Normalize();
+		vPos += vPlayerMoveVec * m_fSpeed * fDT;
+		SetPos(vPos);
+	}
+
+	/*CRigidBody* pRigid = GetRigidBody();
 
 	Vec2 vPlayerMoveVec(0.f, 0.f);
 
@@ -213,7 +243,7 @@ void CPlayer::update_move()
 	}
 
 
-	Vec2 CurVelocity = pRigid->GetVelocity();
+	Vec2 CurVelocity = pRigid->GetVelocity();*/
 }
 
 void CPlayer::update_attack()
