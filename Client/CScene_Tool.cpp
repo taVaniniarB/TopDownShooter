@@ -47,7 +47,6 @@ CScene_Tool::CScene_Tool()
 	, m_eSelectedWall(WALL_TYPE::NONE)
 	, m_eSelectedWallDir(WALL_DIR::TOP)
 	, m_eSelectedWallDir2(WALL_DIR::END)
-	, m_bGrid(true)
 	, m_bDrawingSquare(false)
 {
 }
@@ -235,11 +234,7 @@ void CScene_Tool::update()
 	}
 	*/
 
-	// 그리드 On/Off
-	if (KEY_TAP(KEY::G))
-	{
-		m_bGrid = !m_bGrid;
-	}
+	
 
 	// 컨트롤 + S 누르면 타일을 저장
 	if (KEY_TAP(KEY::S) && KEY_HOLD(KEY::CTRL))
@@ -432,38 +427,6 @@ void CScene_Tool::update()
 
 void CScene_Tool::render(HDC _dc)
 {
-	if (m_bGrid)
-	{
-		PEN_TYPE ePen = PEN_TYPE::BLUE;
-		// 객체의 생성자를 이용하는 방식
-		SelectGDI p(_dc, ePen);
-		SelectGDI b(_dc, BRUSH_TYPE::HOLLOW);
-
-		// 타일이 존재하는 부분에만 그리드 렌더
-		UINT tileX = CScene::GetTileX();
-		UINT tileY = CScene::GetTileY();
-
-		Vec2 vRenderPos = {};
-		Vec2 vPos = {};
-
-		for (UINT i = 0; i < tileY; ++i)
-		{
-			for (UINT j = 0; j < tileX; ++j)
-			{
-				vPos.x = j * TILE_SIZE;
-				vPos.y = i * TILE_SIZE;
-
-				vRenderPos = CCamera::GetInst()->GetRenderPos(vPos);
-
-				Rectangle(_dc
-					, (int)(vRenderPos.x)
-					, (int)(vRenderPos.y)
-					, vRenderPos.x + TILE_SIZE
-					, vRenderPos.y + TILE_SIZE);
-			}
-		}
-	}
-
 	if (m_bDrawingSquare)
 	{
 		PEN_TYPE ePen = PEN_TYPE::GREEN;

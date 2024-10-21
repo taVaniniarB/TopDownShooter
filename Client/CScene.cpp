@@ -13,6 +13,7 @@
 #include "CSceneChanger.h"
 #include "CUI.h"
 #include "CTextUI.h"
+#include "SelectGDI.h"
 
 
 
@@ -23,6 +24,7 @@ CScene::CScene()
 	, m_bUIClicked(false)
 	, m_pStage(nullptr)
 	, m_bEnabled(true)
+	, m_bGrid(false)
 {
 }
 
@@ -387,6 +389,13 @@ void CScene::start()
 
 void CScene::update()
 {
+#ifdef _DEBUG
+	// 그리드 On/Off
+	if (KEY_TAP(KEY::G))
+	{
+		SetGrid();
+	}
+#endif
 	if (m_bEnabled)
 	{
 		for (UINT i = 0; i < (UINT)GROUP_TYPE::END; ++i)
@@ -418,6 +427,7 @@ void CScene::finalUpdate()
 
 void CScene::render(HDC _dc)
 {
+
 	for (UINT i = 0; i < (UINT)GROUP_TYPE::END; ++i)
 	{
 		// 현재 렌더링 그룹이 타일일 시
@@ -447,6 +457,43 @@ void CScene::render(HDC _dc)
 			else
 			{
 				iter = m_arrObj[i].erase(iter); //벡터에서 데이터 삭제 후엔 그 다음 이터 받는 것 기억
+			}
+		}
+	}
+
+	render_grid(_dc);
+}
+
+void CScene::render_grid(HDC _dc)
+{
+	if (m_bGrid)
+	{
+		PEN_TYPE ePen = PEN_TYPE::BLUE;
+		// 객체의 생성자를 이용하는 방식
+		SelectGDI p(_dc, ePen);
+		SelectGDI b(_dc, BRUSH_TYPE::HOLLOW);
+
+		// 타일이 존재하는 부분에만 그리드 렌더
+		UINT tileX = CScene::GetTileX();
+		UINT tileY = CScene::GetTileY();
+
+		Vec2 vRenderPos = {};
+		Vec2 vPos = {};
+
+		for (UINT i = 0; i < tileY; ++i)
+		{
+			for (UINT j = 0; j < tileX; ++j)
+			{
+				vPos.x = j * TILE_SIZE;
+				vPos.y = i * TILE_SIZE;
+
+				vRenderPos = CCamera::GetInst()->GetRenderPos(vPos);
+
+				Rectangle(_dc
+					, (int)(vRenderPos.x)
+					, (int)(vRenderPos.y)
+					, vRenderPos.x + TILE_SIZE
+					, vRenderPos.y + TILE_SIZE);
 			}
 		}
 	}
@@ -490,6 +537,13 @@ void CScene::render_tile(HDC _dc)
 			vecTile[iIdx]->render(_dc);
 		}
 	}
+}
+
+int CScene::GetWallmapNum(float x, float y)
+{
+	x /= TILE_SIZE;
+	y /= TILE_SIZE;
+	return m_WallMap[y][x];
 }
 
 void CScene::DeleteGroup(GROUP_TYPE _eTarget)

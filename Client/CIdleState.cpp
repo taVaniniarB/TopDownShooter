@@ -35,12 +35,38 @@ void CIdleState::update()
 	// 플레이어가 몬스터 인식 범위 내로 진입
 	if (fLen < pMonster->GetInfo().fRecogRange)
 	{
+		// 플레이어 - 몬스터 광선이 벽에 걸리지 않는지 검사
+		float dx = vPlayerPos.x - vMonPos.x;
+		float dy = vPlayerPos.y - vMonPos.y;
+
+		// x 방향으로 움직이며 교차점 구하기
+		float xStep = (dx > 0) ? TILE_SIZE : -TILE_SIZE;
+		for (float x = std::floor(vMonPos.x / TILE_SIZE) * TILE_SIZE;
+			(dx > 0 && x <= vPlayerPos.x) || (dx < 0 && x >= vPlayerPos.x);
+			x += xStep)
+		{
+			float y = vMonPos.y + (x - vMonPos.x) * dy / dx;
+			// 이렇게 구한 x, y 벡터 / TILE_SIZE 가 map에서 1일 때
+			if (1 == CSceneMgr::GetInst()->GetCurScene()->GetWallmapNum(x, y))
+				return;
+		}
+
+		// y 방향으로 움직이며 교차점 구하기
+		float yStep = (dy > 0) ? TILE_SIZE : -TILE_SIZE;
+		for (float y = std::floor(vMonPos.y / TILE_SIZE) * TILE_SIZE;
+			(dy > 0 && y <= vPlayerPos.y) || (dy < 0 && y >= vPlayerPos.y);
+			y += yStep)
+		{
+			float x = vMonPos.x + (y - vMonPos.y) * dx / dy;
+			if (1 == CSceneMgr::GetInst()->GetCurScene()->GetWallmapNum(x, y))
+				return;
+		}
+		 
 		// State 간 상태 전환
 		// 시간 동기화 필요 > 이벤트 매니저 통해 유예 처리
 		// 이벤트 등록
 		ChangeAIState(GetAI(), MON_STATE::TRACE);
 	}
-
 }
 
 void CIdleState::Enter()

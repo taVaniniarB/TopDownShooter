@@ -78,6 +78,45 @@ void CMonster::renderRay(HDC _dc)
 
 	MoveToEx(_dc, vPos.x, vPos.y, NULL);
 	LineTo(_dc, vPlayerPos.x, vPlayerPos.y);
+
+
+
+
+
+	//std::vector<Vec2> intersections;
+
+	//vPos = GetPos();
+	//vPlayerPos = CSceneMgr::GetInst()->GetCurScene()->GetPlayer()->GetPos();
+
+	//// 방향 벡터
+	//float dx = vPlayerPos.x - vPos.x;
+	//float dy = vPlayerPos.y - vPos.y;
+
+	//// x 방향으로 움직이며 교차점 구하기
+	//float xStep = (dx > 0) ? TILE_SIZE : -TILE_SIZE;
+	//for (float x = std::floor(vPos.x / TILE_SIZE) * TILE_SIZE;
+	//	(dx > 0 && x <= vPlayerPos.x) || (dx < 0 && x >= vPlayerPos.x);
+	//	x += xStep) 
+	//{
+	//	float y = vPos.y + (x - vPos.x) * dy / dx;
+	//	intersections.push_back({ x, y });
+	//}
+
+	//// y 방향으로 움직이며 교차점 구하기
+	//float yStep = (dy > 0) ? TILE_SIZE : -TILE_SIZE;
+	//for (float y = std::floor(vPos.y / TILE_SIZE) * TILE_SIZE;
+	//	(dy > 0 && y <= vPlayerPos.y) || (dy < 0 && y >= vPlayerPos.y);
+	//	y += yStep) 
+	//{
+	//	float x = vPos.x + (y - vPos.y) * dx / dy;
+	//	intersections.push_back({ x, y });
+	//}
+
+	//for (int i = 0; i < intersections.size(); i++)
+	//{
+	//	Vec2 vCross = CCamera::GetInst()->GetRenderPos(intersections[i]);
+	//	Ellipse(_dc, vCross.x - 3.f, vCross.y - 3.f, vCross.x + 3.f, vCross.y + 3.f);
+	//}	
 }
 
 // AI - 몬스터가 서로를 알도록 함

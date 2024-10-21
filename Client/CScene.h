@@ -32,6 +32,7 @@ private:
 
 	bool				m_bEnabled; // 활성화 여부
 	
+	bool				m_bGrid; // 그리드 활성화 여부
 	vector<vector<int>>	m_WallMap; // 그래드 내 벽 정보 벡터
 
 public:
@@ -61,6 +62,8 @@ public:
 	virtual void finalUpdate();
 	virtual void render(HDC _dc);
 
+	void SetGrid() { m_bGrid = !m_bGrid; }
+	void render_grid(HDC _dc);
 	void render_tile(HDC _dc);
 
 	// 씬 진입 시 초기 작업을 하는 함수. 부모에선 구현 안함.
@@ -77,6 +80,8 @@ public:
 	virtual void Exit() = 0;
 
 	void SetEnabled(bool _b) { m_bEnabled = _b; }
+
+	int GetWallmapNum(float x, float y); // 해당 좌표 셀의 숫자 반환
 
 public:
 
