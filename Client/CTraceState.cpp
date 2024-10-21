@@ -28,8 +28,8 @@ void CTraceState::SearchMovePath()
 	POINT pEnd = { (int)vEnd.x, (int)vEnd.y };
 	POINT pStart = { (int)vStart.x, (int)vStart.y };
 
-	int row = CSceneMgr::GetInst()->GetCurScene()->GetMapColSize();
-	int col = CSceneMgr::GetInst()->GetCurScene()->GetMapRowSize();
+	int row = CSceneMgr::GetInst()->GetCurScene()->GetMapRowSize();
+	int col = CSceneMgr::GetInst()->GetCurScene()->GetMapColSize();
 
 	// 방문 여부 및 경로 저장용 배열
 	vector<vector<bool>> visit(row, vector<bool>(col, false));
