@@ -24,6 +24,7 @@ void CEventMgr::update()
 
 	// Dangling Pointer 참조 방지
 	// 벡터 내 중복 원소 제거
+	std::sort(m_vecDead.begin(), m_vecDead.end());
 	m_vecDead.erase(unique(m_vecDead.begin(), m_vecDead.end()), m_vecDead.end());
 
 	for (size_t i = 0; i < m_vecDead.size(); ++i)

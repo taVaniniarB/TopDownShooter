@@ -19,7 +19,8 @@ CMonster::CMonster()
 	, m_eType(MON_TYPE::NORMAL)
 {
 	CreateCollider();
-	GetCollider()->SetScale(Vec2(40.f, 40.f));
+	GetCollider()->SetOffsetPos(Vec2(0.f, 3.f));
+	GetCollider()->SetScale(Vec2(15.f, 15.f));
 }
 
 CMonster::~CMonster()

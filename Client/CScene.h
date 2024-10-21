@@ -81,6 +81,8 @@ public:
 
 	void SetEnabled(bool _b) { m_bEnabled = _b; }
 
+	int GetMapRowSize() { return m_WallMap.size(); }
+	int GetMapColSize() { return m_WallMap[0].size(); }
 	int GetWallmapNum(float x, float y); // 해당 좌표 셀의 숫자 반환
 
 public:

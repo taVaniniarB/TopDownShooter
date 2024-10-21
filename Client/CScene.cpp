@@ -583,7 +583,7 @@ void CScene::LoadTile(const wstring& _strRelativePath, FILE* _pFile)
 	}
 
 	// map »ý¼º
-	m_WallMap = vector<vector<int>>((int)xCount, vector<int>(yCount, 0));
+	m_WallMap = vector<vector<int>>((int)yCount, vector<int>(xCount, 0));
 }
 
 void CScene::LoadWall(const wstring& _strRelativePath, FILE* _pFile)

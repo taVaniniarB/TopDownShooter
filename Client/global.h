@@ -14,6 +14,9 @@ using std::list;
 using std::map;
 using std::make_pair;
 
+#include <queue>
+using std::queue;
+
 #include <string>
 using std::string;
 using std::wstring;
