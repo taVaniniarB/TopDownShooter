@@ -15,14 +15,18 @@ public:
         m_vDir = _vDir;
         m_vDir.Normalize();
     }
+    void SetImage(wstring _imageName, wstring _imagePath);
+
 public:
     virtual void update();
     virtual void render(HDC _dc);
+    virtual void start();
 
 public:
     virtual void OnCollisionEnter(CCollider* _pOther);
 
     CLONE(CMissile);
+
 
 public:
     CMissile();

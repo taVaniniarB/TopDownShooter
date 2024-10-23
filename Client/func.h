@@ -51,3 +51,17 @@ void FScanf(char* _pOutBuff, FILE* _pFile);
 void SaveWstring(const wstring& _str, FILE* _pFile);
 // 파일로부터 문자열을 읽어서 _str에 저장하는 함수
 void LoadWstring(wstring& _str, FILE* _pFile);
+
+inline float Vec2ToDgree(Vec2 _vec)
+{
+	return (atan2(_vec.y, _vec.x) * (180.0f / 3.141592f)); // 라디안을 도 단위로 변환
+}
+
+inline Vec2 DegreeToVec2(float degree)
+{
+	float radian = degree * (3.141592f / 180.0f); // 도를 라디안으로 변환
+	Vec2 vec;
+	vec.x = cos(radian); // x 좌표: cos(라디안)
+	vec.y = sin(radian); // y 좌표: sin(라디안)
+	return vec;
+}

@@ -31,3 +31,6 @@
 
 #include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CPathMgr.cpp"
 
+
+#include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CPlayer.cpp"
+

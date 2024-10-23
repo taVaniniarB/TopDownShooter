@@ -188,6 +188,12 @@
     <Filter Include="Engine\04. Object\UI\ImgUI\ArrowImg">
       <UniqueIdentifier>{e6d0b8ae-7cbc-4a75-86f7-d2dbda43f37e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\04. Object\Weapon\Gun\M16">
+      <UniqueIdentifier>{a5b147c1-5972-4a4b-8c6a-ad4496ba2664}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Object\Weapon\Gun\Shotgun">
+      <UniqueIdentifier>{9b1fd4b6-c911-458e-8767-61b1075cf765}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CCore.h">
@@ -380,6 +386,12 @@
     <ClInclude Include="CAmmoImgUI.h">
       <Filter>Engine\04. Object\UI\ImgUI\AmmoImg</Filter>
     </ClInclude>
+    <ClInclude Include="CM16.h">
+      <Filter>Engine\04. Object\Weapon\Gun\M16</Filter>
+    </ClInclude>
+    <ClInclude Include="CShotgun.h">
+      <Filter>Engine\04. Object\Weapon\Gun\Shotgun</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
@@ -563,6 +575,12 @@
     </ClCompile>
     <ClCompile Include="CAmmoImgUI.cpp">
       <Filter>Engine\04. Object\UI\ImgUI\AmmoImg</Filter>
+    </ClCompile>
+    <ClCompile Include="CM16.cpp">
+      <Filter>Engine\04. Object\Weapon\Gun\M16</Filter>
+    </ClCompile>
+    <ClCompile Include="CShotgun.cpp">
+      <Filter>Engine\04. Object\Weapon\Gun\Shotgun</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

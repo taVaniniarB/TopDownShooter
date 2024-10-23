@@ -3,6 +3,8 @@
 
 #include "CMelee.h"
 #include "CGun.h"
+#include "CM16.h"
+#include "CShotgun.h"
 
 #include "CPathMgr.h"
 #include "CObject.h"
@@ -11,6 +13,7 @@
 CWeapon* CWeaponFactory::CreateWeapon(WEAPON_TYPE _eWeaponType, MELEE_TYPE _eMeleeType, GUN_TYPE _eGunType)
 {
 	CWeapon* pWeapon = nullptr;
+	Image* pImage = nullptr;
 
 	switch (_eWeaponType)
 	{
@@ -44,14 +47,11 @@ CWeapon* CWeaponFactory::CreateWeapon(WEAPON_TYPE _eWeaponType, MELEE_TYPE _eMel
 		break;
 	case WEAPON_TYPE::GUN:
 	{
-		pWeapon = new CGun;
-
-		Image* pImage = nullptr;
-
 		switch (_eGunType)
 		{
 		case GUN_TYPE::M16:
 		{
+			pWeapon = new CM16;
 			((CGun*)pWeapon)->SetType(GUN_TYPE::M16);
 			((CGun*)pWeapon)->SetMaxMissile(100);
 			pWeapon->SetDelay(0.1f);
@@ -62,6 +62,7 @@ CWeapon* CWeaponFactory::CreateWeapon(WEAPON_TYPE _eWeaponType, MELEE_TYPE _eMel
 			break;
 		case GUN_TYPE::SHOTGUN:
 		{
+			pWeapon = new CShotgun;
 			((CGun*)pWeapon)->SetType(GUN_TYPE::SHOTGUN);
 			((CGun*)pWeapon)->SetMaxMissile(6);
 			pWeapon->SetDelay(0.3f);

@@ -17,16 +17,19 @@ private:
 
 private:
 	void SetMaxMissile(int _i) { m_iMaxAmmo = _i; m_iRemainAmmo = _i; }
-	void CreateMissile();
+	
+protected:
+	virtual void CreateMissile();
 
 public:
 	void SetType(GUN_TYPE _eType) { m_eGunType = _eType; }
 	int GetAmmoNum() { return m_iRemainAmmo; }
 
 public:
-	void Attack();
+	virtual void Attack();
+	void PlayShotSound(wstring _strSoundName);
 
-	CLONE(CGun);
+	//CLONE(CGun);
 
 public:
 	CGun();

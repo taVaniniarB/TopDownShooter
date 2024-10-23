@@ -12,10 +12,12 @@ CMissile::CMissile()
 {
 	m_vDir.Normalize();
 	CreateCollider();
-	GetCollider()->SetScale(Vec2(10.f, 10.f));
 	SetName(L"Missile");
+}
 
-	Image* pImage = CResMgr::GetInst()->LoadGdiImage(L"ammo", L"texture\\weapon\\ammo.png");
+void CMissile::SetImage(wstring _imageName, wstring _imagePath)
+{
+	Image* pImage = CResMgr::GetInst()->LoadGdiImage(_imageName, _imagePath);
 	m_pImage = pImage;
 }
 
@@ -36,8 +38,8 @@ void CMissile::update()
 void CMissile::render(HDC _dc)
 {
 	// 벡터에서 회전 각도 계산 (단위 벡터이므로 ArcTan2 사용)
-	//float angle = VectorToAngle(m_vAimDir);
-	float angle = atan2(m_vDir.y, m_vDir.x) * (180.0f / 3.141592f);
+	float angle = Vec2ToDgree(m_vDir);
+	//float angle = atan2(m_vDir.y, m_vDir.x) * (180.0f / PI);
 
 	Vec2 vPos = GetPos();
 	vPos = CCamera::GetInst()->GetRenderPos(vPos);
@@ -61,8 +63,12 @@ void CMissile::render(HDC _dc)
 		(int)(vPos.y - vScale.y / 2.f),
 		(int)(vScale.x),
 		(int)(vScale.y));
+}
 
-	//component_render(_dc);
+void CMissile::start()
+{
+	Vec2 vScale = GetScale();
+	GetCollider()->SetScale(vScale);
 }
 
 void CMissile::OnCollisionEnter(CCollider* _pOther)

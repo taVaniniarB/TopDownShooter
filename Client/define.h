@@ -47,9 +47,9 @@ enum class GROUP_TYPE
 	MONSTER,
 	PLAYER,
 	DROPPED_WEAPON,
-	WEAPON,
 	PROJ_PLAYER,
 	PROJ_MONSTER,
+	WEAPON,
 
 	HITBOX_PLAYER,     // 플레이어 히트박스
 	HITBOX_MONSTER,    // 몬스터 히트박스
