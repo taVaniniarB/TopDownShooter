@@ -107,6 +107,8 @@ void CPlayer::update()
 		DropWeapon();
 	}
 
+	SetAimDir();
+	
 	GetAnimator()->update();
 
 	// 왜 첫줄 말고 마지막에 둬야할까...
@@ -211,6 +213,8 @@ void CPlayer::update_move()
 		vPos += vPlayerMoveVec * m_fSpeed * fDT;
 		SetPos(vPos);
 	}
+
+	std::cout << GetPos().x / TILE_SIZE << ", " << GetPos().y / TILE_SIZE << "\n";
 
 	/*CRigidBody* pRigid = GetRigidBody();
 
@@ -349,6 +353,22 @@ void CPlayer::PickupWeapon(CWeapon* _pWeapon)
 			CSceneMgr::GetInst()->GetCurScene()->SetUIVisable(L"ammoUI", false);
 			CSceneMgr::GetInst()->GetCurScene()->SetUIVisable(L"ammoImage", false);
 		}
+	}
+}
+
+void CPlayer::SetAimDir()
+{
+	if (m_pWeapon)
+	{
+		Vec2 vMousePos = MOUSE_POS;
+		vMousePos = CCamera::GetInst()->GetRealPos(vMousePos);
+
+		Vec2 vPos = GetPos();
+
+		m_vAimDir = vMousePos - vPos;
+		m_vAimDir.Normalize();
+		
+		m_pWeapon->SetAimDir(m_vAimDir);
 	}
 }
 

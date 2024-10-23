@@ -60,8 +60,7 @@ public:
 	//void OncollisionEnter(CCollider* _pOther);
 	void SetImage(Image* _pImage);
 
-private:
-	void SetAimDir();
+	void SetAimDir(Vec2 _vAimDir) { m_vAimDir = _vAimDir; }
 
 
 public:

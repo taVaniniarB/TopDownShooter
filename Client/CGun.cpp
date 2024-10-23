@@ -74,5 +74,8 @@ void CGun::CreateMissile()
 	pMissile->SetScale(Vec2(10.f, 10.f));
 	pMissile->SetDir(vAimDir);
 
-	CreateObject(pMissile, GROUP_TYPE::PROJ_PLAYER);
+	if (GetOwner()->GetName() == L"Player")
+		CreateObject(pMissile, GROUP_TYPE::PROJ_PLAYER);
+	else
+		CreateObject(pMissile, GROUP_TYPE::PROJ_MONSTER);
 }

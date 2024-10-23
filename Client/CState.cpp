@@ -25,7 +25,7 @@ CMonster* CState::GetMonster()
 	return pMonster;
 }
 
-bool CState::isWall(float x, float y)
+bool CState::isWall(int x, int y)
 {
 	if (1 == CSceneMgr::GetInst()->GetCurScene()->GetWallmapNum(x, y))
 		return true;

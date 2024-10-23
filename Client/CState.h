@@ -13,7 +13,7 @@ public:
 	MON_STATE GetType() { return m_eState; }
 	CMonster* GetMonster();
 
-	bool isWall(float x, float y);
+	bool isWall(int x, int y);
 
 public:
 	virtual void update() = 0;

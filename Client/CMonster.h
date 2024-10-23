@@ -34,6 +34,7 @@ public:
     void SetWeapon(CWeapon* _pWeapon);
     void SetHitbox(CHitbox* _pHitbox);
     void DropWeapon();
+    CWeapon* GetWeapon() { return m_pWeapon; }
     void SubHP();
 
 public:

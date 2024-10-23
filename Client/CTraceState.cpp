@@ -8,6 +8,8 @@
 #include "CMonster.h"
 
 #include "CTimeMgr.h"
+#include "CWeapon.h"
+//#include "CCollider.h"
 
 CTraceState::CTraceState()
 	: CState(MON_STATE::TRACE)
@@ -18,12 +20,12 @@ CTraceState::~CTraceState()
 {
 }
 
-void CTraceState::SearchMovePath()
+void CTraceState::SearchMovePath(Vec2 vEnd, Vec2 vStart)
 {
+	vEnd *= 1.f / TILE_SIZE;
+	vStart *= 1.f / TILE_SIZE;
+
 	m_vPath.clear();
-	CPlayer* pPlayer = (CPlayer*)CSceneMgr::GetInst()->GetCurScene()->GetPlayer();
-	Vec2 vEnd = pPlayer->GetPos() / TILE_SIZE;
-	Vec2 vStart = GetMonster()->GetPos() / TILE_SIZE;
 
 	POINT pEnd = { (int)vEnd.x, (int)vEnd.y };
 	POINT pStart = { (int)vStart.x, (int)vStart.y };
@@ -61,7 +63,6 @@ void CTraceState::SearchMovePath()
 				p = parent[p.y][p.x];
 			}
 
-			std::reverse(m_vPath.begin(), m_vPath.end());
 			return;
 		}
 
@@ -75,7 +76,7 @@ void CTraceState::SearchMovePath()
 				continue;
 
 			// 이미 방문한 노드 || 1이 아닌 노드인 경우 넘어감
-			if (visit[ny][nx] || isWall(nx * TILE_SIZE, ny * TILE_SIZE))
+			if (visit[ny][nx] || isWall(nx, ny))
 				continue;
 
 			visit[ny][nx] = true;
@@ -85,44 +86,105 @@ void CTraceState::SearchMovePath()
 	}
 }
 
-void CTraceState::update()
+bool CTraceState::isWallInPath(Vec2 vEnd, Vec2 vStart)
 {
-	Vec2 vEnd = {}; //이번 프레임 목적지 좌표
-	/*
-	// if (경로에 벽이 없을 때)
-	if (true)
-	{
-		// 타겟팅 된 Player를 End 좌표로 지정하여 쫓아간다
-		CPlayer* pPlayer = (CPlayer*)CSceneMgr::GetInst()->GetCurScene()->GetPlayer();
-		Vec2 vEnd = pPlayer->GetPos();
+	// 방향 벡터
+	float dx = vEnd.x - vStart.x;
+	float dy = vEnd.y - vStart.y;
+
+	if (std::abs(dx) > std::abs(dy)) {
+		// x 방향으로 움직이며 교차점 구하기
+		float xStep = (dx > 0) ? TILE_SIZE : -TILE_SIZE;
+		for (float x = std::floor(vStart.x / TILE_SIZE) * TILE_SIZE;
+			(dx > 0 && x <= vEnd.x) || (dx < 0 && x >= vEnd.x);
+			x += xStep)
+		{
+			float y = vStart.y + (x - vStart.x) * dy / dx;
+			if (isWall(x / TILE_SIZE, y / TILE_SIZE))
+				return true;
+		}
 	}
-	else
-	{
-		// else (벽이 있을 때)
-		SearchMovePath();
-		vEnd = Vec2(m_vPath[0]) * (TILE_SIZE * 0.5f);
-	}
-	*/
-	SearchMovePath();
-	// 매 프레임 계산되는 path 정보
-	if (m_vPath.size() > 1)
-	{
-		vEnd = (Vec2(m_vPath[1])) * TILE_SIZE;
-		vEnd.x += TILE_SIZE / 2;
-		vEnd.y += TILE_SIZE / 2;
+	else {
+		// y 방향으로 움직이며 교차점 구하기
+		float yStep = (dy > 0) ? TILE_SIZE : -TILE_SIZE;
+		for (float y = std::floor(vStart.y / TILE_SIZE) * TILE_SIZE;
+			(dy > 0 && y <= vEnd.y) || (dy < 0 && y >= vEnd.y);
+			y += yStep)
+		{
+			float x = vStart.x + (y - vStart.y) * dx / dy;
+			if (isWall((int)(x / TILE_SIZE), (int)(y / TILE_SIZE)))
+				return true;
+		}
 	}
 
+	return false;
+}
+
+void CTraceState::update()
+{
+	//이번 프레임 목적지 좌표
+	CPlayer* pPlayer = (CPlayer*)CSceneMgr::GetInst()->GetCurScene()->GetPlayer();
+	Vec2 vEnd = pPlayer->GetPos();
+	Vec2 vStart = GetMonster()->GetPos();
+
+	// 경로에 벽이 있을 때
+	// 충돌체의 네 점에 대하여 모두 검사해야 할까?
+	// 혹은 기울기에 따라 충돌체 점 하나를 추가로 검사
+	// 이 경우 타일사이즈를 나누지 않은 좌표값 그대로를 사용해야 함
+	Vec2 vColliderCorrection = { 1.f, 1.f };
+	if (isWallInPath(vEnd, vStart + vColliderCorrection)
+		|| isWallInPath(vEnd, vStart - vColliderCorrection)
+		|| isWallInPath(vEnd, Vec2(vStart.x - vColliderCorrection.x, vStart.y + vColliderCorrection.y))
+		|| isWallInPath(vEnd, Vec2(vStart.x + vColliderCorrection.x, vStart.y - vColliderCorrection.y)))
+	{
+		// 매 프레임 계산되는 path 정보
+		SearchMovePath(vEnd, vStart);
+
+		if (m_vPath.size() > 1)
+		{
+			vEnd = (Vec2(m_vPath[m_vPath.size() - 2])) * TILE_SIZE;
+			vEnd.x += TILE_SIZE / 2;
+			vEnd.y += TILE_SIZE / 2;
+		}
+		else
+		{
+			// 다음 경로 정보가 없을 때
+			// 즉 제자리거나, 갈 수 있는 경로가 존재하지 않는 경우
+			return;
+		}
+	}
+
+	// 경로에 벽이 없다면 공격한다
+	if (!isWallInPath(pPlayer->GetPos(), vStart))
+		Attack();
+
 	Trace(vEnd);
+}
+
+void CTraceState::Attack()
+{
+	Vec2 vPlayerPos = CSceneMgr::GetInst()->GetCurScene()->GetPlayer()->GetPos();
+	CWeapon* pMonWeapon = GetMonster()->GetWeapon();
+	if (pMonWeapon)
+	{
+		Vec2 vAimDir = vPlayerPos - pMonWeapon->GetPos();
+		pMonWeapon->SetAimDir(vAimDir);
+		pMonWeapon->Attack();
+	}
 }
 
 void CTraceState::Trace(Vec2 vEnd)
 {
 	Vec2 vMonPos = GetMonster()->GetPos();
+	CPlayer* pPlayer = (CPlayer*)CSceneMgr::GetInst()->GetCurScene()->GetPlayer();
+	Vec2 vPlayerPos = pPlayer->GetPos();
 
 	// 몬스터 > 플레이어 쪽의 방향 계산
 	Vec2 vMonDir = vEnd - vMonPos;
-	//if (vMonDir.Length() < 20)
-	//	return;
+
+	Vec2 vPlayerToMonster = vPlayerPos - vMonPos;
+	if (vPlayerToMonster.Length() < 20)
+		return;
 
 	vMonDir.Normalize();
 

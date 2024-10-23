@@ -34,7 +34,7 @@ void CWeapon::update()
 {
 	if (WEAPON_STATUS::HOLD == m_eWeaponStatus)
 	{
-		SetAimDir();
+		//SetAimDir();
 
 		Vec2 vObjectPos = m_pOwner->GetPos();
 		SetPos(vObjectPos + m_vOffsetPos);
@@ -86,28 +86,3 @@ void CWeapon::SetImage(Image* _pImage)
 	m_pImage = _pImage;
 }
 
-void CWeapon::SetAimDir()
-{
-	m_vPrevAimDir = m_vAimDir;
-	Vec2 vAimVec = {};
-
-	if (m_pOwner->GetName() == L"Player")
-	{
-		Vec2 vMousePos = MOUSE_POS;
-		vMousePos = CCamera::GetInst()->GetRealPos(vMousePos);
-
-		Vec2 vPlayerPos = m_pOwner->GetPos();
-		//CCamera::GetInst()->GetInst()->GetRenderPos(vPlayerPos);
-
-		// 플레이어 > 마우스 향하는 벡터
-		vAimVec = vMousePos - vPlayerPos;
-	}
-	
-	if (vAimVec.isZero())
-	{
-		m_vAimDir = m_vPrevAimDir;
-		return;
-	}
-
-	m_vAimDir = vAimVec.Normalize();
-}

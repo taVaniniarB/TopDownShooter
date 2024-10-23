@@ -539,10 +539,8 @@ void CScene::render_tile(HDC _dc)
 	}
 }
 
-int CScene::GetWallmapNum(float x, float y)
+int CScene::GetWallmapNum(int x, int y)
 {
-	x /= TILE_SIZE;
-	y /= TILE_SIZE;
 	return m_WallMap[y][x];
 }
 

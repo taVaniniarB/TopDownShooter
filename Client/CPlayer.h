@@ -41,6 +41,7 @@ private:
     int m_iHP;
 
     CWeapon* m_pWeapon;
+    Vec2 m_vAimDir;
     CHitbox* m_pHitbox;
 
 public:
@@ -58,6 +59,7 @@ private:
     void DropWeapon();
     void ExchangeWeapon(CWeapon* _pWeapon);
     void PickupWeapon(CWeapon* _pWeapon);
+    void SetAimDir();
 
 private:
     void update_state();
