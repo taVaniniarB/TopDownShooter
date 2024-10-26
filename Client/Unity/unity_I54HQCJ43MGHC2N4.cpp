@@ -1,7 +1,4 @@
 
-#include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CMousePtr.cpp"
-
-
 #include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CPipe.cpp"
 
 
@@ -27,4 +24,10 @@
 
 
 #include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CTileBtnUI.cpp"
+
+
+#include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CWall.cpp"
+
+
+#include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CIdleState.cpp"
 

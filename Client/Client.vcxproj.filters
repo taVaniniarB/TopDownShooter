@@ -203,6 +203,9 @@
     <Filter Include="Engine\04. Object\Weapon\Melee\Knife">
       <UniqueIdentifier>{c3a69bfa-0c40-494d-9c8b-6a850e6bb2c6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\04. Object\UI\ImgUI\HP">
+      <UniqueIdentifier>{7e2d7e1a-9da2-4418-b019-10bc66df4816}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CCore.h">
@@ -410,6 +413,9 @@
     <ClInclude Include="targetver.h">
       <Filter>Engine</Filter>
     </ClInclude>
+    <ClInclude Include="CHPUI.h">
+      <Filter>Engine\04. Object\UI\ImgUI\HP</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
@@ -608,6 +614,9 @@
     </ClCompile>
     <ClCompile Include="CPipe.cpp">
       <Filter>Engine\04. Object\Weapon\Melee\Pipe</Filter>
+    </ClCompile>
+    <ClCompile Include="CHPUI.cpp">
+      <Filter>Engine\04. Object\UI\ImgUI\HP</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

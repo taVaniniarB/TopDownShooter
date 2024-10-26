@@ -14,15 +14,11 @@ void CKnife::Attack()
 {
 	float fDelay = GetDelay();
 	float fCurDelay = GetCurDelay();
-	if (fCurDelay > fDelay)
+	if (fCurDelay >= fDelay)
 	{
 		CreateDamageArea();
 		PlayAttackSound(L"Swing1");
 
 		SetCurDelay(0.f);
-	}
-	else
-	{
-		SetCurDelay(fCurDelay + fDT);
 	}
 }

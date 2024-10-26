@@ -53,7 +53,9 @@ public:
 public:
     void SetWeapon(CWeapon* _pWeapon);
     void SetHitbox(CHitbox* _pHitbox);
-    void SubHP() { --m_iHP; }
+    void SetHP(int _iHP) { m_iHP = _iHP; }
+    int GetHP() { return m_iHP; }
+    void SubHP(wstring _strWeaponName);
     
 private:
     void DropWeapon();

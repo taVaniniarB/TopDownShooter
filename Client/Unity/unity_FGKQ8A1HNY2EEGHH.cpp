@@ -1,7 +1,4 @@
 
-#include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CCore.cpp"
-
-
 #include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CDamageArea.cpp"
 
 
@@ -17,6 +14,9 @@
 #include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CHitbox.cpp"
 
 
+#include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CHPUI.cpp"
+
+
 #include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CImgUI.cpp"
 
 
@@ -27,4 +27,7 @@
 
 
 #include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CMelee.cpp"
+
+
+#include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CMousePtr.cpp"
 

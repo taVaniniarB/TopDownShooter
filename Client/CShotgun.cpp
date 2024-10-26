@@ -18,7 +18,7 @@ void CShotgun::Attack()
 {
 	float fDelay = GetDelay();
 	float fCurDelay = GetCurDelay();
-	if (fCurDelay > fDelay)
+	if (fCurDelay >= fDelay)
 	{
 		if (GetAmmoNum() > 0)
 		{
@@ -28,10 +28,6 @@ void CShotgun::Attack()
 			// 공통작업 처리
 			CGun::Attack();
 		}
-	}
-	else
-	{
-		SetCurDelay(fCurDelay + fDT);
 	}
 }
 

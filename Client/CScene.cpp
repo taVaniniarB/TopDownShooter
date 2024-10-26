@@ -13,6 +13,7 @@
 #include "CSceneChanger.h"
 #include "CUI.h"
 #include "CTextUI.h"
+#include "CHPUI.h"
 #include "SelectGDI.h"
 #include "CWeapon.h"
 #include "CHitbox.h"
@@ -373,6 +374,14 @@ void CScene::SetUIText(wstring _strUIName, int _iNum)
 {
 	((CTextUI*)FindUI(_strUIName))->SetText(_iNum);
 }
+
+void CScene::SetHPUI(int _iNum)
+{
+	wstring HP = L"HP";
+	((CHPUI*)FindUI(HP))->SetHPUINum(_iNum);
+}
+
+
 
 CUI* CScene::FindUI(std::wstring& _strUIName)
 {

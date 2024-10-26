@@ -51,6 +51,7 @@ public:
 	CUI* FindUI(wstring& _strName);
 	void SetUIText(wstring _strUIName, wstring _strText);
 	void SetUIText(wstring _strUIName, int _iNum);
+	void SetHPUI(int _iNum);
 
 	// 본인 소속 stage를 반환한다.
 	// 이 프로젝트에서는 하나의 stage만 존재할 것이기 때문에 편의상 싱글턴 패턴을 사용해서
@@ -81,8 +82,8 @@ public:
 
 	void SetEnabled(bool _b) { m_bEnabled = _b; }
 
-	int GetMapRowSize() { return m_WallMap.size(); }
-	int GetMapColSize() { return m_WallMap[0].size(); }
+	int GetMapRowSize() { return (int)m_WallMap.size(); }
+	int GetMapColSize() { return (int)m_WallMap[0].size(); }
 	int GetWallmapNum(int x, int y); // 해당 좌표 셀의 숫자 반환
 
 public:

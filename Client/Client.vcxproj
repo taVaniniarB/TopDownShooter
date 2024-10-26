@@ -173,6 +173,7 @@
     <ClInclude Include="CGravity.h" />
     <ClInclude Include="CGun.h" />
     <ClInclude Include="CHitbox.h" />
+    <ClInclude Include="CHPUI.h" />
     <ClInclude Include="CImgUI.h" />
     <ClInclude Include="CKnife.h" />
     <ClInclude Include="CM16.h" />
@@ -244,6 +245,7 @@
     <ClCompile Include="CGravity.cpp" />
     <ClCompile Include="CGun.cpp" />
     <ClCompile Include="CHitbox.cpp" />
+    <ClCompile Include="CHPUI.cpp" />
     <ClCompile Include="CImgUI.cpp" />
     <ClCompile Include="CKnife.cpp" />
     <ClCompile Include="CM16.cpp" />

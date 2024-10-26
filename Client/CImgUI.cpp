@@ -32,5 +32,4 @@ void CImgUI::render(HDC _dc)
 			, pTex->GetDC()
 			, 0, 0, (int)vScale.x, (int)vScale.y, RGB(255, 0, 255));
 	}
-
 }

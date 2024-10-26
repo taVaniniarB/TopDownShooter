@@ -16,6 +16,7 @@
 #include "CHitbox.h"
 #include "CUI.h"
 #include "CGun.h"
+#include "CSoundMgr.h"
 
 CPlayer::CPlayer()
 	: m_eCurState(PLAYER_STATE::IDLE)
@@ -251,12 +252,30 @@ void CPlayer::update_move()
 
 void CPlayer::update_attack()
 {
-	
-	if (KEY_HOLD(KEY::LBTN))
+	if (!m_pWeapon)
+		return;
+
+	WEAPON_TYPE wt = m_pWeapon->GetWeaponType();
+
+	if (wt == WEAPON_TYPE::MELEE)
 	{
-		if (m_pWeapon)
+		if (KEY_TAP(KEY::LBTN))
 		{
-			m_pWeapon->Attack();
+			if (m_pWeapon)
+			{
+				m_pWeapon->Attack();
+				std::cout << "melee attack called";
+			}
+		}
+	}
+	else if (wt == WEAPON_TYPE::GUN)
+	{
+		if (KEY_HOLD(KEY::LBTN))
+		{
+			if (m_pWeapon)
+			{
+				m_pWeapon->Attack();
+			}
 		}
 	}
 }
@@ -327,6 +346,30 @@ void CPlayer::SetHitbox(CHitbox* _pHitbox)
 {
 	m_pHitbox = _pHitbox;
 	_pHitbox->SetOwner(this);
+}
+
+void CPlayer::SubHP(wstring _strWeapon)
+{
+	--m_iHP;
+
+	if (m_iHP <= 0)
+	{
+		if (_strWeapon == L"Knife")
+			CSoundMgr::GetInst()->PlaySE(L"Cut1", 30.f);
+		else if (_strWeapon == L"Pipe")
+			CSoundMgr::GetInst()->PlaySE(L"Hit1", 30.f);
+
+		// 피 튀는 파티클
+		//DropWeapon();
+		//DeleteObject(this);
+
+		// 시체 + 피 스프라이트
+		SetEnabled(false);
+		
+		std::cout << "You Die ";
+	}
+
+	CSceneMgr::GetInst()->GetCurScene()->SetHPUI(m_iHP);
 }
 
 void CPlayer::PickupWeapon(CWeapon* _pWeapon)

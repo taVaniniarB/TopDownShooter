@@ -6,11 +6,12 @@
 #include "CTexture.h"
 #include "CResMgr.h"
 #include "CSound.h"
+#include "CTimeMgr.h"
 
 
 CWeapon::CWeapon()
 	: m_fDelay(0.f)
-	, m_fCurDelay(0.f)
+	, m_fCurDelay(99.f)
 	, m_pOwner(nullptr)
 	, m_pGetSound(nullptr)
 	, m_pAttackSound(nullptr)
@@ -37,10 +38,10 @@ void CWeapon::update()
 {
 	if (WEAPON_STATUS::HOLD == m_eWeaponStatus)
 	{
-		//SetAimDir();
-
 		Vec2 vObjectPos = m_pOwner->GetPos();
 		SetPos(vObjectPos + m_vOffsetPos);
+
+		m_fCurDelay += fDT;
 	}
 }
 

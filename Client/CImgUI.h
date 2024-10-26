@@ -11,10 +11,5 @@ public:
 
 public:
     virtual void render(HDC _dc);
-
-//
-//private:
-//    CTexture* m_pTex;
-//    int m_iImgIdx;
 };
 

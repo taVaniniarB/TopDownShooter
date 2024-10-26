@@ -24,10 +24,12 @@
 #include "CTimeMgr.h"
 #include "CScoreMgr.h"
 #include "CHitbox.h"
+#include "CGun.h"
 #include "CAmmoImgUI.h"
 #include "CAmmoUI.h"
 #include "CScoreUI.h"
 #include "CComboUI.h"
+#include "CHPUI.h"
 
 
 CScene_Combat::CScene_Combat(const wstring& _wSceneRelativePath)
@@ -145,10 +147,12 @@ void CScene_Combat::CreateCombatSceneUI()
 	pAmmoImgUI->SetName(L"ammoImage");
 	pAmmoImgUI->SetVisable(false);
 	AddObject(pAmmoImgUI, GROUP_TYPE::UI);
-}
 
-// 모든 몬스터의 정보 관리하고 있기
-//	몬스터 벡터 순회하며 HP가 0이 될 때마다 AddCombo와 AddScore 호출
+	CUI* pHPUI = new CHPUI;
+	pHPUI->SetName(L"HP");
+	pHPUI->SetVisable(true);
+	AddObject(pHPUI, GROUP_TYPE::UI);
+}
 
 void CScene_Combat::render(HDC _dc)
 {
@@ -205,12 +209,20 @@ void CScene_Combat::Enter()
 
 void CScene_Combat::PlayerSetting(CObject* pPlayer)
 {
+	int playerInitHP = 10;
+
 	RegisterPlayer(pPlayer);
+
 
 	CHitbox* pHitbox = new CHitbox();
 	pHitbox->SetName(L"Hitbox_Player");
 	AddObject(pHitbox, GROUP_TYPE::HITBOX_PLAYER);
 	((CPlayer*)pPlayer)->SetHitbox(pHitbox);
+
+
+	((CPlayer*)pPlayer)->SetHP(playerInitHP);
+	SetHPUI(playerInitHP);
+
 
 	CWeapon* pWeapon = CStage::GetInst()->GetPlayerWeapon();
 	if (nullptr != pWeapon)
@@ -221,6 +233,7 @@ void CScene_Combat::PlayerSetting(CObject* pPlayer)
 
 		if (pWeapon->GetWeaponType() == WEAPON_TYPE::GUN)
 		{
+			SetUIText(L"ammoUI", ((CGun*)pWeapon)->GetAmmoNum());
 			SetUIVisable(L"ammoImage", true);
 			SetUIVisable(L"ammoUI", true);
 		}

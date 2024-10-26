@@ -26,9 +26,9 @@ void CMelee::CreateDamageArea()
 	pDA->SetOwner(this);
 	
 	if (this->GetFullWeaponType() == FULL_WEAPON_TYPE::KNIFE)
-		pDA->SetName(L"KnifeDA");
+		pDA->SetName(L"Knife");
 	else
-		pDA->SetName(L"PipeDA");
+		pDA->SetName(L"Pipe");
 	pDA->SetPos(GetPos() + vOffset);
 	pDA->SetScale(Vec2(attackRange, attackRange));
 	pDA->SetDir(vAimDir);

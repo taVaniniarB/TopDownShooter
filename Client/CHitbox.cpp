@@ -41,29 +41,12 @@ void CHitbox::OnCollisionEnter(CCollider* _pOther)
 	// 오너가 플레이어 (플레이어 히트박스가 맞음)
 	if (ownerName == L"Player")
 	{
-		if (otherObjName == L"KnifeDA")
-		{
-
-		}
-		else if (otherObjName == L"Missle")
-
-		((CPlayer*)m_pOwner)->SubHP();
+		((CPlayer*)m_pOwner)->SubHP(otherObjName);
 	}
 
 	// 오너가 몬스터 (몬스터 히트박스가 맞음)
 	else if (ownerName == L"Monster")
 	{
-		if (otherObjName == L"KnifeDA")
-		{
-			((CMonster*)m_pOwner)->SubHP(L"Knife");
-		}
-		else if (otherObjName == L"PipeDA")
-		{
-			((CMonster*)m_pOwner)->SubHP(L"Pipe");
-		}
-		else if (otherObjName == L"Missile")
-		{
-			((CMonster*)m_pOwner)->SubHP(L"Missile");
-		}
+		((CMonster*)m_pOwner)->SubHP(otherObjName);
 	}
 }
