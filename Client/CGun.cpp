@@ -29,13 +29,14 @@ void CGun::Attack()
 		CSceneMgr::GetInst()->GetCurScene()->SetUIText(L"ammoUI", m_iRemainAmmo);
 	}
 }
+/*
 void CGun::PlayShotSound(wstring _strSoundName)
 {
 	CSound* pNewSound = nullptr;
 	pNewSound = CResMgr::GetInst()->FindSound(_strSoundName);
 	pNewSound->Play();
 	pNewSound->SetVolume(10.f);
-}
+}*/
 
 void CGun::CreateMissile()
 {

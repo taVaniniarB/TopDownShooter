@@ -107,7 +107,7 @@ public:
 	void GenerateCorner(Vec2 vMousePos, WALL_DIR _eSelectedWallDir);
 	void GenerateTileWall(Vec2 vMousePos, int _idx);
 	void SpawnPlayer(Vec2 vMousePos);
-	void SpawnMonster(Vec2 vMousePos);
+	void SpawnMonster(Vec2 vMousePos, FULL_WEAPON_TYPE fwt);
 	void CreateSceneChanger(Vec2 vPos, Vec2 vScale, SCENE_TYPE _eScene);
 	void CreateWall(Vec2 vMousePos, WALL_DIR _eSelectedWallDir, WALL_TYPE _eWallType, int _idx);
 	void CreateWall(Vec2 vMousePos, WALL_DIR _eSelectedWallDir1, WALL_DIR _eSelectedWallDir2);

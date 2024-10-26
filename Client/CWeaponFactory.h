@@ -5,7 +5,7 @@ class CWeapon;
 class CWeaponFactory
 {
 public:
-	static CWeapon* CreateWeapon(WEAPON_TYPE _eWeaponType, MELEE_TYPE _eMeleeType, GUN_TYPE _eGunType);
+	static CWeapon* CreateWeapon(FULL_WEAPON_TYPE _eWeaponType);
 
 public:
 	CWeaponFactory() {}

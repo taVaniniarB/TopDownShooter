@@ -18,6 +18,10 @@
 #define ID_32771                        32771
 #define ID_MENU_TILE                    32772
 #define IDC_STATIC                      -1
+#define IDD_WEAPON_DIALOG				101
+#define IDC_WEAPON_LIST					1001
+#define IDD_SCENE_DIALOG				111
+#define IDC_SCENE_LIST					1011
 
 // Next default values for new objects
 // 

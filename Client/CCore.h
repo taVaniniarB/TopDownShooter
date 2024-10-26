@@ -39,7 +39,6 @@ public: //코어 클래스의 초기화 함수를 만들자
 
 private:
 	void InitGDIPlus();
-	bool LoadFontFromFile(const wchar_t* fontFilePath);
 	
 public:
 	void DockMenu();

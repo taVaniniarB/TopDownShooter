@@ -22,4 +22,5 @@ public:
 	int init(void);
 	LPDIRECTSOUND8 GetSoundDevice() { return m_pSound; }
 	void RegisterToBGM(CSound* _pSound);
+	void PlaySE(wstring _strSoundName, float _fVolume);
 };

@@ -27,9 +27,6 @@ public:
 
 public:
 	virtual void Attack();
-	void PlayShotSound(wstring _strSoundName);
-
-	//CLONE(CGun);
 
 public:
 	CGun();

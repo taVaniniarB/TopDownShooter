@@ -214,8 +214,7 @@ void CPlayer::update_move()
 		SetPos(vPos);
 	}
 
-	std::cout << GetPos().x / TILE_SIZE << ", " << GetPos().y / TILE_SIZE << "\n";
-
+	
 	/*CRigidBody* pRigid = GetRigidBody();
 
 	Vec2 vPlayerMoveVec(0.f, 0.f);

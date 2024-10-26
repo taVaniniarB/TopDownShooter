@@ -14,9 +14,12 @@ class CWeapon :
 {
 private:
 	WEAPON_TYPE m_eWeaponType;
+	FULL_WEAPON_TYPE m_eFullWeaponType;
 
 	float m_fDelay;
 	float m_fCurDelay;
+	float m_fAttackRange;
+
 	// 공격 시 효과음 리소스
 	CSound* m_pAttackSound;
 	// 장착할 때 때 효과음 리소스
@@ -40,11 +43,15 @@ public:
 
 public:
 	void SetDelay(float _f) { m_fDelay = _f; m_fCurDelay = _f; }
+	float GetAttackRange() { return m_fAttackRange; }
+	void SetAttackRange(float _f) { m_fAttackRange = _f; }
 	CObject* GetOwner() { return m_pOwner; }
 	void SetOnwer(CObject* _pOwner) { m_pOwner = _pOwner; }
 	void SetWeaponType(WEAPON_TYPE _eType) { m_eWeaponType = _eType; }
+	void SetFullWeaponType(FULL_WEAPON_TYPE _eType) { m_eFullWeaponType = _eType; }
 	WEAPON_TYPE GetWeaponType() { return m_eWeaponType; }
-	
+	FULL_WEAPON_TYPE GetFullWeaponType() { return m_eFullWeaponType; }
+
 	void Drop();
 
 	float GetDelay() { return m_fDelay; }
@@ -65,6 +72,7 @@ public:
 
 public:
 	virtual void Attack() = 0;
+	void PlayAttackSound(wstring strSoundName);
 
 public:
 	CWeapon();

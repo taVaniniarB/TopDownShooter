@@ -23,7 +23,7 @@ void CShotgun::Attack()
 		if (GetAmmoNum() > 0)
 		{
 			CreateMissile();
-			PlayShotSound(L"Shotgun");
+			PlayAttackSound(L"Shotgun");
 
 			// 공통작업 처리
 			CGun::Attack();

@@ -37,6 +37,9 @@
 #define FADEOUT_TIME 1.f
 #define FADEIN_TIME 1.f
 
+#define WM_SELECT_WEAPON (WM_USER + 1)
+#define WM_SELECT_SCENE (WM_USER + 2)
+
 enum class GROUP_TYPE
 {
 	DEFAULT,
@@ -148,7 +151,8 @@ enum class WALL_TYPE
 enum class MON_TYPE
 {
 	NORMAL,
-	RANGE,
+	KNIFE_MONSTER,
+	PIPE_MONSTER,
 	FRIENDLY,
 };
 
@@ -162,14 +166,23 @@ enum class GUN_TYPE
 {
 	M16,
 	SHOTGUN,
+	NONE,
 };
 
 enum class MELEE_TYPE
 {
 	KNIFE,
 	PIPE,
-	FIST,
 	NONE,
+};
+
+enum class FULL_WEAPON_TYPE
+{
+	M16,
+	SHOTGUN,
+	KNIFE,
+	PIPE,
+	END,
 };
 
 enum class COLLIDER_TYPE

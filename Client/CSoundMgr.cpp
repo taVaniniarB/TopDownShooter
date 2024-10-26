@@ -41,3 +41,11 @@ void CSoundMgr::RegisterToBGM(CSound* _pSound)
 
 	m_pBGM = _pSound;
 }
+
+void CSoundMgr::PlaySE(wstring _strSoundName, float _fVolume)
+{
+	CSound* pNewSound = nullptr;
+	pNewSound = CResMgr::GetInst()->FindSound(_strSoundName);
+	pNewSound->Play();
+	pNewSound->SetVolume(_fVolume);
+}

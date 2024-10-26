@@ -14,6 +14,8 @@
 #include "CUI.h"
 #include "CTextUI.h"
 #include "SelectGDI.h"
+#include "CWeapon.h"
+#include "CHitbox.h"
 
 
 
@@ -332,12 +334,21 @@ void CScene::SpawnPlayer(Vec2 vMousePos)
 	AddObject(pObj, GROUP_TYPE::PLAYER);
 }
 
-void CScene::SpawnMonster(Vec2 vMousePos)
+void CScene::SpawnMonster(Vec2 vMousePos, FULL_WEAPON_TYPE fwt)
 {
-	CMonster* pMon = CMonFactory::CreateMonster(MON_TYPE::NORMAL, vMousePos);
-	CObject* pObj = (CObject*)pMon;
-	pObj->SetEnabled(false);
-	AddObject(pObj, GROUP_TYPE::MONSTER);
+	CMonster* pMon = CMonFactory::CreateMonster(MON_TYPE::NORMAL, vMousePos, fwt);
+
+	pMon->SetEnabled(false);
+
+	AddObject(pMon, GROUP_TYPE::MONSTER);
+
+	AddObject(pMon->GetHitbox(), GROUP_TYPE::HITBOX_MONSTER);
+	
+	CWeapon* pWeapon = pMon->GetWeapon();
+	if (pWeapon)
+	{
+		AddObject(pWeapon, GROUP_TYPE::WEAPON);
+	}
 }
 
 void CScene::CreateSceneChanger(Vec2 vPos, Vec2 vScale, SCENE_TYPE _eScene)
@@ -427,7 +438,7 @@ void CScene::finalUpdate()
 
 void CScene::render(HDC _dc)
 {
-
+	render_grid(_dc);
 	for (UINT i = 0; i < (UINT)GROUP_TYPE::END; ++i)
 	{
 		// 현재 렌더링 그룹이 타일일 시
@@ -461,7 +472,6 @@ void CScene::render(HDC _dc)
 		}
 	}
 
-	render_grid(_dc);
 }
 
 void CScene::render_grid(HDC _dc)
@@ -626,7 +636,10 @@ void CScene::LoadMonster(const wstring& _strRelativePath, FILE* _pFile)
 		Vec2 vPos;
 		fread(&vPos, sizeof(vPos), 1, _pFile);
 
-		CMonster* pMon = CMonFactory::CreateMonster(type, vPos);
+		FULL_WEAPON_TYPE fwt;
+		fread(&fwt, sizeof(fwt), 1, _pFile);
+
+		CMonster* pMon = CMonFactory::CreateMonster(type, vPos, fwt);
 
 		pMon->Load(_pFile);
 	}

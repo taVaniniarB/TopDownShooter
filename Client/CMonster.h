@@ -33,9 +33,10 @@ public:
 public:
     void SetWeapon(CWeapon* _pWeapon);
     void SetHitbox(CHitbox* _pHitbox);
+    CHitbox* GetHitbox() { return m_pHitbox; }
     void DropWeapon();
     CWeapon* GetWeapon() { return m_pWeapon; }
-    void SubHP();
+    void SubHP(wstring _strWeapon);
 
 public:
     void Save(FILE* _pFile);

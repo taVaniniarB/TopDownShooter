@@ -28,16 +28,10 @@
 
 #include "SelectGDI.h"
 
-// 함수포인터 인자 전달해야 하는데 전역함수가 아래에 있어서 전방선언
+// 전역함수가 아래에 있어서 전방선언
 void ChangeScene(DWORD_PTR, DWORD_PTR);
-
-
-
-
-// 할거: 씬 전환 시 플레이어 생기기 전에 몬스터의 업데이트가 도는 것 같으다??
-
-
-
+FULL_WEAPON_TYPE	g_selectedWeapon;
+SCENE_TYPE			g_selectedScene;
 
 
 CScene_Tool::CScene_Tool()
@@ -273,51 +267,7 @@ void CScene_Tool::update()
 			// 클릭: wsad + 클릭: 해당 위치의 벽 생성
 			if (KEY_TAP(KEY::LBTN))
 			{
-				if (KEY_HOLD(KEY::W))
-				{
-					m_eSelectedWallDir = WALL_DIR::TOP;
-				}
-				if (KEY_HOLD(KEY::A))
-				{
-					m_eSelectedWallDir = WALL_DIR::LEFT;
-				}
-				if (KEY_HOLD(KEY::S))
-				{
-					m_eSelectedWallDir = WALL_DIR::BOTTOM;
-				}
-				if (KEY_HOLD(KEY::D))
-				{
-					m_eSelectedWallDir = WALL_DIR::RIGHT;
-				}
-
-				if (m_eSelectedWallDir != WALL_DIR::END)
-				{
-					if (KEY_HOLD(KEY::W) && m_eSelectedWallDir != WALL_DIR::TOP)
-					{
-						m_eSelectedWallDir2 = WALL_DIR::TOP;
-					}
-					if (KEY_HOLD(KEY::A) && m_eSelectedWallDir != WALL_DIR::LEFT)
-					{
-						m_eSelectedWallDir2 = WALL_DIR::LEFT;
-					}
-					if (KEY_HOLD(KEY::S) && m_eSelectedWallDir != WALL_DIR::BOTTOM)
-					{
-						m_eSelectedWallDir2 = WALL_DIR::BOTTOM;
-					}
-					if (KEY_HOLD(KEY::D) && m_eSelectedWallDir != WALL_DIR::RIGHT)
-					{
-						m_eSelectedWallDir2 = WALL_DIR::RIGHT;
-					}
-				}
-
-
-				if (m_eSelectedWallDir2 != WALL_DIR::END)
-				{
-					CScene::CreateWall(vMousePos, m_eSelectedWallDir, m_eSelectedWallDir2);
-					m_eSelectedWallDir2 = WALL_DIR::END;
-				}
-				else
-					CScene::CreateWall(vMousePos, m_eSelectedWallDir, m_eSelectedWall, m_iSelectedTileIdx);
+				Place_Wall(vMousePos);
 				break;
 			}
 
@@ -327,13 +277,7 @@ void CScene_Tool::update()
 		{
 			if (KEY_TAP(KEY::LBTN))
 			{
-				const vector<CObject*>& playerVec = GetGroupObject(GROUP_TYPE::PLAYER);
-				if (playerVec.size() >= 1)
-				{
-					// 기존의 player를 삭제
-					DeleteObject(playerVec[0]);
-				}
-				CScene::SpawnPlayer(vMousePos);
+				Place_Player(vMousePos);
 			}
 		}
 		break;
@@ -361,14 +305,12 @@ void CScene_Tool::update()
 						}
 					}
 				}
-				CScene::SpawnMonster(vMousePos);
+				PostMessage(CCore::GetInst()->GetMainHwnd(), WM_SELECT_WEAPON, 0, 0);
 			}
 		}
 		break;
 		case SELECT_OPTION::SCENE_CHANGER:
 		{
-			SCENE_TYPE eScene = SCENE_TYPE::STAGE_02;
-			
 			if (KEY_TAP(KEY::LBTN))
 			{
 				const vector<CObject*>& sceneChangerVec = GetGroupObject(GROUP_TYPE::SCENE_CHANGER);
@@ -408,9 +350,10 @@ void CScene_Tool::update()
 			{
 				m_bDrawingSquare = false;
 				m_vEndPos = vMousePos;
+				PostMessage(CCore::GetInst()->GetMainHwnd(), WM_SELECT_SCENE, 0, 0);
 				// SceneChanger 생성 후에는 어떤 씬으로 이동하는 SceneChanger인지 결정하는 창이 뜬다.
 				// 결정이 되면 결과값을 SceneChanger의 멤버로 채운다 (생성자 이용)
-				CScene::CreateSceneChanger(m_vSCPos, m_vSCScale, eScene);
+				
 			}
 		}
 		break;
@@ -423,6 +366,66 @@ void CScene_Tool::update()
 	{
 		ChangeScene(SCENE_TYPE::STAGE_01); // 이벤트 만들음
 	}
+}
+
+void CScene_Tool::Place_Wall(const Vec2& vMousePos)
+{
+	if (KEY_HOLD(KEY::W))
+	{
+		m_eSelectedWallDir = WALL_DIR::TOP;
+	}
+	if (KEY_HOLD(KEY::A))
+	{
+		m_eSelectedWallDir = WALL_DIR::LEFT;
+	}
+	if (KEY_HOLD(KEY::S))
+	{
+		m_eSelectedWallDir = WALL_DIR::BOTTOM;
+	}
+	if (KEY_HOLD(KEY::D))
+	{
+		m_eSelectedWallDir = WALL_DIR::RIGHT;
+	}
+
+	if (m_eSelectedWallDir != WALL_DIR::END)
+	{
+		if (KEY_HOLD(KEY::W) && m_eSelectedWallDir != WALL_DIR::TOP)
+		{
+			m_eSelectedWallDir2 = WALL_DIR::TOP;
+		}
+		if (KEY_HOLD(KEY::A) && m_eSelectedWallDir != WALL_DIR::LEFT)
+		{
+			m_eSelectedWallDir2 = WALL_DIR::LEFT;
+		}
+		if (KEY_HOLD(KEY::S) && m_eSelectedWallDir != WALL_DIR::BOTTOM)
+		{
+			m_eSelectedWallDir2 = WALL_DIR::BOTTOM;
+		}
+		if (KEY_HOLD(KEY::D) && m_eSelectedWallDir != WALL_DIR::RIGHT)
+		{
+			m_eSelectedWallDir2 = WALL_DIR::RIGHT;
+		}
+	}
+
+
+	if (m_eSelectedWallDir2 != WALL_DIR::END)
+	{
+		CScene::CreateWall(vMousePos, m_eSelectedWallDir, m_eSelectedWallDir2);
+		m_eSelectedWallDir2 = WALL_DIR::END;
+	}
+	else
+		CScene::CreateWall(vMousePos, m_eSelectedWallDir, m_eSelectedWall, m_iSelectedTileIdx);
+}
+
+void CScene_Tool::Place_Player(const Vec2& vMousePos)
+{
+	const vector<CObject*>& playerVec = GetGroupObject(GROUP_TYPE::PLAYER);
+	if (playerVec.size() >= 1)
+	{
+		// 기존의 player를 삭제
+		DeleteObject(playerVec[0]);
+	}
+	CScene::SpawnPlayer(vMousePos);
 }
 
 void CScene_Tool::render(HDC _dc)
@@ -940,6 +943,18 @@ void CScene_Tool::SetSelectedSC()
 	m_eSelctedObj = SELECT_OPTION::SCENE_CHANGER;
 }
 
+SCENE_TYPE CScene_Tool::SelectScene()
+{
+
+	return SCENE_TYPE();
+}
+
+CWeapon* CScene_Tool::SelectWeapon()
+{
+
+	return nullptr;
+}
+
 // 전역 함수
 void ChangeScene(DWORD_PTR, DWORD_PTR)
 {
@@ -992,4 +1007,112 @@ INT_PTR CALLBACK TileCountProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
 		break;
 	}
 	return (INT_PTR)FALSE;
+}
+
+
+
+// =======================
+// Weapon Selet Window Proc
+// =======================
+INT_PTR CALLBACK WeaponDialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam) {
+	switch (message) {
+	case WM_INITDIALOG: {
+		HWND hListBox = GetDlgItem(hDlg, IDC_WEAPON_LIST);
+
+		// 무기 목록을 리스트박스에 추가
+		
+			/*
+			M16,
+			SHOTGUN,
+			KNIFE,
+			PIPE,
+			*/
+		SendMessage(hListBox, LB_ADDSTRING, 0, (LPARAM)TEXT("M16"));
+		SendMessage(hListBox, LB_ADDSTRING, 0, (LPARAM)TEXT("SHOTGUN"));
+		SendMessage(hListBox, LB_ADDSTRING, 0, (LPARAM)TEXT("KNIFE"));
+		SendMessage(hListBox, LB_ADDSTRING, 0, (LPARAM)TEXT("PIPE"));
+
+		return TRUE;
+	}
+	case WM_COMMAND:
+		switch (LOWORD(wParam)) {
+		case IDOK: {
+			HWND hListBox = GetDlgItem(hDlg, IDC_WEAPON_LIST);
+			int index = (int)SendMessage(hListBox, LB_GETCURSEL, 0, 0);
+			if (index != LB_ERR) {
+				g_selectedWeapon = (FULL_WEAPON_TYPE)(index);
+
+				// ToolScene 확인
+				CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
+				CScene_Tool* pToolScene = dynamic_cast<CScene_Tool*>(pCurScene);
+				assert(pToolScene);
+
+				pToolScene->SpawnMonster(CCamera::GetInst()->GetRealPos(MOUSE_POS), g_selectedWeapon);
+			}
+			EndDialog(hDlg, IDOK);
+			return TRUE;
+		}
+		case IDCANCEL:
+			EndDialog(hDlg, IDCANCEL);
+			return TRUE;
+		}
+		break;
+	}
+	return FALSE;
+}
+
+
+// =======================
+// Scene Selet Window Proc
+// =======================
+INT_PTR CALLBACK SceneDialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam) {
+	switch (message) {
+	case WM_INITDIALOG: {
+		HWND hListBox = GetDlgItem(hDlg, IDC_SCENE_LIST);
+
+		// 씬 목록을 리스트박스에 추가
+
+			/*
+			TOOL,
+			START,
+			STAGE_01,
+			STAGE_02,
+			BOSS,
+			MENU,
+			END,
+			*/
+		SendMessage(hListBox, LB_ADDSTRING, 0, (LPARAM)TEXT("TOOL"));
+		SendMessage(hListBox, LB_ADDSTRING, 0, (LPARAM)TEXT("START"));
+		SendMessage(hListBox, LB_ADDSTRING, 0, (LPARAM)TEXT("STAGE_01"));
+		SendMessage(hListBox, LB_ADDSTRING, 0, (LPARAM)TEXT("STAGE_02"));
+		SendMessage(hListBox, LB_ADDSTRING, 0, (LPARAM)TEXT("BOSS"));
+		SendMessage(hListBox, LB_ADDSTRING, 0, (LPARAM)TEXT("MENU"));
+
+		return TRUE;
+	}
+	case WM_COMMAND:
+		switch (LOWORD(wParam)) {
+		case IDOK: {
+			HWND hListBox = GetDlgItem(hDlg, IDC_SCENE_LIST);
+			int index = (int)SendMessage(hListBox, LB_GETCURSEL, 0, 0);
+			if (index != LB_ERR) {
+				g_selectedScene = (SCENE_TYPE)(index);
+
+				// ToolScene 확인
+				CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
+				CScene_Tool* pToolScene = dynamic_cast<CScene_Tool*>(pCurScene);
+				assert(pToolScene);
+
+				pToolScene->CreateSceneChanger(pToolScene->GetSCPos(), pToolScene->GetSCScale(), g_selectedScene);
+			}
+			EndDialog(hDlg, IDOK);
+			return TRUE;
+		}
+		case IDCANCEL:
+			EndDialog(hDlg, IDCANCEL);
+			return TRUE;
+		}
+		break;
+	}
+	return FALSE;
 }

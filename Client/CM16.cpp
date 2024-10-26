@@ -21,7 +21,7 @@ void CM16::Attack()
 		if (GetAmmoNum() > 0)
 		{
 			CreateMissile();
-			PlayShotSound(L"M16");
+			PlayAttackSound(L"M16");
 
 			// 공통작업 처리
 			CGun::Attack();

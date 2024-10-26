@@ -34,14 +34,14 @@ void CSceneMgr::init()
 	m_arrScene[(UINT)SCENE_TYPE::STAGE_01] = new CScene_Combat(L"scene\\lab");
 	m_arrScene[(UINT)SCENE_TYPE::STAGE_01]->SetName(L"Lab Scene");
 
-	m_arrScene[(UINT)SCENE_TYPE::STAGE_02] = new CScene_Combat(L"scene\\test");
+	m_arrScene[(UINT)SCENE_TYPE::STAGE_02] = new CScene_Combat(L"scene\\monsterTest");
 	m_arrScene[(UINT)SCENE_TYPE::STAGE_02]->SetName(L"test Scene");
 	
 	m_arrScene[(UINT)SCENE_TYPE::TOOL] = new CScene_Tool;
 	m_arrScene[(UINT)SCENE_TYPE::TOOL]->SetName(L"Tool Scene");
 
 	// ÇöÀç ¾À ÁöÁ¤
-	m_pCurScene = m_arrScene[(UINT)SCENE_TYPE::STAGE_01];
+	m_pCurScene = m_arrScene[(UINT)SCENE_TYPE::STAGE_02];
 	m_pCurScene->Enter();
 }
 

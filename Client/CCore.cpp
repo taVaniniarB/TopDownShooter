@@ -98,6 +98,9 @@ int CCore::init(HWND _hWnd, POINT _ptResolution)
 	CResMgr::GetInst()->LoadSound(L"Kid_Rock", L"sound\\BGM\\Kid_Rock.wav");
 	CResMgr::GetInst()->LoadSound(L"M16", L"sound\\effect\\M16.wav");
 	CResMgr::GetInst()->LoadSound(L"Shotgun", L"sound\\effect\\Shotgun.wav");
+	CResMgr::GetInst()->LoadSound(L"Swing1", L"sound\\effect\\Swing1.wav");
+	CResMgr::GetInst()->LoadSound(L"Cut1", L"sound\\effect\\Cut1.wav");
+	CResMgr::GetInst()->LoadSound(L"Hit1", L"sound\\effect\\Hit1.wav");
 
 
 	CSound* pNewSound = CResMgr::GetInst()->FindSound(L"Kid_Rock");

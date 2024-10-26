@@ -4,6 +4,9 @@
 #include "CCollider.h"
 #include "CPathMgr.h"
 #include "CTexture.h"
+#include "CResMgr.h"
+#include "CSound.h"
+
 
 CWeapon::CWeapon()
 	: m_fDelay(0.f)
@@ -86,3 +89,11 @@ void CWeapon::SetImage(Image* _pImage)
 	m_pImage = _pImage;
 }
 
+
+void CWeapon::PlayAttackSound(wstring _strSoundName)
+{
+	CSound* pNewSound = nullptr;
+	pNewSound = CResMgr::GetInst()->FindSound(_strSoundName);
+	pNewSound->Play();
+	pNewSound->SetVolume(30.f);
+}

@@ -31,7 +31,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 {
 	// 메모리 누수 체크
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-	//_CrtSetBreakAlloc(54920);
+	//_CrtSetBreakAlloc(9936);
 
 	UNREFERENCED_PARAMETER(hPrevInstance);
 	UNREFERENCED_PARAMETER(lpCmdLine);
@@ -154,6 +154,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 // 이런 함수가 있다~는 전방선언
 // 구현은 Tool Scene에 있지만
 INT_PTR CALLBACK TileCountProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
+INT_PTR CALLBACK WeaponDialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
+INT_PTR CALLBACK SceneDialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -170,7 +172,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			break;
 		case ID_MENU_TILE:
 			DialogBox(hInst, MAKEINTRESOURCE(IDD_TILECOUNT), hWnd, TileCountProc);
-
 			break;
 		case IDM_EXIT:
 			DestroyWindow(hWnd);
@@ -208,6 +209,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 	case WM_DESTROY:
 		PostQuitMessage(0);
+		break;
+	case WM_SELECT_WEAPON:
+		DialogBox(hInst, MAKEINTRESOURCE(IDD_WEAPON_DIALOG), hWnd, WeaponDialogProc);
+		break;
+	case WM_SELECT_SCENE:
+		DialogBox(hInst, MAKEINTRESOURCE(IDD_SCENE_DIALOG), hWnd, SceneDialogProc);
 		break;
 	default:
 		return DefWindowProc(hWnd, message, wParam, lParam);

@@ -16,7 +16,7 @@
 // 몬스터 팩토리 객체 안 만든다
 // 클래스로 선언했지만, 객체 있을 필요 X
 
-CMonster* CMonFactory::CreateMonster(MON_TYPE _eType, Vec2 _vPos)
+CMonster* CMonFactory::CreateMonster(MON_TYPE _eType, Vec2 _vPos, FULL_WEAPON_TYPE _eWeapon)
 {
 	CMonster* pMon = nullptr;
 
@@ -35,8 +35,7 @@ CMonster* CMonFactory::CreateMonster(MON_TYPE _eType, Vec2 _vPos)
 		pMon->SetName(L"Monster");
 		pMon->SetTexture(CResMgr::GetInst()->LoadTexture(L"mosnter", L"texture\\ray.bmp"));
 		
-		CWeapon* pNewWeapon = CWeaponFactory::CreateWeapon(WEAPON_TYPE::GUN, MELEE_TYPE::NONE, GUN_TYPE::SHOTGUN);
-		pMon->SetWeapon(pNewWeapon);
+		
 
 		CHitbox* pNewHitbox = new CHitbox;
 		pNewHitbox->SetName(L"Hitbox_Monster");
@@ -59,11 +58,7 @@ CMonster* CMonFactory::CreateMonster(MON_TYPE _eType, Vec2 _vPos)
 		pAI->SetCurState(MON_STATE::IDLE);
 
 		pMon->SetAI(pAI);
-
-		
 	}
-		break;
-	case MON_TYPE::RANGE:
 		break;
 	case MON_TYPE::FRIENDLY:
 		pMon = new CMonster;
@@ -76,6 +71,11 @@ CMonster* CMonFactory::CreateMonster(MON_TYPE _eType, Vec2 _vPos)
 		break;
 	}
 	
+	if (_eWeapon != FULL_WEAPON_TYPE::END)
+	{
+		CWeapon* pNewWeapon = CWeaponFactory::CreateWeapon(_eWeapon);
+		pMon->SetWeapon(pNewWeapon);
+	}
 	assert(pMon);
 
 	return pMon;

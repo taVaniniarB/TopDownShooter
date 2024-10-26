@@ -131,7 +131,7 @@ void CTraceState::update()
 	// 충돌체의 네 점에 대하여 모두 검사해야 할까?
 	// 혹은 기울기에 따라 충돌체 점 하나를 추가로 검사
 	// 이 경우 타일사이즈를 나누지 않은 좌표값 그대로를 사용해야 함
-	Vec2 vColliderCorrection = { 1.f, 1.f };
+	Vec2 vColliderCorrection = { 10.f, 10.f };
 	if (isWallInPath(vEnd, vStart + vColliderCorrection)
 		|| isWallInPath(vEnd, vStart - vColliderCorrection)
 		|| isWallInPath(vEnd, Vec2(vStart.x - vColliderCorrection.x, vStart.y + vColliderCorrection.y))
@@ -154,8 +154,11 @@ void CTraceState::update()
 		}
 	}
 
+	Vec2 vPlayerPos = pPlayer->GetPos();
+	float range = GetMonster()->GetWeapon()->GetAttackRange();
 	// 경로에 벽이 없다면 공격한다
-	if (!isWallInPath(pPlayer->GetPos(), vStart))
+	if (!isWallInPath(vPlayerPos, vStart)
+		&& (vPlayerPos - vStart).Length() <= range)
 		Attack();
 
 	Trace(vEnd);

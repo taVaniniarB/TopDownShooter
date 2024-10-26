@@ -194,6 +194,15 @@
     <Filter Include="Engine\04. Object\Weapon\Gun\Shotgun">
       <UniqueIdentifier>{9b1fd4b6-c911-458e-8767-61b1075cf765}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\04. Object\DamageArea">
+      <UniqueIdentifier>{867f55e9-ad94-4d3a-ae82-9b51d6f4ee5e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Object\Weapon\Melee\Pipe">
+      <UniqueIdentifier>{b8afccc5-24a4-4917-adc5-d7d7a84fce8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Object\Weapon\Melee\Knife">
+      <UniqueIdentifier>{c3a69bfa-0c40-494d-9c8b-6a850e6bb2c6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CCore.h">
@@ -206,9 +215,6 @@
       <Filter>Default</Filter>
     </ClInclude>
     <ClInclude Include="Resource.h">
-      <Filter>Default</Filter>
-    </ClInclude>
-    <ClInclude Include="targetver.h">
       <Filter>Default</Filter>
     </ClInclude>
     <ClInclude Include="define.h">
@@ -391,6 +397,18 @@
     </ClInclude>
     <ClInclude Include="CShotgun.h">
       <Filter>Engine\04. Object\Weapon\Gun\Shotgun</Filter>
+    </ClInclude>
+    <ClInclude Include="CDamageArea.h">
+      <Filter>Engine\04. Object\DamageArea</Filter>
+    </ClInclude>
+    <ClInclude Include="CKnife.h">
+      <Filter>Engine\04. Object\Weapon\Melee\Knife</Filter>
+    </ClInclude>
+    <ClInclude Include="CPipe.h">
+      <Filter>Engine\04. Object\Weapon\Melee\Pipe</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Engine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -581,6 +599,15 @@
     </ClCompile>
     <ClCompile Include="CShotgun.cpp">
       <Filter>Engine\04. Object\Weapon\Gun\Shotgun</Filter>
+    </ClCompile>
+    <ClCompile Include="CDamageArea.cpp">
+      <Filter>Engine\04. Object\DamageArea</Filter>
+    </ClCompile>
+    <ClCompile Include="CKnife.cpp">
+      <Filter>Engine\04. Object\Weapon\Melee\Knife</Filter>
+    </ClCompile>
+    <ClCompile Include="CPipe.cpp">
+      <Filter>Engine\04. Object\Weapon\Melee\Pipe</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

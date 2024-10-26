@@ -8,7 +8,6 @@ CHitbox::CHitbox()
 	: m_pOwner(nullptr)
 {
 	CreateCollider();
-	//GetCollider()->SetOffsetPos(Vec2(0.f, 3.f));
 	GetCollider()->SetScale(Vec2(15.f, 20.f));
 }
 
@@ -36,14 +35,35 @@ void CHitbox::OnCollisionEnter(CCollider* _pOther)
 	CObject* pOtherObj = _pOther->GetObj();
 	wstring otherObjName = pOtherObj->GetName();
 	wstring ownerName = m_pOwner->GetName();
-	// 오너가 플레이어 (플레이어 히트박스가 총알에 맞음)
-	if (ownerName == L"Player" && otherObjName == L"Missile")
+
+
+
+	// 오너가 플레이어 (플레이어 히트박스가 맞음)
+	if (ownerName == L"Player")
 	{
+		if (otherObjName == L"KnifeDA")
+		{
+
+		}
+		else if (otherObjName == L"Missle")
+
 		((CPlayer*)m_pOwner)->SubHP();
 	}
-	// 오너가 몬스터 (몬스터 히트박스가 총알에 맞음)
-	else if (ownerName == L"Monster" && otherObjName == L"Missile")
+
+	// 오너가 몬스터 (몬스터 히트박스가 맞음)
+	else if (ownerName == L"Monster")
 	{
-		((CMonster*)m_pOwner)->SubHP();
+		if (otherObjName == L"KnifeDA")
+		{
+			((CMonster*)m_pOwner)->SubHP(L"Knife");
+		}
+		else if (otherObjName == L"PipeDA")
+		{
+			((CMonster*)m_pOwner)->SubHP(L"Pipe");
+		}
+		else if (otherObjName == L"Missile")
+		{
+			((CMonster*)m_pOwner)->SubHP(L"Missile");
+		}
 	}
 }

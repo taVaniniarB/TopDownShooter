@@ -120,7 +120,6 @@ void CScene_Combat::AddCombo()
 {
 	++m_iCombo;
 	m_fCurTime = 0;
-	std::cout << "ÄÞº¸: " << m_iCombo << "\n";
 
 	SetUIVisable(L"ComboUI", true);
 	SetUIText(L"ComboUI", m_iCombo);
@@ -188,7 +187,7 @@ void CScene_Combat::Enter()
 	PlayerSetting(pPlayer);
 
 	// ¹Ù´Ú¿¡ ¶³±¼ ÀÓ½Ã ¹«±â
-	CWeapon* ptestWeapon = CWeaponFactory::CreateWeapon(WEAPON_TYPE::GUN, MELEE_TYPE::NONE, GUN_TYPE::M16);
+	CWeapon* ptestWeapon = CWeaponFactory::CreateWeapon(FULL_WEAPON_TYPE::KNIFE);
 	ptestWeapon->Drop();
 	AddObject(ptestWeapon, GROUP_TYPE::DROPPED_WEAPON);
 	ptestWeapon->SetPos(pPlayer->GetPos());

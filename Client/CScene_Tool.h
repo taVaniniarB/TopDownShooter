@@ -43,19 +43,24 @@ private:
 	Vec2 m_vSCPos;
 
 	// 그리드 표시
-	bool m_bGrid;
+	//bool m_bGrid;
 	bool m_bDrawingSquare;
 
 public:
 	virtual void Enter();
 	virtual void Exit();
 	virtual void update();
+	void Place_Wall(const Vec2& vMousePos);
+	void Place_Player(const Vec2& vMousePos);
 	virtual void render(HDC _dc);
 
 public:
 	void SaveSceneData();
 	void SaveScene(const wstring& _strFilePath);
 	void LoadSceneData();
+
+	Vec2 GetSCPos() { return m_vSCPos; }
+	Vec2 GetSCScale() { return m_vSCScale; }
 
 	// 타일
 public:
@@ -75,7 +80,10 @@ public:
 	void SetSelectedPlayer();
 	void SetSelectedMosnter();
 	void SetSelectedSC();
-
+	
+	// 몬스터/Scene 배치 시 창이 뜨며 이동할 씬 or 무기를 정하도록 하는 함수
+	SCENE_TYPE SelectScene();
+	CWeapon* SelectWeapon();
 
 	// 벽
 public:
