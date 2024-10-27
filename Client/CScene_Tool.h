@@ -9,6 +9,7 @@ enum class SELECT_OPTION
 	WALL,
 	PLAYER,
 	SCENE_CHANGER,
+	WEAPON,
 
 	NONE,
 };
@@ -80,10 +81,7 @@ public:
 	void SetSelectedPlayer();
 	void SetSelectedMosnter();
 	void SetSelectedSC();
-	
-	// 몬스터/Scene 배치 시 창이 뜨며 이동할 씬 or 무기를 정하도록 하는 함수
-	SCENE_TYPE SelectScene();
-	CWeapon* SelectWeapon();
+	void SetSelectedWeapon();
 
 	// 벽
 public:

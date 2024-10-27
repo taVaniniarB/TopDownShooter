@@ -2,6 +2,7 @@
 #include "CIdleState.h"
 
 #include "CSceneMgr.h"
+#include "CTimeMgr.h"
 #include "CScene.h"
 
 #include "CPlayer.h"
@@ -9,6 +10,8 @@
 
 CIdleState::CIdleState()
 	: CState(MON_STATE::IDLE)
+	, m_fCurDetectionDelay(0.f)
+	, m_fDetectionDelay(0.3f)
 {
 }
 
@@ -20,8 +23,12 @@ void CIdleState::update()
 {
 	// 가만히 있는다
 
-	// 플레이어 위치 받아와서
+	// 플레이어 위치 받기
 	CPlayer* pPlayer = (CPlayer*)CSceneMgr::GetInst()->GetCurScene()->GetPlayer();
+	
+	if (!pPlayer)
+		return;
+	
 	Vec2 vPlayerPos = pPlayer->GetPos();
 
 	// 몬스터의 범위 안에 들어오면 추적 상태로 전환
@@ -32,16 +39,16 @@ void CIdleState::update()
 	Vec2 vDiff = vPlayerPos - vMonPos;
 	float fLen = vDiff.Length();
 
-	// 플레이어가 몬스터 인식 범위 내로 진입
-	if (fLen < pMonster->GetInfo().fRecogRange)
+	// 플레이어가 몬스터 인식 범위 내로 진입 && 중간에 벽이 없을 때
+	if (fLen < pMonster->GetInfo().fRecogRange
+		&& !CheckWallInRay(vPlayerPos, vMonPos))
 	{
-		if (CheckWallInRay(vPlayerPos, vMonPos))
-			return;
-		 
-		// State 간 상태 전환
+		// 지연시간 지난 후 추적 모드로 전환
+		if (m_fCurDetectionDelay >= m_fDetectionDelay)
+			ChangeAIState(GetAI(), MON_STATE::TRACE);
 		// 시간 동기화 필요 > 이벤트 매니저 통해 유예 처리
-		// 이벤트 등록
-		ChangeAIState(GetAI(), MON_STATE::TRACE);
+
+		m_fCurDetectionDelay += fDT;
 	}
 }
 

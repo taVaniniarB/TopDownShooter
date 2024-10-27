@@ -18,7 +18,7 @@ void CMelee::Attack()
 void CMelee::CreateDamageArea()
 {
 	Vec2 vAimDir = GetAimDir();
-	Vec2 vOffset = GetAimDir().Normalize() * 20.f;
+	Vec2 vOffset = GetAimDir().Normalize() * 10.f;
 	float attackRange = GetAttackRange();
 
 	//DamageArea °´Ã¼ »ý¼º

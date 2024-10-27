@@ -4,7 +4,7 @@
 #include "CPlayer.h"
 #include "CMonster.h"
 
-CHitbox::CHitbox()
+CHitbox::CHitbox(Vec2 _vColliderScale)
 	: m_pOwner(nullptr)
 {
 	CreateCollider();
@@ -17,13 +17,16 @@ CHitbox::~CHitbox()
 
 void CHitbox::update()
 {
+	if (!m_pOwner)
+		DeleteObject(this);
+
 	Vec2 vObjectPos = m_pOwner->GetPos();
 	SetPos(vObjectPos);
 }
 
 void CHitbox::render(HDC _dc)
 {
-	//component_render(_dc);
+	component_render(_dc);
 }
 
 void CHitbox::OnCollision(CCollider* _pOther)

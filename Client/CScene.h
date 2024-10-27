@@ -35,9 +35,16 @@ private:
 	bool				m_bGrid; // 그리드 활성화 여부
 	vector<vector<int>>	m_WallMap; // 그래드 내 벽 정보 벡터
 
+	SCENE_TYPE m_eSceneType;
+	bool m_bPlayerAlive;
+	bool m_bPlayerPrevAlive;
+
 public:
 	void SetName(const wstring& _strName) { m_strName = _strName; }
 	const wstring& GetName() { return m_strName; }
+	
+	void SetSceneType(SCENE_TYPE _eType) { m_eSceneType = _eType; }
+	SCENE_TYPE  GetSceneType() { return m_eSceneType; }
 
 	void SetUIClicked(bool _b) { m_bUIClicked = _b; }
 	bool GetUIClicked() { return m_bUIClicked; }
@@ -46,6 +53,10 @@ public:
 	UINT GetTileY() { return m_iTileY; }
 
 	CObject* GetPlayer() { return m_pPlayer; }
+	bool GetIsPlayerAlive() { return m_bPlayerAlive; }
+	bool GetPlayerPrevAlive() { return m_bPlayerPrevAlive; }
+	void SetPlayerAlive(bool _b) { m_bPlayerAlive = _b; }
+	void SetPlayerPrevAlive(bool _b) { m_bPlayerPrevAlive = _b; }
 
 	void SetUIVisable(wstring _strUIName, bool _b);
 	CUI* FindUI(wstring& _strName);
@@ -87,9 +98,9 @@ public:
 	int GetWallmapNum(int x, int y); // 해당 좌표 셀의 숫자 반환
 
 public:
-
 	void AddObject(CObject* _pObj, GROUP_TYPE _eType) { m_arrObj[(UINT)_eType].push_back(_pObj); }
 	void RegisterPlayer(CObject* _pPlayer) { m_pPlayer = _pPlayer; }
+	void PlayerDeath();
 
 	// 벡터 복제 안되게 벡터 그룹 그 자체를 주도록 함 (참조) + 수정방지 const
 	const vector<CObject*>& GetGroupObject(GROUP_TYPE _eType) { return m_arrObj[(UINT)_eType]; }
@@ -103,16 +114,18 @@ public:
 	void CreateTile(UINT _iXCount, UINT _iYCount);
 	void ChangeTile(Vec2 _vMousePos, int _idx);
 
-	// 벽 객체를 만드는 함수
+	// 객체들 만드어서 씬에 추가하는 함수
 	void GenerateWall(Vec2 vMousePos, WALL_DIR _eSelectedWallDir);
 	void GenerateCorner(Vec2 vMousePos, WALL_DIR _eSelectedWallDir);
 	void GenerateTileWall(Vec2 vMousePos, int _idx);
 	void SpawnPlayer(Vec2 vMousePos);
 	void SpawnMonster(Vec2 vMousePos, FULL_WEAPON_TYPE fwt);
+	void CreateWeapon(Vec2 vMousePos, FULL_WEAPON_TYPE fwt);
 	void CreateSceneChanger(Vec2 vPos, Vec2 vScale, SCENE_TYPE _eScene);
 	void CreateWall(Vec2 vMousePos, WALL_DIR _eSelectedWallDir, WALL_TYPE _eWallType, int _idx);
 	void CreateWall(Vec2 vMousePos, WALL_DIR _eSelectedWallDir1, WALL_DIR _eSelectedWallDir2);
 	void DeleteWall(Vec2 vMousePos, WALL_TYPE _eType);
+	void CreateBlood(Vec2 vPos);
 
 	// Tool Scene에서 파일을 세이브하고, 씬(을 상속받은 다른 씬들)은 그것을 load한다
 	void LoadTile(const wstring& _sttRelativePath, FILE* pFile);
@@ -120,6 +133,7 @@ public:
 	void LoadPlayer(const wstring& _strRelativePath, FILE* pFile);
 	void LoadMonster(const wstring& _strRelativePath, FILE* pFile);
 	void LoadSceneChanger(const wstring& _strRelativePath, FILE* pFile);
+	void LoadWeapon(const wstring& _strRelativePath, FILE* pFile);
 
 	void LoadScene(const wstring& _strRelativePath);
 

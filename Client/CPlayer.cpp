@@ -350,26 +350,31 @@ void CPlayer::SetHitbox(CHitbox* _pHitbox)
 
 void CPlayer::SubHP(wstring _strWeapon)
 {
+	if (m_iHP == 0)
+		return;
+
 	--m_iHP;
+	CSceneMgr::GetInst()->GetCurScene()->SetHPUI(m_iHP);
 
 	if (m_iHP <= 0)
 	{
-		if (_strWeapon == L"Knife")
-			CSoundMgr::GetInst()->PlaySE(L"Cut1", 30.f);
-		else if (_strWeapon == L"Pipe")
-			CSoundMgr::GetInst()->PlaySE(L"Hit1", 30.f);
-
-		// 피 튀는 파티클
-		//DropWeapon();
-		//DeleteObject(this);
-
-		// 시체 + 피 스프라이트
-		SetEnabled(false);
-		
-		std::cout << "You Die ";
+		PlayerDeath(_strWeapon);
 	}
+}
 
-	CSceneMgr::GetInst()->GetCurScene()->SetHPUI(m_iHP);
+void CPlayer::PlayerDeath(std::wstring& _strWeapon)
+{
+	if (_strWeapon == L"Knife")
+		CSoundMgr::GetInst()->PlaySE(L"Cut1", 30.f);
+	else if (_strWeapon == L"Pipe")
+		CSoundMgr::GetInst()->PlaySE(L"Hit1", 30.f);
+	DropWeapon();
+
+	DeleteObject(this);
+
+	CSceneMgr::GetInst()->GetCurScene()->CreateBlood(GetPos());
+	CSceneMgr::GetInst()->GetCurScene()->PlayerDeath();
+	std::cout << "You Die ";
 }
 
 void CPlayer::PickupWeapon(CWeapon* _pWeapon)

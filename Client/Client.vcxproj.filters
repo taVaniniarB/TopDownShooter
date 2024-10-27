@@ -206,6 +206,12 @@
     <Filter Include="Engine\04. Object\UI\ImgUI\HP">
       <UniqueIdentifier>{7e2d7e1a-9da2-4418-b019-10bc66df4816}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\04. Object\ExtraImage">
+      <UniqueIdentifier>{595672ae-49e7-452c-bc59-be5a7eb7b497}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Object\UI\ImgUI\Restart">
+      <UniqueIdentifier>{31258803-4b37-4d6d-afe0-f74180689126}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CCore.h">
@@ -416,6 +422,12 @@
     <ClInclude Include="CHPUI.h">
       <Filter>Engine\04. Object\UI\ImgUI\HP</Filter>
     </ClInclude>
+    <ClInclude Include="CExtraImage.h">
+      <Filter>Engine\04. Object\ExtraImage</Filter>
+    </ClInclude>
+    <ClInclude Include="CRestartUI.h">
+      <Filter>Engine\04. Object\UI\ImgUI\Restart</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
@@ -617,6 +629,12 @@
     </ClCompile>
     <ClCompile Include="CHPUI.cpp">
       <Filter>Engine\04. Object\UI\ImgUI\HP</Filter>
+    </ClCompile>
+    <ClCompile Include="CExtraImage.cpp">
+      <Filter>Engine\04. Object\ExtraImage</Filter>
+    </ClCompile>
+    <ClCompile Include="CRestartUI.cpp">
+      <Filter>Engine\04. Object\UI\ImgUI\Restart</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

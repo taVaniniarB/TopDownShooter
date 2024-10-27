@@ -122,17 +122,22 @@ void CMonster::SubHP(wstring _strWeapon)
 
 	if (m_tInfo.iHP <= 0)
 	{
-		if (_strWeapon == L"Knife")
-			CSoundMgr::GetInst()->PlaySE(L"Cut1", 30.f);
-		else if (_strWeapon == L"Pipe")
-			CSoundMgr::GetInst()->PlaySE(L"Hit1", 30.f);
-
-		// 피 튀는 파티클
-		DropWeapon();
-		DeleteObject(this);
-
-		// 시체 + 피 스프라이트
+		MonsterDeath(_strWeapon);
 	}
+}
+
+void CMonster::MonsterDeath(std::wstring& _strWeapon)
+{
+	if (_strWeapon == L"Knife")
+		CSoundMgr::GetInst()->PlaySE(L"Cut1", 30.f);
+	else if (_strWeapon == L"Pipe")
+		CSoundMgr::GetInst()->PlaySE(L"Hit1", 30.f);
+
+	// 피 튀는 파티클
+	DropWeapon();
+	DeleteObject(this);
+
+	CSceneMgr::GetInst()->GetCurScene()->CreateBlood(GetPos());
 }
 
 void CMonster::Save(FILE* _pFile)

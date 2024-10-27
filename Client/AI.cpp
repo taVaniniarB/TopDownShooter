@@ -19,8 +19,6 @@ void AI::update()
 {
 	// 현재 상태에 맞는 업데이트 코드를 돌린다
 	m_pCurState->update();
-
-	
 }
 
 

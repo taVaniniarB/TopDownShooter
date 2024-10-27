@@ -5,6 +5,9 @@
 #include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CEventMgr.cpp"
 
 
+#include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CExtraImage.cpp"
+
+
 #include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CGravity.cpp"
 
 
@@ -27,7 +30,4 @@
 
 
 #include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CMelee.cpp"
-
-
-#include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CMousePtr.cpp"
 

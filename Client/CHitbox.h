@@ -19,7 +19,7 @@ public:
     virtual void OnCollisionEnter(CCollider* _pOther);
 
 public:
-    CHitbox();
+    CHitbox(Vec2 _vColliderScale);
     ~CHitbox();
 
 };

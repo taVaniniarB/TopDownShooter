@@ -1,4 +1,10 @@
 
+#include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CTraceState.cpp"
+
+
+#include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CUI.cpp"
+
+
 #include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CUIMgr.cpp"
 
 

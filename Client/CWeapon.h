@@ -69,6 +69,10 @@ public:
 
 	void SetAimDir(Vec2 _vAimDir) { m_vAimDir = _vAimDir; }
 
+public:
+	void Save(FILE* pFile);
+	void Load(FILE* pFile);
+
 
 public:
 	virtual void Attack() = 0;

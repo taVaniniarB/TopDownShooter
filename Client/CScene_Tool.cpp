@@ -25,6 +25,7 @@
 #include "CPlayer.h"
 #include "CMonster.h"
 #include "CSceneChanger.h"
+#include "CWeapon.h"
 
 #include "SelectGDI.h"
 
@@ -183,6 +184,15 @@ void CScene_Tool::Enter()
 		pTilePanelUI->AddChild(pSCSelectUI);
 	}
 
+	// Weapon 버튼
+	{
+		CBtnUI* pSCSelectUI = new CBtnUI;
+		pSCSelectUI->SetScale(Vec2(50.f, 50.f));
+		pSCSelectUI->SetPos(Vec2(100.f, 280.f));
+		pSCSelectUI->SetName(L"Weapon");
+		((CBtnUI*)pSCSelectUI)->SetClickedCallBack(this, (SCENE_MEMFUNC)&CScene_Tool::SetSelectedWeapon);
+		pTilePanelUI->AddChild(pSCSelectUI);
+	}
 
 	// 복사본 UI
 	/* 복사본 UI
@@ -354,6 +364,34 @@ void CScene_Tool::update()
 				// SceneChanger 생성 후에는 어떤 씬으로 이동하는 SceneChanger인지 결정하는 창이 뜬다.
 				// 결정이 되면 결과값을 SceneChanger의 멤버로 채운다 (생성자 이용)
 				
+			}
+		}
+		break;
+		case SELECT_OPTION::WEAPON:
+		{
+			if (KEY_TAP(KEY::LBTN))
+			{
+				// shift + 클릭: 삭제
+				if (KEY_HOLD(KEY::LSHIFT))
+				{
+					const vector<CObject*>& weaponVec = GetGroupObject(GROUP_TYPE::DROPPED_WEAPON);
+
+					for (size_t i = 0; i < weaponVec.size(); ++i)
+					{
+						Vec2 vMonScale = weaponVec[i]->GetScale();
+						Vec2 vMonPos = weaponVec[i]->GetPos();
+
+						if (vMousePos.x >= vMonPos.x - vMonScale.x / 2
+							&& vMousePos.x <= vMonPos.x + vMonScale.x / 2
+							&& vMousePos.y >= vMonPos.y - vMonScale.y / 2
+							&& vMousePos.y <= vMonPos.y + vMonScale.y / 2)
+						{
+							DeleteObject(weaponVec[i]);
+							return;
+						}
+					}
+				}
+				PostMessage(CCore::GetInst()->GetMainHwnd(), WM_SELECT_WEAPON, 0, 0);
 			}
 		}
 		break;
@@ -582,12 +620,22 @@ void CScene_Tool::SaveScene(const wstring& _strFilePath)
 	if (vecSC.size() >= 1)
 		((CSceneChanger*)vecSC[0])->Save(pFile);
 	
+	// 무기 저장
+	// 무기 개수 저장
+	const vector<CObject*>& vecWeapon = GetGroupObject(GROUP_TYPE::DROPPED_WEAPON);
+	UINT weaponSize = (UINT)(vecWeapon.size());
+	fwrite(&weaponSize, sizeof(UINT), 1, pFile);
+	// 개별 무기의 정보를 세이브
+	for (size_t i = 0; i < weaponSize; ++i)
+	{
+		((CWeapon*)vecWeapon[i])->Save(pFile);
+	}
+
 	// 기타 오브젝트 저장
 
 
 	// 이 파일에 대한 파일 입출력 닫기
 	fclose(pFile);
-
 }
 
 void CScene_Tool::LoadSceneData()
@@ -943,16 +991,9 @@ void CScene_Tool::SetSelectedSC()
 	m_eSelctedObj = SELECT_OPTION::SCENE_CHANGER;
 }
 
-SCENE_TYPE CScene_Tool::SelectScene()
+void CScene_Tool::SetSelectedWeapon()
 {
-
-	return SCENE_TYPE();
-}
-
-CWeapon* CScene_Tool::SelectWeapon()
-{
-
-	return nullptr;
+	m_eSelctedObj = SELECT_OPTION::WEAPON;
 }
 
 // 전역 함수
@@ -1047,7 +1088,10 @@ INT_PTR CALLBACK WeaponDialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM
 				CScene_Tool* pToolScene = dynamic_cast<CScene_Tool*>(pCurScene);
 				assert(pToolScene);
 
-				pToolScene->SpawnMonster(CCamera::GetInst()->GetRealPos(MOUSE_POS), g_selectedWeapon);
+				if (pToolScene->GetSelectedObj() == SELECT_OPTION::MONSTER)
+					pToolScene->SpawnMonster(CCamera::GetInst()->GetRealPos(MOUSE_POS), g_selectedWeapon);
+				else if(pToolScene->GetSelectedObj() == SELECT_OPTION::WEAPON)
+					pToolScene->CreateWeapon(CCamera::GetInst()->GetRealPos(MOUSE_POS), g_selectedWeapon);
 			}
 			EndDialog(hDlg, IDOK);
 			return TRUE;

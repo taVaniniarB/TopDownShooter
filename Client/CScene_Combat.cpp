@@ -30,6 +30,7 @@
 #include "CScoreUI.h"
 #include "CComboUI.h"
 #include "CHPUI.h"
+#include "CRestartUI.h"
 
 
 CScene_Combat::CScene_Combat(const wstring& _wSceneRelativePath)
@@ -47,6 +48,23 @@ CScene_Combat::~CScene_Combat()
 void CScene_Combat::update()
 {
 	CScene::update(); //부모 코드 재활용
+
+	if (!GetIsPlayerAlive())
+	{
+		if (GetPlayerPrevAlive())
+		{
+			CUI* pRestartUI = new CRestartUI;
+			pRestartUI->SetName(L"RestartUI");
+			pRestartUI->SetVisable(true);
+			AddObject(pRestartUI, GROUP_TYPE::UI);
+
+			SetPlayerPrevAlive(false);
+		}
+
+		if (KEY_TAP(KEY::R))
+			ChangeScene(GetSceneType());
+	}
+
 
 	const vector<CObject*>& vecMonster = CSceneMgr::GetInst()->GetCurScene()->GetGroupObject(GROUP_TYPE::MONSTER);
 	for (size_t i = 0; vecMonster.size() > i; ++i)
@@ -149,7 +167,7 @@ void CScene_Combat::CreateCombatSceneUI()
 	AddObject(pAmmoImgUI, GROUP_TYPE::UI);
 
 	CUI* pHPUI = new CHPUI;
-	pHPUI->SetName(L"HP");
+	pHPUI->SetName(L"HPUI");
 	pHPUI->SetVisable(true);
 	AddObject(pHPUI, GROUP_TYPE::UI);
 }
@@ -191,7 +209,7 @@ void CScene_Combat::Enter()
 	PlayerSetting(pPlayer);
 
 	// 바닥에 떨굴 임시 무기
-	CWeapon* ptestWeapon = CWeaponFactory::CreateWeapon(FULL_WEAPON_TYPE::KNIFE);
+	CWeapon* ptestWeapon = CWeaponFactory::CreateWeapon(FULL_WEAPON_TYPE::M16);
 	ptestWeapon->Drop();
 	AddObject(ptestWeapon, GROUP_TYPE::DROPPED_WEAPON);
 	ptestWeapon->SetPos(pPlayer->GetPos());
@@ -212,9 +230,10 @@ void CScene_Combat::PlayerSetting(CObject* pPlayer)
 	int playerInitHP = 10;
 
 	RegisterPlayer(pPlayer);
+	SetPlayerAlive(true);
 
 
-	CHitbox* pHitbox = new CHitbox();
+	CHitbox* pHitbox = new CHitbox(Vec2(15.f, 25.f));
 	pHitbox->SetName(L"Hitbox_Player");
 	AddObject(pHitbox, GROUP_TYPE::HITBOX_PLAYER);
 	((CPlayer*)pPlayer)->SetHitbox(pHitbox);
@@ -285,11 +304,16 @@ void CScene_Combat::CreateCollisionGroup()
 // 다음 씬에서는 다른 물체끼리의 충돌 검사할 수 있으니까
 void CScene_Combat::Exit()
 {
-	CObject* pPlayer = GetGroupObject(GROUP_TYPE::PLAYER)[0];
 	
-	// 플레이어 무기 저장
-	CStage::GetInst()->SavePlayerWeapon(((CPlayer*)pPlayer)->GetWeapon());
 
+	// 플레이어 무기 저장
+	if (GetIsPlayerAlive())
+	{
+		CObject* pPlayer = GetPlayer();
+		CStage::GetInst()->SavePlayerWeapon(((CPlayer*)pPlayer)->GetWeapon());
+	}
+		
+	
 	// 씬의 객체 삭제
 	DeleteAll();
 	// 그룹 충돌 지정 해제

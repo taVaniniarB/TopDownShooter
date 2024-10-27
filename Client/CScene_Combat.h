@@ -4,11 +4,6 @@ class CScene_Combat :
     public CScene
 {
 private:
-    //bool m_bUseForce;
-    //float m_fForceRadius; // 힘 반경 (영향권)
-    //float m_fCurRadius;
-    //float m_fForce; // 힘의 크기
-    //Vec2 m_vForcePos; // 힘 발생 위치
     wstring m_wSceneRelativePath;
 
 private:
@@ -25,9 +20,7 @@ public:
     virtual void render(HDC _dc);
 
     void SetFile(const wstring& _wSceneRelativePath) { m_wSceneRelativePath = _wSceneRelativePath; }
-//
-//public:
-//    void CreateForce();
+
 public:
     int GetCombo() { return m_iCombo; }
 

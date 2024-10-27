@@ -38,6 +38,8 @@ public:
     CWeapon* GetWeapon() { return m_pWeapon; }
     void SubHP(wstring _strWeapon);
 
+    void MonsterDeath(std::wstring& _strWeapon);
+
 public:
     void Save(FILE* _pFile);
     void Load(FILE* _pFile);

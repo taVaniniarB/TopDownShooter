@@ -54,9 +54,9 @@ CWeapon* CWeaponFactory::CreateWeapon(FULL_WEAPON_TYPE _eFullWeaponType)
 		pWeapon = new CKnife;
 		((CMelee*)pWeapon)->SetType(MELEE_TYPE::KNIFE);
 		pWeapon->SetScale(Vec2(20.f, 10.f));
-		pWeapon->SetDelay(0.1f);
+		pWeapon->SetDelay(0.15f);
 
-		pWeapon->SetAttackRange(20.f);
+		pWeapon->SetAttackRange(25.f);
 
 		pImage = CResMgr::GetInst()->LoadGdiImage(L"Knife", L"texture\\weapon\\knife.png");
 		pWeapon->SetImage(pImage);
@@ -68,7 +68,7 @@ CWeapon* CWeaponFactory::CreateWeapon(FULL_WEAPON_TYPE _eFullWeaponType)
 		pWeapon = new CPipe;
 		((CMelee*)pWeapon)->SetType(MELEE_TYPE::PIPE);
 		pWeapon->SetScale(Vec2(40.f, 15.f));
-		pWeapon->SetDelay(0.2f);
+		pWeapon->SetDelay(0.25f);
 
 		pWeapon->SetAttackRange(40.f);
 

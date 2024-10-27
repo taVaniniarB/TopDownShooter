@@ -170,6 +170,7 @@
     <ClInclude Include="CCore.h" />
     <ClInclude Include="CDamageArea.h" />
     <ClInclude Include="CEventMgr.h" />
+    <ClInclude Include="CExtraImage.h" />
     <ClInclude Include="CGravity.h" />
     <ClInclude Include="CGun.h" />
     <ClInclude Include="CHitbox.h" />
@@ -180,6 +181,7 @@
     <ClInclude Include="CMelee.h" />
     <ClInclude Include="CMousePtr.h" />
     <ClInclude Include="CPipe.h" />
+    <ClInclude Include="CRestartUI.h" />
     <ClInclude Include="CSceneChanger.h" />
     <ClInclude Include="CScene_Story.h" />
     <ClInclude Include="CScoreMgr.h" />
@@ -242,6 +244,7 @@
     <ClCompile Include="CCore.cpp" />
     <ClCompile Include="CDamageArea.cpp" />
     <ClCompile Include="CEventMgr.cpp" />
+    <ClCompile Include="CExtraImage.cpp" />
     <ClCompile Include="CGravity.cpp" />
     <ClCompile Include="CGun.cpp" />
     <ClCompile Include="CHitbox.cpp" />
@@ -252,6 +255,7 @@
     <ClCompile Include="CMelee.cpp" />
     <ClCompile Include="CMousePtr.cpp" />
     <ClCompile Include="CPipe.cpp" />
+    <ClCompile Include="CRestartUI.cpp" />
     <ClCompile Include="CSceneChanger.cpp" />
     <ClCompile Include="CScene_Story.cpp" />
     <ClCompile Include="CScoreMgr.cpp" />

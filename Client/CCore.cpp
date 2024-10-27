@@ -26,8 +26,6 @@ CCore::CCore()
 	: m_hWnd(0)
 	, m_ptResolution{}
 	, m_hDC(0)
-	//, m_hBit(0)
-	//, m_memDC(0)
 	, m_arrBrush{}
 	, m_arrPen{}
 	, m_arrFont{}
@@ -74,11 +72,6 @@ int CCore::init(HWND _hWnd, POINT _ptResolution)
 	m_pMemTex = CResMgr::GetInst()->CreateTexture(L"BackBuffer", (UINT)m_ptResolution.x, (UINT)m_ptResolution.y);
 
 	InitGDIPlus();
-	// 이중 버퍼링 용도의 비트맵과 DC를 만든다 (멤버가 텍스처와 겹치므로 위의 방식으로 변경)
-	//m_hBit = CreateCompatibleBitmap(m_hDC, m_ptResolution.x, m_ptResolution.y);
-	//m_memDC = CreateCompatibleDC(m_hDC);
-	//HBITMAP hOldBit = (HBITMAP)SelectObject(m_memDC, m_hBit);
-	//DeleteObject(hOldBit);
 
 	// 자주 사용할 펜, 브러쉬 생성
 	CreateBrushPen();
@@ -94,7 +87,7 @@ int CCore::init(HWND _hWnd, POINT _ptResolution)
 	CSceneMgr::GetInst()->init();
 	CSoundMgr::GetInst()->init();
 
-	// Sound 로드 테스트
+	// Sound 로드
 	CResMgr::GetInst()->LoadSound(L"Kid_Rock", L"sound\\BGM\\Kid_Rock.wav");
 	CResMgr::GetInst()->LoadSound(L"M16", L"sound\\effect\\M16.wav");
 	CResMgr::GetInst()->LoadSound(L"Shotgun", L"sound\\effect\\Shotgun.wav");

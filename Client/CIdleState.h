@@ -4,6 +4,8 @@ class CIdleState :
     public CState
 {
 private:
+    float m_fCurDetectionDelay;
+    float m_fDetectionDelay;
 
 public:
     virtual void update();

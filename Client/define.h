@@ -44,6 +44,7 @@ enum class GROUP_TYPE
 {
 	DEFAULT,
 	TILE,
+	EXTRA_IMAGE,
 	TILE_WALL,
 	WALL,
 	CORNER,

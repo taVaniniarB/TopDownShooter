@@ -43,7 +43,6 @@ void CMissile::render(HDC _dc)
 
 	Vec2 vPos = GetPos();
 	vPos = CCamera::GetInst()->GetRenderPos(vPos);
-	CTexture* pTex = GetTexture();
 	Vec2 vScale = GetScale();
 
 	// GDI+ÀÇ Graphics °´Ã¼ »ý¼º

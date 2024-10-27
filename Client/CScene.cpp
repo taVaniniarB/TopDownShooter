@@ -17,6 +17,7 @@
 #include "SelectGDI.h"
 #include "CWeapon.h"
 #include "CHitbox.h"
+#include "CExtraImage.h"
 
 
 
@@ -28,6 +29,8 @@ CScene::CScene()
 	, m_pStage(nullptr)
 	, m_bEnabled(true)
 	, m_bGrid(false)
+	, m_bPlayerAlive(true)
+	, m_bPlayerPrevAlive(m_bPlayerAlive)
 {
 }
 
@@ -269,17 +272,33 @@ void CScene::DeleteWall(Vec2 vMousePos, WALL_TYPE eType)
 	Vec2 WallPos = Vec2(iCol * TILE_SIZE, iRow * TILE_SIZE);
 
 	HDC dc = CCore::GetInst()->GetMainDC();
+
+	GROUP_TYPE eVectorGroutType;
+	switch (eType)
+	{
+	case WALL_TYPE::TILE:
+		eVectorGroutType = GROUP_TYPE::TILE_WALL;
+		break;
+	case WALL_TYPE::WALL:
+		eVectorGroutType = GROUP_TYPE::WALL;
+		break;
+	case WALL_TYPE::CORNER:
+		eVectorGroutType = GROUP_TYPE::CORNER;
+		break;
+	case WALL_TYPE::NONE:
+		break;
+	default:
+		break;
+	}
 	
-	const vector<CObject*>& vWall = GetGroupObject(GROUP_TYPE((int(eType)+2)));
+	const vector<CObject*>& vWall = GetGroupObject(eVectorGroutType);
 
 	switch (eType)
 	{
 	case WALL_TYPE::WALL:
-		//vWall = GetGroupObject(GROUP_TYPE::WALL);
 		break;
 	case WALL_TYPE::CORNER:
 	{
-		//vWall = GetGroupObject(GROUP_TYPE::CORNER);
 		for (int i = 0; i < vWall.size(); ++i)
 		{
 			Vec2 vCompare = vWall[i]->GetPos();
@@ -300,7 +319,6 @@ void CScene::DeleteWall(Vec2 vMousePos, WALL_TYPE eType)
 	}
 		break;
 	case WALL_TYPE::TILE:
-		//vWall = GetGroupObject(GROUP_TYPE::TILE_WALL);
 		break;
 	default:
 		break;
@@ -323,6 +341,15 @@ void CScene::DeleteWall(Vec2 vMousePos, WALL_TYPE eType)
 			}
 		}
 	}
+}
+
+void CScene::CreateBlood(Vec2 vPos)
+{
+	Vec2 vScale = { 40.f, 40.f };
+	CExtraImage* pBlood = new CExtraImage(vPos, vScale);
+	pBlood->SetImage(L"Blood", L"texture\\otherTex\\blood.png");
+
+	AddObject(pBlood, GROUP_TYPE::EXTRA_IMAGE);
 }
 
 void CScene::SpawnPlayer(Vec2 vMousePos)
@@ -352,6 +379,14 @@ void CScene::SpawnMonster(Vec2 vMousePos, FULL_WEAPON_TYPE fwt)
 	}
 }
 
+void CScene::CreateWeapon(Vec2 vMousePos, FULL_WEAPON_TYPE fwt)
+{
+	CWeapon* pWeapon = CWeaponFactory::CreateWeapon(fwt);
+	pWeapon->SetPos(vMousePos);
+	pWeapon->SetStatus(WEAPON_STATUS::DROPPED);
+	AddObject(pWeapon, GROUP_TYPE::DROPPED_WEAPON);
+}
+
 void CScene::CreateSceneChanger(Vec2 vPos, Vec2 vScale, SCENE_TYPE _eScene)
 {
 	CObject* pObj = new CSceneChanger(_eScene);
@@ -377,7 +412,7 @@ void CScene::SetUIText(wstring _strUIName, int _iNum)
 
 void CScene::SetHPUI(int _iNum)
 {
-	wstring HP = L"HP";
+	wstring HP = L"HPUI";
 	((CHPUI*)FindUI(HP))->SetHPUINum(_iNum);
 }
 
@@ -563,6 +598,12 @@ int CScene::GetWallmapNum(int x, int y)
 	return m_WallMap[y][x];
 }
 
+void CScene::PlayerDeath()
+{
+	m_bPlayerPrevAlive = m_bPlayerAlive;
+	m_bPlayerAlive = false;
+}
+
 void CScene::DeleteGroup(GROUP_TYPE _eTarget)
 {
 	Safe_Delete_Vec<CObject*>(m_arrObj[(UINT)_eTarget]);
@@ -621,7 +662,6 @@ void CScene::LoadWall(const wstring& _strRelativePath, FILE* _pFile)
 
 		m_WallMap[iRow][iCol] = 1;
 	}
-
 }
 
 void CScene::LoadPlayer(const wstring& _strRelativePath, FILE* _pFile)
@@ -662,6 +702,29 @@ void CScene::LoadSceneChanger(const wstring& _strRelativePath, FILE* _pFile)
 	pSceneChanger->Load(_pFile);
 }
 
+void CScene::LoadWeapon(const wstring& _strRelativePath, FILE* _pFile)
+{
+	UINT size = 0;
+
+	fread(&size, sizeof(UINT), 1, _pFile);
+
+	// 수량에 맞는 Weapon 생성
+	for (UINT i = 0; i < size; ++i)
+	{
+		FULL_WEAPON_TYPE type;
+		fread(&type, sizeof(FULL_WEAPON_TYPE), 1, _pFile);
+
+		Vec2 vPos;
+		fread(&vPos, sizeof(vPos), 1, _pFile);
+
+		CWeapon* pWeapon = CWeaponFactory::CreateWeapon(type);
+		pWeapon->SetStatus(WEAPON_STATUS::DROPPED);
+		pWeapon->SetPos(vPos);
+
+		pWeapon->Load(_pFile);
+	}
+}
+
 
 void CScene::LoadScene(const wstring& _strRelativePath)
 {
@@ -680,6 +743,7 @@ void CScene::LoadScene(const wstring& _strRelativePath)
 	LoadPlayer(strFilePath, pFile);
 	LoadMonster(strFilePath, pFile);
 	LoadSceneChanger(strFilePath, pFile);
+	LoadWeapon(strFilePath, pFile);
 	// LoadObject(strFilePath, pFile);
 
 

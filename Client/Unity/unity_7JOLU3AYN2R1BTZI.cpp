@@ -1,4 +1,10 @@
 
+#include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CWall.cpp"
+
+
+#include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CIdleState.cpp"
+
+
 #include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CKeyMgr.cpp"
 
 
@@ -24,10 +30,4 @@
 
 
 #include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CResMgr.cpp"
-
-
-#include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CRigidBody.cpp"
-
-
-#include "C:\Users\hayeon\Source\Repos\taVaniniarB\WinApiLecture\Client\CScene.cpp"
 

@@ -5,7 +5,7 @@
 #include "CCamera.h"
 
 CShotgun::CShotgun()
-	: m_fRadAngle(10.f)
+	: m_fRadAngle(7.f)
 	, m_iPelletNum(5)
 {
 }

@@ -56,6 +56,8 @@ public:
     void SetHP(int _iHP) { m_iHP = _iHP; }
     int GetHP() { return m_iHP; }
     void SubHP(wstring _strWeaponName);
+
+    void PlayerDeath(std::wstring& _strWeapon);
     
 private:
     void DropWeapon();

@@ -7,6 +7,8 @@
 #include "CResMgr.h"
 #include "CSound.h"
 #include "CTimeMgr.h"
+#include "CSceneMgr.h"
+#include "CScene.h"
 
 
 CWeapon::CWeapon()
@@ -88,6 +90,20 @@ void CWeapon::Drop()
 void CWeapon::SetImage(Image* _pImage)
 {
 	m_pImage = _pImage;
+}
+
+void CWeapon::Save(FILE* _pFile)
+{
+	fwrite(&m_eFullWeaponType, sizeof(FULL_WEAPON_TYPE), 1, _pFile);
+
+	Vec2 vPos = GetPos();
+	fwrite(&vPos, sizeof(Vec2), 1, _pFile);
+}
+
+void CWeapon::Load(FILE* pFile)
+{
+	CScene* pScene = CSceneMgr::GetInst()->GetCurScene();
+	pScene->AddObject(this, GROUP_TYPE::DROPPED_WEAPON);
 }
 
 

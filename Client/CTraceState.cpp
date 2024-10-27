@@ -124,6 +124,10 @@ void CTraceState::update()
 {
 	//이번 프레임 목적지 좌표
 	CPlayer* pPlayer = (CPlayer*)CSceneMgr::GetInst()->GetCurScene()->GetPlayer();
+
+	if (!pPlayer)
+		return;
+
 	Vec2 vEnd = pPlayer->GetPos();
 	Vec2 vStart = GetMonster()->GetPos();
 
