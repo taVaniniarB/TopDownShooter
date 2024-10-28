@@ -13,6 +13,7 @@ public:
 	void AddScore(int _iScore);
 	const int& GetScore() { return m_iScore; }
 	void SavePlayerWeapon(CWeapon* _pWeapon);
+	void SavePrevScore();
 
 	CWeapon* GetPlayerWeapon() { return m_pWeapon; }
 

@@ -183,6 +183,7 @@
     <ClInclude Include="CPipe.h" />
     <ClInclude Include="CRestartUI.h" />
     <ClInclude Include="CSceneChanger.h" />
+    <ClInclude Include="CScene_Main.h" />
     <ClInclude Include="CScene_Story.h" />
     <ClInclude Include="CScoreMgr.h" />
     <ClInclude Include="CScoreUI.h" />
@@ -190,6 +191,7 @@
     <ClInclude Include="CStage.h" />
     <ClInclude Include="CTextUI.h" />
     <ClInclude Include="CTileBtnUI.h" />
+    <ClInclude Include="CTitleImg.h" />
     <ClInclude Include="CWall.h" />
     <ClInclude Include="CIdleState.h" />
     <ClInclude Include="CKeyMgr.h" />
@@ -225,7 +227,6 @@
     <ClInclude Include="CMonFactory.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
-    <ClInclude Include="Scene_Main.h" />
     <ClInclude Include="SelectGDI.h" />
     <ClInclude Include="struct.h" />
     <ClInclude Include="targetver.h" />
@@ -257,6 +258,7 @@
     <ClCompile Include="CPipe.cpp" />
     <ClCompile Include="CRestartUI.cpp" />
     <ClCompile Include="CSceneChanger.cpp" />
+    <ClCompile Include="CScene_Main.cpp" />
     <ClCompile Include="CScene_Story.cpp" />
     <ClCompile Include="CScoreMgr.cpp" />
     <ClCompile Include="CScoreUI.cpp" />
@@ -264,6 +266,7 @@
     <ClCompile Include="CStage.cpp" />
     <ClCompile Include="CTextUI.cpp" />
     <ClCompile Include="CTileBtnUI.cpp" />
+    <ClCompile Include="CTitleImg.cpp" />
     <ClCompile Include="CWall.cpp" />
     <ClCompile Include="CIdleState.cpp" />
     <ClCompile Include="CKeyMgr.cpp" />
@@ -294,7 +297,6 @@
     <ClCompile Include="func.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="CMonFactory.cpp" />
-    <ClCompile Include="Scene_Main.cpp" />
     <ClCompile Include="SelectGDI.cpp" />
   </ItemGroup>
   <ItemGroup>

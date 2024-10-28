@@ -27,7 +27,7 @@ CWeapon* CWeaponFactory::CreateWeapon(FULL_WEAPON_TYPE _eFullWeaponType)
 		eWeaponType = WEAPON_TYPE::GUN;
 		pWeapon = new CM16;
 		((CGun*)pWeapon)->SetType(GUN_TYPE::M16);
-		((CGun*)pWeapon)->SetMaxMissile(100);
+		((CGun*)pWeapon)->SetMaxMissile(24);
 		pWeapon->SetDelay(0.1f);
 		pWeapon->SetScale(Vec2(48.f, 14.f));
 		pWeapon->SetAttackRange(INFINITE);
@@ -41,7 +41,7 @@ CWeapon* CWeaponFactory::CreateWeapon(FULL_WEAPON_TYPE _eFullWeaponType)
 		pWeapon = new CShotgun;
 		((CGun*)pWeapon)->SetType(GUN_TYPE::SHOTGUN);
 		((CGun*)pWeapon)->SetMaxMissile(6);
-		pWeapon->SetDelay(0.3f);
+		pWeapon->SetDelay(0.4f);
 		pWeapon->SetScale(Vec2(50.f, 10.f));
 		pWeapon->SetAttackRange(INFINITE);
 		pImage = CResMgr::GetInst()->LoadGdiImage(L"shotgun", L"texture\\weapon\\shotgun.png");

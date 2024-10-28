@@ -37,7 +37,7 @@ CMonster* CMonFactory::CreateMonster(MON_TYPE _eType, Vec2 _vPos, FULL_WEAPON_TY
 		
 		
 
-		CHitbox* pNewHitbox = new CHitbox(Vec2(25.f, 25.f));
+		CHitbox* pNewHitbox = new CHitbox(Vec2(30.f, 30.f));
 		pNewHitbox->SetName(L"Hitbox_Monster");
 		pMon->SetHitbox(pNewHitbox);
 

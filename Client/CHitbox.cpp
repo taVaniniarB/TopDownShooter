@@ -8,7 +8,7 @@ CHitbox::CHitbox(Vec2 _vColliderScale)
 	: m_pOwner(nullptr)
 {
 	CreateCollider();
-	GetCollider()->SetScale(Vec2(15.f, 20.f));
+	GetCollider()->SetScale(_vColliderScale);
 }
 
 CHitbox::~CHitbox()

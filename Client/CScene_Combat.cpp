@@ -304,14 +304,15 @@ void CScene_Combat::CreateCollisionGroup()
 // 다음 씬에서는 다른 물체끼리의 충돌 검사할 수 있으니까
 void CScene_Combat::Exit()
 {
-	
-
 	// 플레이어 무기 저장
 	if (GetIsPlayerAlive())
 	{
 		CObject* pPlayer = GetPlayer();
 		CStage::GetInst()->SavePlayerWeapon(((CPlayer*)pPlayer)->GetWeapon());
+
+		//CStage::GetInst()->SaveScore();
 	}
+
 		
 	
 	// 씬의 객체 삭제

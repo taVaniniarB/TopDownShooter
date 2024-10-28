@@ -26,6 +26,9 @@ void CAmmoUI::render(HDC _dc)
 
 		HFONT hFont = CCore::GetInst()->GetFont(eFont);
 
+		SetTextColor(_dc, RGB(255, 255, 255));
+		SetBkMode(_dc, TRANSPARENT);
+
 		// 이전 폰트 백업 (기존 폰트를 복원하기 위해)
 		HFONT hOldFont = (HFONT)SelectObject(_dc, hFont);
 		// l, t, r, b

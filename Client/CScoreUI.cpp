@@ -41,9 +41,13 @@ void CScoreUI::render(HDC _dc)
 
 	// 이전 폰트 백업 (기존 폰트를 복원하기 위해)
 	HFONT hOldFont = (HFONT)SelectObject(_dc, hFont);
+
+	SetTextColor(_dc, RGB(249, 146, 255));
+	SetBkMode(_dc, TRANSPARENT);
+
 	// l, t, r, b
 	RECT rect = { 500, (LONG)vPos.y, (LONG)vPos.x, 100 };
-	DrawText(_dc, text.c_str(), -1, &rect, DT_RIGHT | DT_TOP | DT_NOCLIP);
+	DrawText(_dc, (text + L"pts").c_str(), -1, &rect, DT_RIGHT | DT_TOP | DT_NOCLIP);
 
 	// 폰트를 원래 상태로 복원
 	SelectObject(_dc, hOldFont);

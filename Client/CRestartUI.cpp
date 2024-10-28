@@ -9,6 +9,7 @@ CRestartUI::CRestartUI()
 	, m_fAmplitude(10.f)
 	, m_fFrequency(2.f)
 	, m_fAngle(0.f)
+	, m_vBGOffset(Vec2(0.f, 0.f))
 {
 	Image * pImage = CResMgr::GetInst()->LoadGdiImage(L"RestartUIbg", L"texture\\UI\\blackBG.png");
 	m_pBackground = pImage;
@@ -34,8 +35,7 @@ void CRestartUI::update()
 
 void CRestartUI::render(HDC _dc)
 {
-	Vec2 vPos = GetPos();
-	//Vec2 vScale = GetScale();
+	Vec2 vPos = GetPos() + m_vBGOffset;
 	Vec2 vScale = Vec2(m_pBackground->GetWidth() / 4.f, m_pBackground->GetHeight() / 4.f);
 
 	// GDI+의 Graphics 객체 생성
@@ -49,7 +49,7 @@ void CRestartUI::render(HDC _dc)
 
 
 
-
+	vPos = GetPos();
 	vScale = Vec2(m_pImg->GetWidth() / 4.f, m_pImg->GetHeight() / 4.f);
 
 	// 회전의 기준점을 이미지 중심으로 설정

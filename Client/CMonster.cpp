@@ -136,6 +136,7 @@ void CMonster::MonsterDeath(std::wstring& _strWeapon)
 	// 피 튀는 파티클
 	DropWeapon();
 	DeleteObject(this);
+	DeleteObject(GetHitbox());
 
 	CSceneMgr::GetInst()->GetCurScene()->CreateBlood(GetPos());
 }

@@ -212,6 +212,9 @@
     <Filter Include="Engine\04. Object\UI\ImgUI\Restart">
       <UniqueIdentifier>{31258803-4b37-4d6d-afe0-f74180689126}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\04. Object\UI\ImgUI\Title">
+      <UniqueIdentifier>{cf852d41-dc0c-450d-9469-98a8d3f95e18}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CCore.h">
@@ -371,9 +374,6 @@
     <ClInclude Include="CStage.h">
       <Filter>Engine\05. Scene\Stage</Filter>
     </ClInclude>
-    <ClInclude Include="Scene_Main.h">
-      <Filter>Engine\05. Scene\Scene_Main</Filter>
-    </ClInclude>
     <ClInclude Include="CScene_Story.h">
       <Filter>Engine\05. Scene\StoryScene</Filter>
     </ClInclude>
@@ -427,6 +427,12 @@
     </ClInclude>
     <ClInclude Include="CRestartUI.h">
       <Filter>Engine\04. Object\UI\ImgUI\Restart</Filter>
+    </ClInclude>
+    <ClInclude Include="CScene_Main.h">
+      <Filter>Engine\05. Scene\Scene_Main</Filter>
+    </ClInclude>
+    <ClInclude Include="CTitleImg.h">
+      <Filter>Engine\04. Object\UI\ImgUI\Title</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -585,9 +591,6 @@
     <ClCompile Include="CStage.cpp">
       <Filter>Engine\05. Scene\Stage</Filter>
     </ClCompile>
-    <ClCompile Include="Scene_Main.cpp">
-      <Filter>Engine\05. Scene\Scene_Main</Filter>
-    </ClCompile>
     <ClCompile Include="CScene_Story.cpp">
       <Filter>Engine\05. Scene\StoryScene</Filter>
     </ClCompile>
@@ -635,6 +638,12 @@
     </ClCompile>
     <ClCompile Include="CRestartUI.cpp">
       <Filter>Engine\04. Object\UI\ImgUI\Restart</Filter>
+    </ClCompile>
+    <ClCompile Include="CScene_Main.cpp">
+      <Filter>Engine\05. Scene\Scene_Main</Filter>
+    </ClCompile>
+    <ClCompile Include="CTitleImg.cpp">
+      <Filter>Engine\04. Object\UI\ImgUI\Title</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

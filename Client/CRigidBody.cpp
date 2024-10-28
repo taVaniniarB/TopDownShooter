@@ -73,21 +73,6 @@ void CRigidBody::finalUpdate()
 		}
 		m_vVelocity = vDir * m_fMaxVelocity;
 	}
-	//
-	//// 횡스크롤 속도 제한 검사 (x, y 따로 최대속력이 존재)
-	//if (abs(m_vMaxVelocity.x) < abs(m_vVelocity.x))
-	//{
-	//	// 최대 속도를 넘겼을 시
-	//	// 기존 방향에 최대 속도를 곱해서, 기존의 방향을 유지하며 딱 최대속력인 벡터로 만들어준다
-
-	//	// 방향 (-1, 1)
-	//	m_vVelocity.x = m_vVelocity.x / abs(m_vVelocity.x) * abs(m_vMaxVelocity.x);
-	//}
-	//if (abs(m_vMaxVelocity.y) < abs(m_vVelocity.y))
-	//{
-	//	// 방향 (-1, 1)
-	//	m_vVelocity.y = m_vVelocity.y / abs(m_vVelocity.y) * abs(m_vMaxVelocity.y);
-	//}
 
 	// 속도에 따른 이동
 	Move();

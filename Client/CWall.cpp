@@ -126,7 +126,7 @@ void CWall::OnCollisionEnter(CCollider* _pOther)
 			collisionDir = WALL_DIR::RIGHT;
 
 			
-
+		
 		if (WALL_DIR::TOP == collisionDir) // 윗면과 충돌
 		{
 			// 파고든 길이 구하기
@@ -171,6 +171,7 @@ void CWall::OnCollisionEnter(CCollider* _pOther)
 		}
 
 		pOtherObj->SetPos(vObjPos);
+		_pOther->SetPos(vObjPos + _pOther->GetOffsetPos());
 		pOtherObj->GetRigidBody()->SetGround(true, collisionDir);
 	}
 }
@@ -195,8 +196,6 @@ void CWall::OnCollision(CCollider* _pOther)
 		// 벽 정보
 		Vec2 vPos = GetCollider()->GetFinalPos();
 		Vec2 vScale = GetCollider()->GetScale();
-
-		//이전 프레임 정보는 필요가 없다? 어차피 equal일 것이라
 
 		WALL_DIR collisionDir = pOtherObj->GetRigidBody()->GetGroundType();
 
@@ -244,6 +243,7 @@ void CWall::OnCollision(CCollider* _pOther)
 		}
 
 		pOtherObj->SetPos(vObjPos);
+		_pOther->SetPos(vObjPos + _pOther->GetOffsetPos());
 
 		// 특정 축으로의 이동 자체가 막혀버림
 		pOtherObj->GetRigidBody()->SetGround(true, collisionDir);

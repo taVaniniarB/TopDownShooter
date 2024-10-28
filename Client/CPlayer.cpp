@@ -264,7 +264,6 @@ void CPlayer::update_attack()
 			if (m_pWeapon)
 			{
 				m_pWeapon->Attack();
-				std::cout << "melee attack called";
 			}
 		}
 	}

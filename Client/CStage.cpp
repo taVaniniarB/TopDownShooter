@@ -30,3 +30,8 @@ void CStage::SavePlayerWeapon(CWeapon* _pWeapon)
 	m_pWeapon = (CWeapon*)pNewWeapon;
 }
 
+void CStage::SavePrevScore()
+{
+
+}
+
