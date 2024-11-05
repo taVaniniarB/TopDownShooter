@@ -62,14 +62,17 @@ void CScene_Combat::update()
 		}
 
 		if (KEY_TAP(KEY::R))
+		{
+			CStage::GetInst()->SetSavedScore();
 			ChangeScene(GetSceneType());
+		}
 	}
 
 
 	const vector<CObject*>& vecMonster = CSceneMgr::GetInst()->GetCurScene()->GetGroupObject(GROUP_TYPE::MONSTER);
 	for (size_t i = 0; vecMonster.size() > i; ++i)
 	{
-		// 몬스터 죽음 > DeleteObject 당하기 전에 실행
+		// 몬스터 죽음 > DeleteObject 당하기 전에 점수 증가
 		if (vecMonster[i]->IsDead())
 		{
 			AddScore();
@@ -200,6 +203,7 @@ void CScene_Combat::Enter()
 	LoadScene(m_wSceneRelativePath);
 
 	CreateCombatSceneUI();
+	CStage::GetInst()->SetSavedScore();
 
 	CMousePtr* mousePtr = new CMousePtr();
 	AddObject(mousePtr, GROUP_TYPE::MOUSE_POINTER);
@@ -209,13 +213,11 @@ void CScene_Combat::Enter()
 	PlayerSetting(pPlayer);
 
 	// 바닥에 떨굴 임시 무기
-	CWeapon* ptestWeapon = CWeaponFactory::CreateWeapon(FULL_WEAPON_TYPE::M16);
-	ptestWeapon->Drop();
-	AddObject(ptestWeapon, GROUP_TYPE::DROPPED_WEAPON);
-	ptestWeapon->SetPos(pPlayer->GetPos());
+	//CWeapon* ptestWeapon = CWeaponFactory::CreateWeapon(FULL_WEAPON_TYPE::M16);
+	//ptestWeapon->Drop();
+	//AddObject(ptestWeapon, GROUP_TYPE::DROPPED_WEAPON);
+	//ptestWeapon->SetPos(pPlayer->GetPos());
 
-	
-	
 	// 충돌 그룹 지정
 	CreateCollisionGroup();
 	
@@ -310,7 +312,6 @@ void CScene_Combat::Exit()
 		CObject* pPlayer = GetPlayer();
 		CStage::GetInst()->SavePlayerWeapon(((CPlayer*)pPlayer)->GetWeapon());
 
-		//CStage::GetInst()->SaveScore();
 	}
 
 		

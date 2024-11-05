@@ -29,9 +29,3 @@ void CStage::SavePlayerWeapon(CWeapon* _pWeapon)
 	CObject* pNewWeapon = _pWeapon->Clone();
 	m_pWeapon = (CWeapon*)pNewWeapon;
 }
-
-void CStage::SavePrevScore()
-{
-
-}
-

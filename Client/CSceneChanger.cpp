@@ -1,6 +1,6 @@
 #include "CSceneChanger.h"
 #include "CCollider.h"
-
+#include "CStage.h"
 #include "SelectGDI.h"
 #include "CSceneMgr.h"
 #include "CScene.h"
@@ -23,7 +23,10 @@ void CSceneChanger::update()
 {
 	vector<CObject*> vMonster = CSceneMgr::GetInst()->GetCurScene()->GetGroupObject(GROUP_TYPE::MONSTER);
 	if (0 >= vMonster.size())
+	{
 		m_bActive = true;
+		CStage::GetInst()->SaveScore();
+	}
 }
 
 void CSceneChanger::render(HDC _dc)

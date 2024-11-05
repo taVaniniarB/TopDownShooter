@@ -123,10 +123,11 @@ bool CTraceState::isWallInPath(Vec2 vEnd, Vec2 vStart)
 void CTraceState::update()
 {
 	//이번 프레임 목적지 좌표
-	CPlayer* pPlayer = (CPlayer*)CSceneMgr::GetInst()->GetCurScene()->GetPlayer();
-
-	if (!pPlayer)
+	
+	if (!CSceneMgr::GetInst()->GetCurScene()->GetIsPlayerAlive())
 		return;
+	
+	CPlayer* pPlayer = (CPlayer*)CSceneMgr::GetInst()->GetCurScene()->GetPlayer();
 
 	Vec2 vEnd = pPlayer->GetPos();
 	Vec2 vStart = GetMonster()->GetPos();

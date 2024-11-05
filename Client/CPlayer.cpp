@@ -373,7 +373,6 @@ void CPlayer::PlayerDeath(std::wstring& _strWeapon)
 
 	CSceneMgr::GetInst()->GetCurScene()->CreateBlood(GetPos());
 	CSceneMgr::GetInst()->GetCurScene()->PlayerDeath();
-	std::cout << "You Die ";
 }
 
 void CPlayer::PickupWeapon(CWeapon* _pWeapon)
