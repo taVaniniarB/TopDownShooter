@@ -58,6 +58,8 @@ void CSceneMgr::init()
 	// ÇöÀç ¾À ÁöÁ¤
 	m_pCurScene = m_arrScene[(UINT)SCENE_TYPE::MENU];
 	m_pCurScene->Enter();
+
+	// git Test
 }
 
 void CSceneMgr::update()
