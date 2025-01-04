@@ -229,7 +229,7 @@ void CScene_Combat::Enter()
 
 void CScene_Combat::PlayerSetting(CObject* pPlayer)
 {
-	int playerInitHP = 10;
+	int playerInitHP = 3;
 
 	RegisterPlayer(pPlayer);
 	SetPlayerAlive(true);

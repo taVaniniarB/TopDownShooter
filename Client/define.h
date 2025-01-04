@@ -67,10 +67,9 @@ enum class GROUP_TYPE
 enum class SCENE_TYPE
 {
 	TOOL,
-	START,
 	STAGE_01,
 	STAGE_02,
-	BOSS,
+	CLEAR,
 	MENU,
 	END,
 };

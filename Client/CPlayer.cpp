@@ -53,7 +53,6 @@ CPlayer::CPlayer()
 	GetAnimator()->LoadAnimation(L"animation\\player_idle_left.anim");
 	GetAnimator()->LoadAnimation(L"animation\\player_idle_right.anim");
 	GetAnimator()->LoadAnimation(L"animation\\player_run.anim");
-	GetAnimator()->LoadAnimation(L"animation\\player_jump.anim");
 
 	if (CSceneMgr::GetInst()->GetCurScene()->GetName() == L"Tool Scene")
 		SetEnabled(false);
@@ -121,32 +120,7 @@ void CPlayer::update()
 }
 void CPlayer::render(HDC _dc)
 {
-	// 컴포넌트(충돌체, etc,,) 있는 경우 렌더
 	component_render(_dc);
-
-	// Alpha Blending Test
-
-	//CTexture* pTex = CResMgr::GetInst()->LoadTexture(L"PlayerTex", L"texture\\rat_t.bmp");
-
-	//Vec2 vPos = GetPos();
-	//vPos = CCamera::GetInst()->GetRenderPos(vPos);
-
-	//float width = (float)pTex->Width();
-	//float height = (float)pTex->Height();
-
-	//BLENDFUNCTION bf = {};
-	//bf.BlendOp = AC_SRC_OVER;
-	//bf.AlphaFormat = AC_SRC_ALPHA;
-	//bf.BlendFlags = 0;
-	//bf.SourceConstantAlpha = 127; //전역적으로 적용되는 알파!
-
-	//// 목적지 dc, 출력위치(좌상단의 x, y), 가로세로, 원본 dc, 원본 이미지의 좌상단 xy, 너비높이, BLANDFUNCTION 구조체
-	//AlphaBlend(_dc
-	//	, int(vPos.x - width / 2.f)
-	//	, int(vPos.y - height / 2.f)
-	//	, int(width), int(height)
-	//	, pTex->GetDC()
-	//	, 0, 0, (int)width, (int)height, bf);
 }
 
 
@@ -164,15 +138,6 @@ void CPlayer::update_state()
 		m_iDir = 1;
 		m_eCurState = PLAYER_STATE::RUN;
 	}
-	// 처형
-	/*if (KEY_TAP(KEY::SPACE))
-	{
-		m_eCurState = PLAYER_STATE::ATTACK;
-	}*/
-	/*if (0.f == GetRigidBody()->GetSpeed())
-	{
-		m_eCurState = PLAYER_STATE::IDLE;
-	}*/
 	if (KEY_TAP(KEY::W))
 	{
 		m_eCurState = PLAYER_STATE::RUN;
@@ -181,6 +146,11 @@ void CPlayer::update_state()
 	if (KEY_TAP(KEY::S))
 	{
 		m_eCurState = PLAYER_STATE::RUN;
+	}
+
+	if (KEY_AWAY(KEY::A) || KEY_AWAY(KEY::D) || KEY_AWAY(KEY::W) || KEY_AWAY(KEY::S))
+	{
+		m_eCurState = PLAYER_STATE::IDLE;
 	}
 }
 
@@ -214,40 +184,6 @@ void CPlayer::update_move()
 		vPos += vPlayerMoveVec * m_fSpeed * fDT;
 		SetPos(vPos);
 	}
-
-	
-	/*CRigidBody* pRigid = GetRigidBody();
-
-	Vec2 vPlayerMoveVec(0.f, 0.f);
-
-	Vec2 vPos = GetPos();
-
-	if (KEY_HOLD(KEY::W))
-	{
-		vPlayerMoveVec += Vec2(0.f, -1.f);
-	}
-	if (KEY_HOLD(KEY::S))
-	{
-		vPlayerMoveVec += Vec2(0.f, 1.f);
-	}
-	if (KEY_HOLD(KEY::A))
-	{
-		vPlayerMoveVec += Vec2(-1.f, 0.f);
-	}
-	if (KEY_HOLD(KEY::D))
-	{
-		vPlayerMoveVec += Vec2(1.f, 0.f);
-	}
-
-
-	if (!vPlayerMoveVec.isZero())
-	{
-		vPlayerMoveVec.Nomalize();
-		pRigid->SetVelocity(vPlayerMoveVec * 250.f);
-	}
-
-
-	Vec2 CurVelocity = pRigid->GetVelocity();*/
 }
 
 void CPlayer::update_attack()

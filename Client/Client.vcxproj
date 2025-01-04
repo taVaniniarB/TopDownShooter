@@ -184,7 +184,6 @@
     <ClInclude Include="CRestartUI.h" />
     <ClInclude Include="CSceneChanger.h" />
     <ClInclude Include="CScene_Main.h" />
-    <ClInclude Include="CScene_Story.h" />
     <ClInclude Include="CScoreMgr.h" />
     <ClInclude Include="CScoreUI.h" />
     <ClInclude Include="CShotgun.h" />
@@ -227,6 +226,7 @@
     <ClInclude Include="CMonFactory.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="CScene_End.h" />
     <ClInclude Include="SelectGDI.h" />
     <ClInclude Include="struct.h" />
     <ClInclude Include="targetver.h" />
@@ -259,7 +259,6 @@
     <ClCompile Include="CRestartUI.cpp" />
     <ClCompile Include="CSceneChanger.cpp" />
     <ClCompile Include="CScene_Main.cpp" />
-    <ClCompile Include="CScene_Story.cpp" />
     <ClCompile Include="CScoreMgr.cpp" />
     <ClCompile Include="CScoreUI.cpp" />
     <ClCompile Include="CShotgun.cpp" />
@@ -297,6 +296,7 @@
     <ClCompile Include="func.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="CMonFactory.cpp" />
+    <ClCompile Include="CScene_End.cpp" />
     <ClCompile Include="SelectGDI.cpp" />
   </ItemGroup>
   <ItemGroup>

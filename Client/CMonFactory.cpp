@@ -13,7 +13,7 @@
 #include "CWeaponFactory.h"
 #include "CHitbox.h"
 
-// 몬스터 팩토리 객체 안 만든다
+// 몬스터 팩토리 클래스로는 객체를 만들지 않는다.
 // 클래스로 선언했지만, 객체 있을 필요 X
 
 CMonster* CMonFactory::CreateMonster(MON_TYPE _eType, Vec2 _vPos, FULL_WEAPON_TYPE _eWeapon)
@@ -33,7 +33,7 @@ CMonster* CMonFactory::CreateMonster(MON_TYPE _eType, Vec2 _vPos, FULL_WEAPON_TY
 		pMon->SetPos(_vPos);
 		pMon->SetScale(Vec2(64.f, 64.f));
 		pMon->SetName(L"Monster");
-		pMon->SetTexture(CResMgr::GetInst()->LoadTexture(L"mosnter", L"texture\\ray.bmp"));
+		pMon->SetTexture(CResMgr::GetInst()->LoadTexture(L"mosnter", L"texture\\zombie.bmp"));
 		
 		
 
@@ -66,7 +66,7 @@ CMonster* CMonFactory::CreateMonster(MON_TYPE _eType, Vec2 _vPos, FULL_WEAPON_TY
 		pMon->SetPos(_vPos);
 		pMon->SetScale(Vec2(64.f, 64.f));
 		pMon->SetName(L"NPC");
-		pMon->SetTexture(CResMgr::GetInst()->LoadTexture(L"mosnter", L"texture\\ray.bmp"));
+		pMon->SetTexture(CResMgr::GetInst()->LoadTexture(L"mosnter", L"texture\\zombie.bmp"));
 
 		break;
 	}

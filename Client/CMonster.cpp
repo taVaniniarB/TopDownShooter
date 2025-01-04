@@ -133,7 +133,6 @@ void CMonster::MonsterDeath(std::wstring& _strWeapon)
 	else if (_strWeapon == L"Pipe")
 		CSoundMgr::GetInst()->PlaySE(L"Hit1", 30.f);
 
-	// 피 튀는 파티클
 	DropWeapon();
 	DeleteObject(this);
 	DeleteObject(GetHitbox());
@@ -163,27 +162,5 @@ void CMonster::Load(FILE* _pFile)
 	if (nullptr != m_pHitbox)
 	{
 		pScene->AddObject(m_pHitbox, GROUP_TYPE::HITBOX_MONSTER);
-	}
-}
-
-
-void CMonster::OnCollisionEnter(CCollider* _pOther)
-{
-	// 충돌한 오브젝트의 정체를 알아내자 (충돌체의 owner 반환하는 GetObj)
-	CObject* pOtherObj = _pOther->GetObj();
-	// obj 종류 알아내는 방법: 오브젝트에 아이디나 태그명 부여
-
-	if (pOtherObj->GetName() == L"Missile")
-	{
-		//--m_tInfo.iHP;
-
-		//if (m_tInfo.iHP <= 0)
-		//{
-		//	// 피 튀는 파티클
-		//	DropWeapon();
-		//	DeleteObject(this);
-
-		//	// 시체 + 피 스프라이트
-		//}
 	}
 }

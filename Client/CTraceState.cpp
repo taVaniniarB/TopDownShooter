@@ -9,7 +9,19 @@
 
 #include "CTimeMgr.h"
 #include "CWeapon.h"
-//#include "CCollider.h"
+
+struct Node {
+	POINT pos; // 현재 노드 좌표
+	int g;     // 시작점 ~ 현재 노드 실제 비용
+	int h;     // 시작점 ~ 목적지 추정 비용
+	int f;     // g + h
+	Vec2 parent; // 부모 노드
+
+	bool operator>(const Node& other) const {
+		return f > other.f; // 우선순위 큐에서 f 값이 낮은 것이 먼저 나오도록 설정
+	}
+};
+
 
 CTraceState::CTraceState()
 	: CState(MON_STATE::TRACE)
@@ -20,8 +32,7 @@ CTraceState::~CTraceState()
 {
 }
 
-void CTraceState::SearchMovePath(Vec2 vEnd, Vec2 vStart)
-{
+void CTraceState::SearchMovePath_AStar(Vec2 vEnd, Vec2 vStart) {
 	vEnd *= 1.f / TILE_SIZE;
 	vStart *= 1.f / TILE_SIZE;
 
@@ -34,58 +45,66 @@ void CTraceState::SearchMovePath(Vec2 vEnd, Vec2 vStart)
 	int col = CSceneMgr::GetInst()->GetCurScene()->GetMapColSize();
 
 	// 방문 여부 및 경로 저장용 배열
-	vector<vector<bool>> visit(row, vector<bool>(col, false));
-	vector<vector<POINT>> parent(row, std::vector<POINT>(col, { -1, -1 }));
+	std::vector<std::vector<bool>> visit(row, std::vector<bool>(col, false));
+	std::vector<std::vector<POINT>> parent(row, std::vector<POINT>(col, { -1, -1 }));
 
+	// A* 방향 이동 배열
 	int dx[4] = { 1, 0, -1, 0 };
-	int dy[4] = { 0, 1, 0, -1 }; // 상하좌우 4방향
+	int dy[4] = { 0, 1, 0, -1 };
 
-	queue<POINT> Q;
+	// 우선순위 큐 (f 값이 낮은 노드를 우선 탐색)
+	std::priority_queue<Node, std::vector<Node>, std::greater<Node>> openList;
 
+	// 휴리스틱 함수 (맨해튼 거리)
+	auto heuristic = [](POINT a, POINT b) {
+		return std::abs(a.x - b.x) + std::abs(a.y - b.y);
+		};
+
+	// 시작 노드를 큐에 삽입
+	Node startNode = { pStart, 0, heuristic(pStart, pEnd), 0 + heuristic(pStart, pEnd), { -1, -1 } };
+	openList.push(startNode);
 	visit[pStart.y][pStart.x] = true;
-	Q.push(pStart); // 큐에 0, 0을 삽입
 
-	while (!Q.empty())
-	{
-		// 큐의 front에 있는 것을 현재노드로 지정하고 pop
-		POINT cur = Q.front();
-		Q.pop();
+	while (!openList.empty()) {
+		Node curNode = openList.top();
+		openList.pop();
+		POINT cur = curNode.pos;
 
 		// 목표 노드에 도달했을 때
-		if (cur.x == pEnd.x && cur.y == pEnd.y)
-		{
+		if (cur.x == pEnd.x && cur.y == pEnd.y) {
 			POINT p = pEnd;
-
-			// 부모 노드를 따라 경로를 역추적
-			while (p.x != -1 && p.y != -1)
-			{
+			while (p.x != -1 && p.y != -1) {
 				m_vPath.push_back(p);
 				p = parent[p.y][p.x];
 			}
-
 			return;
 		}
 
-		for (int dir = 0; dir < 4; dir++)
-		{
+		for (int dir = 0; dir < 4; dir++) {
 			int nx = cur.x + dx[dir];
-			int ny = cur.y + dy[dir]; // nx, ny에 dir에서 정한 방향의 인접칸 좌표 들어감
+			int ny = cur.y + dy[dir];
 
-			// 범위 밖일 경우 넘어감
+			// 범위 밖일 경우 무시
 			if (nx < 0 || nx >= col || ny < 0 || ny >= row)
 				continue;
 
-			// 이미 방문한 노드 || 1이 아닌 노드인 경우 넘어감
-			if (visit[ny][nx] || isWall(nx, ny))
+			// 벽이거나 이미 방문한 경우 무시
+			if (isWall(nx, ny) || visit[ny][nx])
 				continue;
 
+			// 새 노드의 비용 계산
+			int newG = curNode.g + 1; // 인접 노드 이동 비용 (1로 고정)
+			int newH = heuristic({ nx, ny }, pEnd);
+			int newF = newG + newH;
+
+			// 큐에 추가 및 부모 노드 갱신
+			Node nextNode = { { nx, ny }, newG, newH, newF, cur };
+			openList.push(nextNode);
+			parent[ny][nx] = cur;
 			visit[ny][nx] = true;
-			Q.push({ nx, ny });
-			parent[ny][nx] = cur; // 부모 노드 저장 (경로 추적용)
 		}
 	}
 }
-
 bool CTraceState::isWallInPath(Vec2 vEnd, Vec2 vStart)
 {
 	// 방향 벡터
@@ -123,27 +142,25 @@ bool CTraceState::isWallInPath(Vec2 vEnd, Vec2 vStart)
 void CTraceState::update()
 {
 	//이번 프레임 목적지 좌표
-	
+
 	if (!CSceneMgr::GetInst()->GetCurScene()->GetIsPlayerAlive())
 		return;
-	
+
 	CPlayer* pPlayer = (CPlayer*)CSceneMgr::GetInst()->GetCurScene()->GetPlayer();
 
 	Vec2 vEnd = pPlayer->GetPos();
 	Vec2 vStart = GetMonster()->GetPos();
 
-	// 경로에 벽이 있을 때
-	// 충돌체의 네 점에 대하여 모두 검사해야 할까?
-	// 혹은 기울기에 따라 충돌체 점 하나를 추가로 검사
-	// 이 경우 타일사이즈를 나누지 않은 좌표값 그대로를 사용해야 함
+	// 경로에 벽이 있을 때 막힘 방지
+	// 충돌체의 네 점에 대하여 점-목적지 직선 경로 충돌검사
 	Vec2 vColliderCorrection = { 10.f, 10.f };
 	if (isWallInPath(vEnd, vStart + vColliderCorrection)
 		|| isWallInPath(vEnd, vStart - vColliderCorrection)
 		|| isWallInPath(vEnd, Vec2(vStart.x - vColliderCorrection.x, vStart.y + vColliderCorrection.y))
 		|| isWallInPath(vEnd, Vec2(vStart.x + vColliderCorrection.x, vStart.y - vColliderCorrection.y)))
 	{
-		// 매 프레임 계산되는 path 정보
-		SearchMovePath(vEnd, vStart);
+		// 경로 계산
+		SearchMovePath_AStar(vEnd, vStart);
 
 		if (m_vPath.size() > 1)
 		{

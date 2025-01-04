@@ -51,8 +51,6 @@ private:
 
     void renderRay(HDC _dc);
 
-public:
-    virtual void OnCollisionEnter(CCollider* _pOther);
     
 public:
     void update();

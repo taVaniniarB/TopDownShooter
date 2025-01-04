@@ -654,9 +654,9 @@ void CScene_Tool::LoadSceneData()
 	ofn.lpstrFile = szName;
 
 	ofn.nMaxFile = sizeof(szName); // 버퍼 크기 (바이트)
-	// lpstrFilter: 확장자 필터 규칙....?
+	// lpstrFilter: 확장자 필터 규칙
 	// 모든 파일: L"ALL\0*.*"
-	// 저장 창 열렸을 때 필더된 확장자 파일들만 목록에 뜨는거!!!!
+	// 저장 창 열렸을 때 필더된 확장자 파일들만 목록에 뜬다
 	ofn.lpstrFilter = L"ALL\0*.*\0Scene\0*.scene\0";
 	// 필터 인덱스: 골라놓은 것 중 초기 필터를 무엇으로 세팅하는가?
 	// 0선택: ALL이라는 뜻...
@@ -996,16 +996,10 @@ void CScene_Tool::SetSelectedWeapon()
 	m_eSelctedObj = SELECT_OPTION::WEAPON;
 }
 
-// 전역 함수
-void ChangeScene(DWORD_PTR, DWORD_PTR)
-{
-	ChangeScene(SCENE_TYPE::START);
-}
 
 
 
-
-// Tool Scene의 멤버 X, 보기 편하게 배치만 이렇게 해둔거임
+// Tool Scene의 멤버 X, 보기 편하게 배치만 이렇게 해둔것
 // =======================
 // Tile Count Window Proc
 // =======================
@@ -1121,15 +1115,14 @@ INT_PTR CALLBACK SceneDialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 			START,
 			STAGE_01,
 			STAGE_02,
-			BOSS,
+			CLEAR,
 			MENU,
 			END,
 			*/
 		SendMessage(hListBox, LB_ADDSTRING, 0, (LPARAM)TEXT("TOOL"));
-		SendMessage(hListBox, LB_ADDSTRING, 0, (LPARAM)TEXT("START"));
 		SendMessage(hListBox, LB_ADDSTRING, 0, (LPARAM)TEXT("STAGE_01"));
 		SendMessage(hListBox, LB_ADDSTRING, 0, (LPARAM)TEXT("STAGE_02"));
-		SendMessage(hListBox, LB_ADDSTRING, 0, (LPARAM)TEXT("BOSS"));
+		SendMessage(hListBox, LB_ADDSTRING, 0, (LPARAM)TEXT("CLEAR"));
 		SendMessage(hListBox, LB_ADDSTRING, 0, (LPARAM)TEXT("MENU"));
 
 		return TRUE;

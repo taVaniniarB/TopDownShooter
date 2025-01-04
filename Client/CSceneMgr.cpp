@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "CSceneMgr.h"
 #include "CScene_Main.h"
+#include "CScene_End.h"
 #include "CScene_Combat.h"
 #include "Cscene_Tool.h"
 #include "CTimeMgr.h"
@@ -24,8 +25,8 @@ CSceneMgr::~CSceneMgr()
 	}
 	// 씬 전부 삭제
 	// 씬 저장한 형태 보면, CScene* 타입임.
-	// 이 상태로 delete 해봤자 부모 소멸자만 호출돼서 자식 부분은 안 지워지겠지?
-	// 따라서, 소멸자에 virtual 붙여서 자식 부분 소멸자 호출되도록 해주어야 한다
+	// 이 상태로 delete 해봤자 부모 소멸자만 호출돼서 자식 부분은 안 지워진다.
+	// -> 소멸자에 virtual 붙여서 자식 부분 소멸자도 호출되도록 해주어야 한다
 }
 
 void CSceneMgr::init()
@@ -34,28 +35,24 @@ void CSceneMgr::init()
 	m_arrScene[(UINT)SCENE_TYPE::MENU] = new CScene_Main();
 	m_arrScene[(UINT)SCENE_TYPE::MENU]->SetName(L"Menu Scene");
 	m_arrScene[(UINT)SCENE_TYPE::MENU]->SetSceneType(SCENE_TYPE::MENU);
-	
-	m_arrScene[(UINT)SCENE_TYPE::START] = new CScene_Combat(L"scene\\start");
-	m_arrScene[(UINT)SCENE_TYPE::START]->SetName(L"Start Scene");
-	m_arrScene[(UINT)SCENE_TYPE::START]->SetSceneType(SCENE_TYPE::START);
 
-	m_arrScene[(UINT)SCENE_TYPE::STAGE_01] = new CScene_Combat(L"scene\\stage01");
-	m_arrScene[(UINT)SCENE_TYPE::STAGE_01]->SetName(L"Lab Scene");
+	m_arrScene[(UINT)SCENE_TYPE::STAGE_01] = new CScene_Combat(L"scene\\stage_01");
+	m_arrScene[(UINT)SCENE_TYPE::STAGE_01]->SetName(L"Lab1");
 	m_arrScene[(UINT)SCENE_TYPE::STAGE_01]->SetSceneType(SCENE_TYPE::STAGE_01);
 
-	m_arrScene[(UINT)SCENE_TYPE::STAGE_02] = new CScene_Combat(L"scene\\stage02");
-	m_arrScene[(UINT)SCENE_TYPE::STAGE_02]->SetName(L"test Scene");
+	m_arrScene[(UINT)SCENE_TYPE::STAGE_02] = new CScene_Combat(L"scene\\stage_02");
+	m_arrScene[(UINT)SCENE_TYPE::STAGE_02]->SetName(L"Lab2");
 	m_arrScene[(UINT)SCENE_TYPE::STAGE_02]->SetSceneType(SCENE_TYPE::STAGE_02);
 
-	m_arrScene[(UINT)SCENE_TYPE::BOSS] = new CScene_Combat(L"scene\\boss");
-	m_arrScene[(UINT)SCENE_TYPE::BOSS]->SetName(L"Start Scene");
-	m_arrScene[(UINT)SCENE_TYPE::BOSS]->SetSceneType(SCENE_TYPE::BOSS);
+	m_arrScene[(UINT)SCENE_TYPE::CLEAR] = new CScene_End();
+	m_arrScene[(UINT)SCENE_TYPE::CLEAR]->SetName(L"Clear Scene");
+	m_arrScene[(UINT)SCENE_TYPE::CLEAR]->SetSceneType(SCENE_TYPE::CLEAR);
 	
 	m_arrScene[(UINT)SCENE_TYPE::TOOL] = new CScene_Tool;
 	m_arrScene[(UINT)SCENE_TYPE::TOOL]->SetName(L"Tool Scene");
 	m_arrScene[(UINT)SCENE_TYPE::TOOL]->SetSceneType(SCENE_TYPE::TOOL);
 
-	// 현재 씬 지정
+
 	m_pCurScene = m_arrScene[(UINT)SCENE_TYPE::MENU];
 	m_pCurScene->Enter();
 }

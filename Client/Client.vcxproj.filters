@@ -149,9 +149,6 @@
     <Filter Include="Engine\03. Manager\ScoreMgr">
       <UniqueIdentifier>{1cb781f8-9b6d-496d-8062-93bd71837aa4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\05. Scene\StoryScene">
-      <UniqueIdentifier>{fd4b3760-74e5-4131-9da6-7c10f10dbea8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\05. Scene\Stage">
       <UniqueIdentifier>{f6aab05f-5584-4418-8f15-63d011a2dd99}</UniqueIdentifier>
     </Filter>
@@ -214,6 +211,9 @@
     </Filter>
     <Filter Include="Engine\04. Object\UI\ImgUI\Title">
       <UniqueIdentifier>{cf852d41-dc0c-450d-9469-98a8d3f95e18}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\05. Scene\Scene_End">
+      <UniqueIdentifier>{b0315825-4428-45fb-93fe-1a38d89c6158}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -374,9 +374,6 @@
     <ClInclude Include="CStage.h">
       <Filter>Engine\05. Scene\Stage</Filter>
     </ClInclude>
-    <ClInclude Include="CScene_Story.h">
-      <Filter>Engine\05. Scene\StoryScene</Filter>
-    </ClInclude>
     <ClInclude Include="CSceneChanger.h">
       <Filter>Engine\04. Object\SceneChanger</Filter>
     </ClInclude>
@@ -433,6 +430,9 @@
     </ClInclude>
     <ClInclude Include="CTitleImg.h">
       <Filter>Engine\04. Object\UI\ImgUI\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="CScene_End.h">
+      <Filter>Engine\05. Scene\Scene_End</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -591,9 +591,6 @@
     <ClCompile Include="CStage.cpp">
       <Filter>Engine\05. Scene\Stage</Filter>
     </ClCompile>
-    <ClCompile Include="CScene_Story.cpp">
-      <Filter>Engine\05. Scene\StoryScene</Filter>
-    </ClCompile>
     <ClCompile Include="CHitbox.cpp">
       <Filter>Engine\04. Object\Hitbox</Filter>
     </ClCompile>
@@ -644,6 +641,9 @@
     </ClCompile>
     <ClCompile Include="CTitleImg.cpp">
       <Filter>Engine\04. Object\UI\ImgUI\Title</Filter>
+    </ClCompile>
+    <ClCompile Include="CScene_End.cpp">
+      <Filter>Engine\05. Scene\Scene_End</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
